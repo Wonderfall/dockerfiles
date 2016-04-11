@@ -9,7 +9,7 @@ RUN echo "@community http://dl-4.alpinelinux.org/alpine/v3.3/community/" >> /etc
  && echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
  && apk -U add \
-    libva@edge \ #libva is temporary missing
+    libva@edge \
     ffmpeg \
     openjdk8-jre@community \
     tini@commuedge \
