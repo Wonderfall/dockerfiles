@@ -1,6 +1,8 @@
 FROM alpine:3.3
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
+ARG VERSION=3.1.0
+
 ENV UID=991 GID=991
 
 RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
@@ -22,7 +24,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     -e "s/memory_limit = 256M/memory_limit = 512M/g" \
     /etc/php/php.ini \
  && mkdir /lychee && cd /lychee \
- && wget -qO- https://github.com/electerious/Lychee/archive/master.tar.gz | tar xz --strip 1 \
+ && wget -qO- https://github.com/electerious/Lychee/archive/v$VERSION.tar.gz | tar xz --strip 1 \
  && apk del \
     tar \
     ca-certificates \
