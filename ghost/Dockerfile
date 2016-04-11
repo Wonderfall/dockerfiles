@@ -1,8 +1,9 @@
 FROM wonderfall/node:stable
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
-ENV VERSION=0.7.8 \
-    GHOST_NODE_VERSION_CHECK=false \
+ARG VERSION=0.7.8
+
+ENV GHOST_NODE_VERSION_CHECK=false \
     GID=991 \
     UID=991 \
     DOMAIN=my-ghost-blog.com \
