@@ -1,7 +1,9 @@
 FROM alpine:3.3
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
-ENV ISSO_VER=0.10.2 GID=1000 UID=1000
+ARG ISSO_VER=0.10.2
+
+ENV GID=1000 UID=1000
 
 RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
