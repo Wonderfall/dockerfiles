@@ -1,8 +1,9 @@
 FROM debian:jessie
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
-ENV TINI_VER=0.9.0 \
-    USERID=1000 \
+ARG TINI_VER=0.9.0
+
+ENV USERID=1000 \
     GROUPID=1000 \
     SECRET=ZyCnLAhYKBIJrukuKZZJ \
     CONTACT=contact@domain.tld \
