@@ -11,7 +11,7 @@ su subsonic << EOF
 java -Xmx200m \
   -Dsubsonic.home=/data \
   -Dsubsonic.host=0.0.0.0 \
-  -Dsubsonic.port=4040 \
+  -Dsubsonic.port=8080 \
   -Dsubsonic.httpsPort=0 \
   -Dsubsonic.contextPath=/ \
   -Dsubsonic.defaultMusicFolder=/musics \
