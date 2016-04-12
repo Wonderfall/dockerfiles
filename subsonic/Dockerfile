@@ -21,7 +21,9 @@ RUN wget -qO- http://subsonic.org/download/subsonic-$VERSION-standalone.tar.gz |
 COPY run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
 
-EXPOSE 4040
+EXPOSE 8080
+EXPOSE 4050
+
 VOLUME /data /musics /playlists /podcasts
 
 LABEL description "Open source media streamer" \
