@@ -1,7 +1,7 @@
 FROM debian:jessie
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
-ARG VERSION=9.0.0 
+ARG VERSION=9.0.1
 ARG TINI_VER=0.9.0 
 
 ENV USERID=1000 GROUPID=1000
