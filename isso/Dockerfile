@@ -1,7 +1,7 @@
 FROM alpine:3.3
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
-ARG ISSO_VER=0.10.2
+ARG ISSO_VER=0.10.4
 
 ENV GID=1000 UID=1000
 
