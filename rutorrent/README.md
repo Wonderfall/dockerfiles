@@ -1,61 +1,60 @@
-# RuTorrent Image
+## wonderfall/rutorrent
+Originally forked from [xataz/rutorrent](https://github.com/xataz/dockerfiles/tree/master/rutorrent).
 
-## ImageLayer
-* latest [![](https://badge.imagelayers.io/xataz/rutorrent:latest.svg)](https://imagelayers.io/?images=xataz/rutorrent:latest 'Get your own badge on imagelayers.io')
-* latest-filebot, filebot [![](https://badge.imagelayers.io/xataz/rutorrent:filebot.svg)](https://imagelayers.io/?images=xataz/rutorrent:filebot 'Get your own badge on imagelayers.io')
+#### What is this?
+This container contains both rtorrent (whis is a BitTorrent client) and rutorrent (which is a front-end for rtorrent). Filebolt is also included, the default behavior is set to create clean symlinks, so media players like Emby/Plex can easily detect your TV shows and movies.
 
-## Tag available
-* latest [(rutorrent/latest/Dockerfile)](https://github.com/xataz/dockerfiles/blob/master/rutorrent/latest/Dockerfile)
-* latest-filebot, filebot [(rutorrent/latest-filebot/Dockerfile)](https://github.com/xataz/dockerfiles/blob/master/rutorrent/latest-filebot/Dockerfile)
 
-## Description
-What is [RuTorrent](https://github.com/Novik/ruTorrent) ?
+#### Main features
+- Lightweight, since it's based on Alpine Linux.
+- Everything is almost compiled from source.
+- Secured, don't bother about configuration files.
+- Filebot is included, and creates symlinks in /data/Media.
+- FlatUI themes for rutorrent are included.
 
-ruTorrent is a front-end for the popular Bittorrent client rtorrent.
-This project is released under the GPLv3 license, for more details, take a look at the LICENSE.md file in the source.
+#### Ports
+There's one port to bind to your host (both tcp/udp) : 49184 (arbitrary chosen).
 
-What is [rtorrent](https://github.com/rakshasa/rtorrent/) ?
+#### Volumes
+- **/data** : your files, symlinks, etc. everything you must care of.
+- **/var/www/torrent/share/users** : rutorrent settings, as you don't want them to go away each time you update the container.
 
-rtorrent is the popular Bittorrent client.
+#### How to use it?
+Basically you just have to run the container behind a reverse proxy.
+This may help you : https://hub.docker.com/r/wonderfall/reverse/
 
-## BUILD IMAGE
+Here is an example of a docker-compose.yml file :
 
-```shell
-docker build -t xataz/rutorrent github.com/xataz/dockerfiles.git#master:rutorrent/latest
 ```
-
-## Configuration
-### Environments
-* UID : Choose uid for launch rtorrent (default : 991)
-* GID : Choose gid for launch rtorrent (default : 991)
-* WEBROOT : (default : /)
-
-### Volumes
-* /data : Folder for download torrents
-
-#### data Folder tree
-* /data/.watch : Rtorrent watch this folder and add automatly torrent file
-* /data/.session : Rtorrent save statement here
-* /data/torrents : Rtorrent download torrent here
-* /data/Media : If filebot version, rtorrent create a symlink 
-
-### Ports
-* 80
-
-## Usage
-### Simple launch
-```shell
-docker run -d -p 80:80 xataz/rutorrent
+nginx:
+  image: wonderfall/reverse:1.9
+  container_name: nginx
+  environment:
+    - UID=1000
+    - GID=1000
+  ports:
+    - "80:8000"
+    - "443:4430"
+  links:
+    - rutorrent:rutorrent
+  volumes:
+    - /home/docker/nginx/sites:/sites-enabled
+    - /home/docker/nginx/conf:/conf.d
+    - /home/docker/nginx/passwds:/passwds
+    - /home/docker/nginx/log:/var/log/nginx
+    - /home/docker/nginx/certs:/certs
+    
+rutorrent:
+  image: wonderfall/rutorrent
+  container_name: rutorrent
+  environment:
+    - WEBROOT=/
+    - UID=1000
+    - GID=1000
+  ports:
+    - "49184:49184"
+    - "49184:49184/udp"
+  volumes:
+    - /home/user/seedbox:/data
+    - /home/user/seedbox/rutorrent:/var/www/torrent/share/users
 ```
-URI access : http://XX.XX.XX.XX
-
-### Advanced launch
-```shell
-docker run -d -p 80:80 \
-	-v /docker/data:/data \ 
-	-e UID=1001 \
-	-e GID=1001 \
-    -e WEBROOT=/rutorrent \
-	xataz/rutorrent:filebot
-```
-URI access : http://XX.XX.XX.XX/rutorrent
