@@ -1,5 +1,4 @@
 ## wonderfall/subsonic
-[![](https://badge.imagelayers.io/wonderfall/subsonic:latest.svg)](https://imagelayers.io/?images=wonderfall/subsonic:latest 'Get your own badge on imagelayers.io')
 
 ![](https://i.goopics.net/lr.png)
 

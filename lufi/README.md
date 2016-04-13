@@ -1,5 +1,4 @@
 ## wonderfall/lufi
-[![](https://badge.imagelayers.io/wonderfall/lufi:latest.svg)](https://imagelayers.io/?images=wonderfall/lufi:latest 'Get your own badge on imagelayers.io')
 
 ![](https://pix.schrodinger.io/H1JZuROt/zh7BXdOK.png)
 

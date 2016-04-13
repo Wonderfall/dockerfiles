@@ -1,5 +1,4 @@
 ## wonderfall/rainloop
-[![](https://badge.imagelayers.io/wonderfall/rainloop:latest.svg)](https://imagelayers.io/?images=wonderfall/rainloop:latest 'Get your own badge on imagelayers.io')
 
 ![](https://i.goopics.net/nI.png)
 

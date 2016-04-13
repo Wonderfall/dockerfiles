@@ -1,5 +1,4 @@
 ## wonderfall/cowrie
-[![](https://badge.imagelayers.io/wonderfall/cowrie:latest.svg)](https://imagelayers.io/?images=wonderfall/cowrie:latest 'Get your own badge on imagelayers.io')
 
 ![](https://i.goopics.net/lO.jpg)
 

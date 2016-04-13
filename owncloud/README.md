@@ -1,5 +1,4 @@
 ## wonderfall/owncloud
-[![](https://badge.imagelayers.io/wonderfall/owncloud:latest.svg)](https://imagelayers.io/?images=wonderfall/owncloud:latest 'Get your own badge on imagelayers.io')
 
 ![](https://i.goopics.net/lu.png)
 

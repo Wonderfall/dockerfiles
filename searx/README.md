@@ -1,5 +1,4 @@
 ## wonderfall/searx
-[![](https://badge.imagelayers.io/wonderfall/searx:latest.svg)](https://imagelayers.io/?images=wonderfall/searx:latest 'Get your own badge on imagelayers.io')
 
 ![](https://i.goopics.net/ls.png)
 

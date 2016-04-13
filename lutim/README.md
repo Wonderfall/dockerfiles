@@ -1,5 +1,4 @@
 ## wonderfall/lutim
-[![](https://badge.imagelayers.io/wonderfall/lutim:latest.svg)](https://imagelayers.io/?images=wonderfall/lutim:latest 'Get your own badge on imagelayers.io')
 
 ![](https://i.goopics.net/rf.png)
 
