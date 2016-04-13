@@ -6,8 +6,7 @@
 Subsonic is an open-source web-based media streamer and jukebox. Supports MP3, OGG, AAC and other streamable audio and video formats. Indeed, this build comes with **transcoding abilities**.
 
 #### Tags
-- **Stable 5.x** : `5.3`, `latest`, `old-5.3`
-- **Beta 6.0** : `6.0b1`, `6`
+- **6.0 beta 2** : `6`, `latest`
 
 #### Environment variables
 - **GID** : subsonic group id.
@@ -17,10 +16,6 @@ Subsonic is an open-source web-based media streamer and jukebox. Supports MP3, O
 - **/musics** : your music files
 - **/data** : subsonic data
 - **/playlists** : subsonic playlists
-
-#### Known issues (only with alpine) :
-- Can't retrieve pictures through TLS (although it's not automatic, you have to choose clear-HTTP sources only when picking a cover picture) -> **fixed !**
-- "Default covers" (when no cover image is detected) are not generated (not sure it's a problem since I find this feature useless... such ugly fonts/colors)
 
 #### Docker Compose (example)
 ```
