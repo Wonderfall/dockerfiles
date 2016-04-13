@@ -28,6 +28,8 @@ RUN apt-get update \
     php7.0-gd \
     php7.0-mcrypt \
     php7.0-mysql \
+    php7.0-apcu \
+    php7.0-apcu-bc \
  && mkdir /run/php && touch /run/php/php7.0-fpm.sock \
  && chown www-data:www-data /run/php/php7.0-fpm.sock \
  && sed -i "s/;env\[PATH\]/env\[PATH\]/g" /etc/php/7.0/fpm/pool.d/www.conf \
