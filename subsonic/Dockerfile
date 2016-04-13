@@ -25,6 +25,6 @@ EXPOSE 4040
 VOLUME /data /musics /playlists /podcasts
 
 LABEL description "Open source media streamer" \
-      subsonisc "Subsonic v$VERSION"
+      subsonic "Subsonic v$VERSION"
 
 CMD ["tini","--","run.sh"]
