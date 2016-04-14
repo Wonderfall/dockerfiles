@@ -1,7 +1,7 @@
 FROM alpine:3.3
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
-ARG NODE_VER=4.4.2
+ARG NODE_VER=4.4.3
 ARG NPM_VER=3
 
 RUN apk -U add \
