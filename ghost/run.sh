@@ -37,6 +37,12 @@ if [ "$ENABLE_ISSO" == "True" ] && ! grep -q 'isso' /ghost/content/themes/casper
            -e "s/<VOTE>/$ISSO_VOTE/g" /ghost/content/themes/casper/post.hbs
 fi
 
+if [ "$ENABLE_DISQUS" == "True" ] && ! grep -q 'disqus' /ghost/content/themes/casper/post.hbs; then
+    cd /usr/local/etc
+    sed -i -e "/\/author/r disqus.conf" /ghost/content/themes/casper/post.hbs
+    sed -i -e "s/<SHORTNAME>/$DISQUS_SHORTNAME/g" /ghost/content/themes/casper/post.hbs
+fi
+
 if [ "$SYNTAX_HIGHLIGHTING" == "True" ] && [ ! -f /ghost/content/themes/casper/assets/js/prism.js ]; then
     cp /ghost/prismjs/$HIGHLIGHTER_COLOR/prism.css /ghost/content/themes/casper/assets/css
     cp /ghost/prismjs/$HIGHLIGHTER_COLOR/prism.js /ghost/content/themes/casper/assets/js

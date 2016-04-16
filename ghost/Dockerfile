@@ -18,7 +18,9 @@ ENV GHOST_NODE_VERSION_CHECK=false \
     ENABLE_ISSO=False \
     ISSO_HOST=isso.domain.tld \
     ISSO_AVATAR=false \
-    ISSO_VOTE=false
+    ISSO_VOTE=false \
+    ENABLE_DISQUS=False \
+    DISQUS_SHORTNAME=shortname
 
 VOLUME /ghost/content
 
@@ -44,6 +46,7 @@ RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/re
 COPY run.sh /usr/local/bin/run.sh
 COPY smtp.conf /usr/local/etc/smtp.conf
 COPY isso.conf /usr/local/etc/isso.conf
+COPY disqus.conf /usr/local/etc/disqus.conf
 COPY prism_light.js /ghost/prismjs/light/prism.js
 COPY prism_light.css /ghost/prismjs/light/prism.css
 COPY prism_dark.js /ghost/prismjs/dark/prism.js
