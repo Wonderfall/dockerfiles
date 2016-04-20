@@ -21,7 +21,8 @@ RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/re
     tar \
     libtool \
     pcre-dev \
-    zlib-dev" \
+    zlib-dev
+    binutils" \
  && apk -U add \
     $BUILD_DEPS \
     pcre \
@@ -76,6 +77,8 @@ RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/re
     --sbin-path=/usr/local/sbin/nginx \
     --add-module=/tmp/ngx_brotli \
  && make -j $NB_CORES && make install \
+ && make clean \
+ && strip -s /usr/local/sbin/nginx \
  && apk del $BUILD_DEPS \
  && rm -rf /tmp/* /var/cache/apk/*
 
