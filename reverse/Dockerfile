@@ -21,7 +21,7 @@ RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/re
     tar \
     libtool \
     pcre-dev \
-    zlib-dev
+    zlib-dev \
     binutils" \
  && apk -U add \
     $BUILD_DEPS \
