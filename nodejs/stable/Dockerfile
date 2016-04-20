@@ -14,6 +14,7 @@ RUN apk -U add \
     paxctl \
     libgcc \
     libstdc++ \
+    binutils \
     binutils-gold \
     ca-certificates \
  && NB_CORES=`getconf _NPROCESSORS_CONF` \
@@ -21,11 +22,11 @@ RUN apk -U add \
  && wget -qO- https://nodejs.org/dist/v$NODE_VER/node-v$NODE_VER.tar.gz | tar zxf - \
  && cd node-v$NODE_VER \
  && ./configure --prefix=/usr \
- && make -j$NB_CORES && make install \
+ && make -j$NB_CORES && make install && make clean \
  && paxctl -cm /usr/bin/node \
  && npm install -g npm@$NPM_VER \
- && find /usr/lib/node_modules/npm -name test -o -name .bin -type d \
- | xargs rm -rf \
+ && find /usr/lib/node_modules/npm -name test -o -name .bin -type d | xargs rm -rf \
+ && strip -s /usr/bin/node \
  && apk del \
     git \
     make \
@@ -35,6 +36,7 @@ RUN apk -U add \
     linux-headers \
     paxctl \
     grep \
+    binutils \
     binutils-gold \
     ca-certificates \
  && rm -rf \
