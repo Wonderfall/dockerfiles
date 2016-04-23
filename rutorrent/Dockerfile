@@ -28,7 +28,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     cppunit-dev \
     openssl-dev \
     ncurses-dev \
-    curl-dev
+    curl-dev \
     binutils" \
  && apk -U add \
     ${BUILD_DEPS} \
@@ -52,49 +52,29 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && svn checkout http://svn.code.sf.net/p/xmlrpc-c/code/stable xmlrpc-c \
  && git clone https://github.com/rakshasa/libtorrent.git \
  && git clone https://github.com/rakshasa/rtorrent.git \
- && wget http://mediaarea.net/download/binary/mediainfo/${MEDIAINFO_VER}/MediaInfo_CLI_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
- && wget http://mediaarea.net/download/binary/libmediainfo0/${MEDIAINFO_VER}/MediaInfo_DLL_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
+ && wget -q http://mediaarea.net/download/binary/mediainfo/${MEDIAINFO_VER}/MediaInfo_CLI_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
+ && wget -q http://mediaarea.net/download/binary/libmediainfo0/${MEDIAINFO_VER}/MediaInfo_DLL_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
  && tar xzf MediaInfo_DLL_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
  && tar xzf MediaInfo_CLI_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
  && tar xzvf mktorrent-1.0.tar.gz \
- && cd /tmp/mktorrent-1.0 \
- && make -j ${NB_CORES} \
- && make install \
- && cd  /tmp/MediaInfo_DLL_GNU_FromSource \
- && ./SO_Compile.sh \
- && cd /tmp/MediaInfo_DLL_GNU_FromSource/ZenLib/Project/GNU/Library \
- && make install \
- && cd /tmp/MediaInfo_DLL_GNU_FromSource/MediaInfoLib/Project/GNU/Library \
- && make install \
- && cd /tmp/MediaInfo_CLI_GNU_FromSource \
- && ./CLI_Compile.sh \
- && cd /tmp/MediaInfo_CLI_GNU_FromSource/MediaInfo/Project/GNU/CLI \
- && make install \
- && cd /tmp/xmlrpc-c \
- && ./configure \
- && make -j ${NB_CORES} \
- && make install \
- && cd /tmp/libtorrent \
- && git checkout ${LIBTORRENT_VER} \    
- && ./autogen.sh \
- && ./configure \
- && make -j ${NB_CORES} \
- && make install \
- && cd /tmp/rtorrent \
- && git checkout ${RTORRENT_VER} \
- && ./autogen.sh \
- && ./configure --with-xmlrpc-c \
- && make -j ${NB_CORES} \
- && make install \
- && mkdir -p /var/www \
- && cd /var/www \
+ && cd /tmp/mktorrent-1.0 && make -j ${NB_CORES} && make install \
+ && cd  /tmp/MediaInfo_DLL_GNU_FromSource && ./SO_Compile.sh \
+ && cd /tmp/MediaInfo_DLL_GNU_FromSource/ZenLib/Project/GNU/Library && make install \
+ && cd /tmp/MediaInfo_DLL_GNU_FromSource/MediaInfoLib/Project/GNU/Library && make install \
+ && cd /tmp/MediaInfo_CLI_GNU_FromSource && ./CLI_Compile.sh \
+ && cd /tmp/MediaInfo_CLI_GNU_FromSource/MediaInfo/Project/GNU/CLI && make install \
+ && cd /tmp/xmlrpc-c && ./configure && make -j ${NB_CORES} && make install \
+ && cd /tmp/libtorrent && git checkout ${LIBTORRENT_VER} && ./autogen.sh && ./configure \
+ && make -j ${NB_CORES} && make install \
+ && cd /tmp/rtorrent && git checkout ${RTORRENT_VER} && ./autogen.sh && ./configure --with-xmlrpc-c \
+ && make -j ${NB_CORES} && make install \
+ && mkdir -p /var/www && cd /var/www \
  && git clone https://github.com/Novik/ruTorrent.git rutorrent \
  && cd /var/www/rutorrent/plugins/ \
  && git clone https://github.com/xombiemp/rutorrentMobile.git mobile \
  && cd /var/www/rutorrent/plugins/theme/themes \
  && git clone https://github.com/exetico/FlatUI.git \
- && mv FlatUI/FlatUI_* . \
- && rm -rf FlatUI \
+ && mv FlatUI/FlatUI_* . && rm -rf FlatUI \
  && mv /var/www/rutorrent /var/www/torrent \
  && mkdir /filebot \
  && wget -q http://downloads.sourceforge.net/project/filebot/filebot/FileBot_${FILEBOT_VER}/FileBot_${FILEBOT_VER}-portable.zip -P /tmp \
@@ -102,8 +82,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && strip -s /usr/local/bin/rtorrent \
  && strip -s /usr/local/bin/mediainfo \
  && apk del ${BUILD_DEPS} \
- && deluser svn \
- && delgroup svnusers \
+ && deluser svn && delgroup svnusers \
  && rm -rf /var/cache/apk/* /tmp/*
 
 COPY rootfs /
