@@ -28,7 +28,8 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     cppunit-dev \
     openssl-dev \
     ncurses-dev \
-    curl-dev" \
+    curl-dev
+    binutils" \
  && apk -U add \
     ${BUILD_DEPS} \
     ffmpeg \
@@ -98,6 +99,8 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && mkdir /filebot \
  && wget -q http://downloads.sourceforge.net/project/filebot/filebot/FileBot_${FILEBOT_VER}/FileBot_${FILEBOT_VER}-portable.zip -P /tmp \
  && unzip -q /tmp/FileBot_${FILEBOT_VER}-portable.zip -d /filebot \
+ && strip -s /usr/local/bin/rtorrent \
+ && strip -s /usr/local/bin/mediainfo \
  && apk del ${BUILD_DEPS} \
  && deluser svn \
  && delgroup svnusers \
