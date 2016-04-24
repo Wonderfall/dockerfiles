@@ -9,6 +9,7 @@ rm /selfoss/config.ini
 if [ -e /selfoss/data/config.ini ]; then
   cp /selfoss/data/config.ini /selfoss/config.ini
 else
+  cp /selfoss/defaults.ini /selfoss/data/config.ini
   cp /selfoss/defaults.ini /selfoss/config.ini
 fi
 
