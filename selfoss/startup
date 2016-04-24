@@ -14,7 +14,7 @@ else
 fi
 
 # Init data dir
-if [ ! "$(ls -A /selfoss/data)" ]; then
+if [ ! "$(ls -Ad /selfoss/data/*/)" ]; then
    cd /selfoss/data/ && mkdir cache favicons logs sqlite thumbnails
 fi
 
