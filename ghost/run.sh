@@ -15,7 +15,9 @@ if [ "$CUSTOM_SMTP" == "True" ]; then
     sed -i -e "s/<HOST>/$SMTP_HOST/g" \
            -e "s/<PORT>/$SMTP_PORT/g" \
            -e "s/<USER>/$SMTP_USER/g" \
-           -e "s/<PASS>/$SMTP_PASS/g" /ghost/config.js
+           -e "s/<PASS>/$SMTP_PASS/g" \
+           -e "s/<SENDER_MAIL>/$SMTP_SENDER_MAIL/g" \
+           -e "s/<SENDER_NAME>/$SMTP_SENDER_NAME/g" /ghost/config.js
 fi
 
 if [ ! -d /ghost/content/themes/casper ]; then
