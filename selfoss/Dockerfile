@@ -25,7 +25,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     ca-certificates \
     tini@commuedge \
  && rm -f /var/cache/apk/* \
- && sed -i -e 's/max_execution_time = 30/max_execution_time = 300/' /etc/php/php.ini
+ && sed -i -e 's/max_execution_time = 30/max_execution_time = 300/' /etc/php7/php.ini
 
 RUN wget -q https://github.com/SSilence/selfoss/releases/download/$VERSION/selfoss-$VERSION.zip -P /tmp \
  && mkdir /selfoss && unzip -q /tmp/selfoss-$VERSION.zip -d /selfoss \
