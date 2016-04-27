@@ -6,14 +6,15 @@ ARG VERSION=3.1.0
 ENV UID=991 GID=991
 
 RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+ && echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && apk -U add \
     nginx \
-    php-fpm \
-    php-exif \
-    php-gd \
-    php-json \
-    php-mysqli \
-    php-zip \
+    php7-fpm@testing \
+    php7-exif@testing \
+    php7-gd@testing \
+    php7-json@testing \
+    php7-mysqli@testing \
+    php7-zip@testing \
     tar \
     supervisor \
     ca-certificates \
@@ -22,7 +23,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     -e "s/post_max_size = 8M/post_max_size = 100M/g" \
     -e "s/upload_max_filesize = 2M/upload_max_filesize = 20M/g" \
     -e "s/memory_limit = 256M/memory_limit = 512M/g" \
-    /etc/php/php.ini \
+    /etc/php7/php.ini \
  && mkdir /lychee && cd /lychee \
  && wget -qO- https://github.com/electerious/Lychee/archive/v$VERSION.tar.gz | tar xz --strip 1 \
  && apk del \
@@ -31,7 +32,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && rm -f /var/cache/apk/*
 
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY php-fpm.conf /etc/php/php-fpm.conf
+COPY php-fpm.conf /etc/php7/php-fpm.conf
 COPY supervisord.conf /usr/local/etc/supervisord.conf
 COPY run.sh /usr/local/bin/run.sh
 
