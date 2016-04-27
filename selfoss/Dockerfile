@@ -5,9 +5,11 @@ ENV GID=991 UID=991 VERSION=2.15
 
 RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+ && echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
  && apk -U add \
     musl \
     nginx \
+    libwebp@edge \
     php7-fpm@testing \
     php7-gd@testing \
     php7-json@testing \
