@@ -26,6 +26,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
 
 RUN wget -q https://github.com/SSilence/selfoss/releases/download/$VERSION/selfoss-$VERSION.zip -P /tmp \
  && mkdir /selfoss && unzip -q /tmp/selfoss-$VERSION.zip -d /selfoss \
+ && sed -i -e 's/base_url=/base_url=\//g' /selfoss/defaults.ini \
  && rm -rf /tmp/*
 
 COPY nginx.conf /etc/nginx/nginx.conf
