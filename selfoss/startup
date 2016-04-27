@@ -4,6 +4,7 @@
 addgroup -g ${GID} selfoss && adduser -h /selfoss -s /bin/sh -D -G selfoss -u ${UID} selfoss
 
 # Selfoss custom configuration file
+sed -i "s/lkjl1289/`cat \/dev\/urandom | tr -dc 'a-zA-Z' | fold -w 20 | head -n 1`/g" /selfoss/defaults.ini
 rm /selfoss/config.ini
 
 if [ -e /selfoss/data/config.ini ]; then
