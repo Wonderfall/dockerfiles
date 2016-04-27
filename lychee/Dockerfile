@@ -9,6 +9,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && apk -U add \
     nginx \
+    libwebp@edge \
     php7-fpm@testing \
     php7-exif@testing \
     php7-gd@testing \
