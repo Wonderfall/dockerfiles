@@ -1,33 +1,12 @@
 FROM alpine:3.3
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
-ARG NODE_VER=5.11.0
+ARG NODE_VER=4.4.3
 ARG NPM_VER=3
+ARG BUILD_CORES
 
-RUN apk -U add \
-    git \
-    make \
-    gcc \
-    g++ \
-    python \
-    linux-headers \
-    paxctl \
-    libgcc \
-    libstdc++ \
-    binutils \
-    binutils-gold \
-    ca-certificates \
- && NB_CORES=`getconf _NPROCESSORS_CONF` \
- && cd /tmp \
- && wget -qO- https://nodejs.org/dist/v$NODE_VER/node-v$NODE_VER.tar.gz | tar zxf - \
- && cd node-v$NODE_VER \
- && ./configure --prefix=/usr \
- && make -j$NB_CORES && make install && make clean \
- && paxctl -cm /usr/bin/node \
- && npm install -g npm@$NPM_VER \
- && find /usr/lib/node_modules/npm -name test -o -name .bin -type d | xargs rm -rf \
- && strip -s /usr/bin/node \
- && apk del \
+RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
+ && BUILD_DEPS=" \
     git \
     make \
     gcc \
@@ -38,7 +17,21 @@ RUN apk -U add \
     grep \
     binutils \
     binutils-gold \
-    ca-certificates \
+    ca-certificates" \
+ && apk -U add \
+    $BUILD_DEPS \
+    libgcc \
+    libstdc++ \
+ && cd /tmp \
+ && wget -qO- https://nodejs.org/dist/v$NODE_VER/node-v$NODE_VER.tar.gz | tar zxf - \
+ && cd node-v$NODE_VER \
+ && ./configure --prefix=/usr \
+ && make -j $NB_CORES && make install && make clean \
+ && paxctl -cm /usr/bin/node \
+ && npm install -g npm@$NPM_VER \
+ && find /usr/lib/node_modules/npm -name test -o -name .bin -type d | xargs rm -rf \
+ && strip -s /usr/bin/node \
+ && apk del $BUILD_DEPS \
  && rm -rf \
     /tmp/* \
     /var/cache/apk/* \
