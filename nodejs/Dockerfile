@@ -25,7 +25,7 @@ RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && cd /tmp \
  && wget -qO- https://nodejs.org/dist/v$NODE_VER/node-v$NODE_VER.tar.gz | tar zxf - \
  && cd node-v$NODE_VER \
- && ./configure --prefix=/usr \
+ && ./configure --prefix=/usr --without-snapshot \
  && make -j $NB_CORES && make install && make clean \
  && paxctl -cm /usr/bin/node \
  && npm install -g npm@$NPM_VER \
