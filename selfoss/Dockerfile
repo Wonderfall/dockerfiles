@@ -21,6 +21,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     php7-mcrypt@testing \
     php7-pdo_sqlite@testing \
     php7-ctype@testing \
+    php7-session@testing \
     supervisor \
     ca-certificates \
     tini@commuedge \
