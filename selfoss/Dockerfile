@@ -4,20 +4,21 @@ MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 ENV GID=991 UID=991 VERSION=2.15
 
 RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+ && echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && apk -U add \
     musl \
     nginx \
-    php-fpm \
-    php-gd \
-    php-json \
-    php-zlib \
-    php-xml \
-    php-dom \
-    php-curl \
-    php-iconv \
-    php-mcrypt \
-    php-pdo_sqlite \
-    php-ctype \
+    php7-fpm@testing \
+    php7-gd@testing \
+    php7-json@testing \
+    php7-zlib@testing \
+    php7-xml@testing \
+    php7-dom@testing \
+    php7-curl@testing \
+    php7-iconv@testing \
+    php7-mcrypt@testing \
+    php7-pdo_sqlite@testing \
+    php7-ctype@testing \
     supervisor \
     ca-certificates \
     tini@commuedge \
