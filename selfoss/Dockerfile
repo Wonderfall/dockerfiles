@@ -33,7 +33,7 @@ RUN wget -q https://github.com/SSilence/selfoss/releases/download/$VERSION/selfo
  && rm -rf /tmp/*
 
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY php-fpm.conf /etc/php/php-fpm.conf
+COPY php-fpm.conf /etc/php7/php-fpm.conf
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY startup /usr/local/bin/startup
 COPY cron /etc/periodic/15min/selfoss
