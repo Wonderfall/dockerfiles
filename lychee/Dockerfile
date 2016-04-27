@@ -17,6 +17,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     php7-json@testing \
     php7-mysqli@testing \
     php7-zip@testing \
+    php7-session@testing \
     tar \
     supervisor \
     ca-certificates \
