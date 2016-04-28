@@ -8,8 +8,7 @@ ARG BUILD_CORES
 
 ENV UID=991 GID=991
 
-RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
- && echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && BUILD_DEPS=" \
     build-base \
@@ -29,8 +28,8 @@ RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/re
     zlib \
     libgcc \
     libstdc++ \
-    gosu@testing \
-    libressl@testing \
+    su-exec \
+    openssl \
     tini@commuedge \
  && cd /tmp && git clone https://github.com/bagder/libbrotli && cd libbrotli \
  && ./autogen.sh && ./configure && make -j $NB_CORES && make install \
