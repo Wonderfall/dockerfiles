@@ -29,7 +29,6 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     libgcc \
     libstdc++ \
     su-exec \
-    openssl \
     tini@commuedge \
  && cd /tmp && git clone https://github.com/bagder/libbrotli && cd libbrotli \
  && ./autogen.sh && ./configure && make -j $NB_CORES && make install \
@@ -83,7 +82,6 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
 
 COPY nginx.conf /etc/nginx/conf/nginx.conf
 COPY run.sh /usr/local/bin/run.sh
-COPY ngxpasswd /usr/local/bin/ngxpasswd
 
 RUN chmod +x /usr/local/bin/*
 
