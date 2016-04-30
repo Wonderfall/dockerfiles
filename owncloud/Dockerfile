@@ -64,8 +64,8 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
 COPY opcache.ini /etc/php7/conf.d/00_opcache.ini
-COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY apcu.ini /etc/php7/conf.d/00_apcu.ini
+COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY run.sh /usr/local/bin/run.sh
 COPY cron /etc/periodic/15min/owncloud
 
@@ -75,6 +75,8 @@ VOLUME /data /config /apps2
 EXPOSE 80
 
 LABEL description="A server software for creating file hosting services" \
-      owncloud="ownCloud v$VERSION"
+      owncloud="ownCloud v$VERSION" \
+      apcu="apcu v$APCU" \
+      apcu_bc="apcu_bc v$APCUBC"
 
 CMD ["tini","--","run.sh"]
