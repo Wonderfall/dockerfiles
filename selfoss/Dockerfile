@@ -10,6 +10,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     musl \
     nginx \
     libwebp@edge \
+    php7@testing \
     php7-fpm@testing \
     php7-gd@testing \
     php7-json@testing \
