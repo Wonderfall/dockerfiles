@@ -34,6 +34,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     php7-zip@testing \
     php7-xmlreader@testing \
     php7-posix@testing \
+    php7-openssl@testing \
  && mkdir /owncloud && cd /tmp \
  && wget -q https://download.owncloud.org/community/owncloud-$VERSION.tar.bz2 \
  && wget -q https://download.owncloud.org/community/owncloud-$VERSION.tar.bz2.sha256 \
