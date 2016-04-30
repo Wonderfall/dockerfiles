@@ -30,7 +30,7 @@ If you want some security, versioning with tags should be available since 9.0 (e
 - **/config** : configuration files (contains config.php).
 - **/apps2** : owncloud downloaded apps (like calendar, contacts, etc.).
 
-Hey, yu should add the following code to your config.php in order to enable apps persistence :
+Hey, you should add the following code to your config.php in order to enable apps persistence :
 
 ```
   "apps_paths" => array (
