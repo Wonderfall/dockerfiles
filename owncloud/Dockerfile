@@ -42,7 +42,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && gpg --import owncloud.asc \
  && gpg --verify owncloud-$VERSION.tar.bz2.asc \
  && tar xjf /tmp/owncloud-$VERSION.tar.bz2 --strip 1 -C /owncloud \
- && sed -i "s/;env\[PATH\]/env\[PATH\]/g" /etc/php7/php.ini \
+ && sed -i "s/;env\[PATH\]/env\[PATH\]/g" /etc/php7/php-fpm.d/www.conf \
  && apk del tar ca-certificates gnupg \
  && rm -rf /var/cache/apk/* /tmp/*
 
