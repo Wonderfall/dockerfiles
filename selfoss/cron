@@ -1,3 +1,2 @@
 #!/bin/sh
-
-su - selfoss -c "/usr/bin/php --file /selfoss/cliupdate.php" > /dev/null 2>&1
+su - selfoss -c "php7 -f /selfoss/cliupdate.php" > /dev/null 2>&1
