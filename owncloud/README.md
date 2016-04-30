@@ -7,7 +7,7 @@
 - **Ready to update** : data and apps persistence.
 - **nginx** is the webserver.
 - **PHP 7** version is used.
-- **OPCache** (opcode cache) is configured to provide best performances.
+- **OPCache** (opcode cache) is configured to provide better performances.
 - **APCu** (data store) is installed, so you can benefit from memory caching.
 - **system cron** is already configured (you can disable AJAX cron).
 - **MySQL/MariaDB** compatibility (server not built-in).
