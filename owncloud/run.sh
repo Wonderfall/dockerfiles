@@ -7,6 +7,7 @@ crontab -u www-data /etc/cron.conf
 if [ -f /owncloud/config/config.php ] && [ ! -f /config/config.php ]; then
   cp /owncloud/config/config.php /config/config.php
 elif [ -f /config/config.php ]; then
+  sed -i "s/.*version.*/`grep "version" \/owncloud\/config\/config.php`/" /config/config.php
   mv /owncloud/config/config.php /config/config.php.bkp
   cp /config/config.php /owncloud/config/config.php
 fi
