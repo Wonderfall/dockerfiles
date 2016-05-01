@@ -5,9 +5,6 @@
 #### What is Subsonic?
 Subsonic is an open-source web-based media streamer and jukebox. Supports MP3, OGG, AAC and other streamable audio and video formats. Indeed, this build comes with **transcoding abilities**.
 
-#### Tags
-- **6.0 beta 2** : `6`, `latest`
-
 #### Environment variables
 - **GID** : subsonic group id.
 - **UID** : subsonic user id.
@@ -15,7 +12,6 @@ Subsonic is an open-source web-based media streamer and jukebox. Supports MP3, O
 #### Volumes
 - **/musics** : your music files
 - **/data** : subsonic data
-- **/playlists** : subsonic playlists
 
 #### Docker Compose (example)
 ```
@@ -24,7 +20,6 @@ subsonic:
   volumes: 
     - /mnt/music:/musics
     - /mnt/subsonic:/data
-    - /mnt/playlists:/playlists
   environment:
     - GID=1000
     - UID=1000
@@ -32,7 +27,7 @@ subsonic:
 
 #### Reverse proxy
 https://github.com/Wonderfall/dockerfiles/tree/master/reverse
-Fully working configuration with TLS :
+Working configuration with HTTPS :
 
 ```
   location / {
