@@ -39,10 +39,16 @@ RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/re
  && apk del git autoconf build-base php7-dev php7-pear geoip-dev \
  && rm -rf /var/cache/apk/* /tmp/*
 
-RUN wget -qO- http://builds.piwik.org/piwik-$VERSION.tar.gz | tar xz \
+RUN apk -U add openssl ca-certificates \
+ && wget -qO- http://builds.piwik.org/piwik-$VERSION.tar.gz | tar xz \
  && wget -q http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz -P /piwik/misc \
  && gzip -d /piwik/misc/GeoLiteCity.dat.gz \
- && mv /piwik/misc/GeoLiteCity.dat /piwik/misc/GeoIPCity.dat
+ && mv /piwik/misc/GeoLiteCity.dat /piwik/misc/GeoIPCity.dat \
+ && cd /piwik/libs/MaxMindGeoIP && rm geoip.inc \
+ && wget -q https://raw.githubusercontent.com/cerlestes/piwik/cerlestes-patch-1/libs/MaxMindGeoIP/geoip.inc \
+ && chmod +x geoip.inc \
+ && apk del openssl ca-certificates \
+ && rm -f /var/cache/apk/*
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
