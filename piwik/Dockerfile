@@ -34,6 +34,7 @@ RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/re
     php7-pear@testing \
  && cd /tmp && git clone https://github.com/Zakay/geoip && cd geoip \
  && phpize7 && ./configure --with-php-config=/usr/bin/php-config7 && make && make install \
+ && echo 'extension=geoip.so' >> /etc/php7/conf.d/00_geoip.ini \
  && echo 'geoip.custom_directory=/piwik/misc' >> /etc/php7/php.ini \
  && apk del git autoconf build-base php7-dev php7-pear geoip-dev \
  && rm -rf /var/cache/apk/* /tmp/*
