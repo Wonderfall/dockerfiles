@@ -2,7 +2,7 @@ FROM alpine:3.3
 MAINTAINER xataz <https://github.com/xataz/dockerfiles>
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG MEDIAINFO_VER=0.7.84
+ARG MEDIAINFO_VER=0.7.85
 ARG RTORRENT_VER=0.9.6
 ARG LIBTORRENT_VER=0.13.6
 ARG FILEBOT_VER=4.6.1
