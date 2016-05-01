@@ -6,13 +6,13 @@ if [ -f /owncloud/config/config.php ] && [ ! -f /config/config.php ]; then
 elif [ -f /config/config.php ]; then
   if [ -f /owncloud/config/config.php ]; then
     sed -i "s/.*version.*/`grep "version" \/owncloud\/config\/config.php`/" /config/config.php
+    CONFIG=`md5sum /config/config.php | awk '{ print $1 }'`
+    CONFIGINS=`md5sum /owncloud/config/config.php | awk '{ print $1 }'`
+    if [ $CONFIG != $CONFIGINS ]; then
+      mv /owncloud/config/config.php /config/config.php.bkp
+    fi
   fi
-  CONFIG=`md5sum /config/config.php | awk '{ print $1 }'`
-  CONFIGINS=`md5sum /owncloud/config/config.php | awk '{ print $1 }'`
-  if [ $CONFIG != $CONFIGINS ]; then
-    mv /owncloud/config/config.php /config/config.php.bkp
-    cp /config/config.php /owncloud/config/config.php
-  fi
+  cp /config/config.php /owncloud/config/config.php
 fi
 
 touch /var/run/php-fpm.sock
