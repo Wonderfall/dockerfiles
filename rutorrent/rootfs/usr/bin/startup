@@ -8,6 +8,7 @@ mkdir -p /data/Media/Movies
 mkdir -p /data/Media/TV
 mkdir -p /data/Media/Animes
 mkdir -p /data/Media/Music
+mkdir /tmp/fastcgi /tmp/scgi /tmp/client_body
 
 if [ $WEBROOT != "/" ]; then
     sed -i 's|<webroot>|'${WEBROOT}'|g' /sites/rutorrent.conf
