@@ -7,6 +7,8 @@ ln -s /usr/bin/lame /data/transcode/lame
 
 chown -R subsonic:subsonic /data /playlists /subsonic
 
+sleep 7 # avoid 503
+
 su subsonic << EOF
 java -Xmx200m \
   -Dsubsonic.home=/data \
