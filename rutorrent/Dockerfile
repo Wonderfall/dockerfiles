@@ -75,9 +75,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && cd /var/www/rutorrent/plugins/theme/themes \
  && git clone https://github.com/exetico/FlatUI.git \
  && mv FlatUI/FlatUI_* . && rm -rf FlatUI \
- && mkdir Material && cd Material \
- && wget http://www.sendbox.fr/a542c550bcde658d/MaterialDesign.zip \
- && unzip MaterialDesign.zip && rm MaterialDesign.zip \
+ && git clone https://github.com/Phlooo/ruTorrent-MaterialDesign.git Material \
  && mv /var/www/rutorrent /var/www/torrent \
  && mkdir /filebot \
  && wget -q http://downloads.sourceforge.net/project/filebot/filebot/FileBot_${FILEBOT_VER}/FileBot_${FILEBOT_VER}-portable.zip -P /tmp \
