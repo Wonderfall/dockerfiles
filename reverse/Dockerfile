@@ -2,7 +2,7 @@ FROM alpine:3.3
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
 ARG NGINX_VER=1.10.0
-ARG LIBRESSL_VER=2.3.3
+ARG LIBRESSL_VER=2.3.4
 ARG SIGNATURE=secret
 ARG BUILD_CORES
 
