@@ -71,6 +71,10 @@ COPY cron /etc/periodic/15min/owncloud
 
 RUN chmod +x /usr/local/bin/run.sh /etc/periodic/15min/owncloud
 
+RUN cd /owncloud/lib/private/appframework/http/ \
+ && rm request.php \
+ && wget -q https://raw.githubusercontent.com/owncloud/core/a834531aef418688538adb809a796cf830c5385b/lib/private/appframework/http/request.php
+
 VOLUME /data /config /apps2
 EXPOSE 80
 
