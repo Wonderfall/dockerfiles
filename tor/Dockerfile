@@ -1,16 +1,13 @@
 FROM alpine:edge
 
-RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
- && apk -U add tor@testing \
- && rm -f /var/cache/apk/*
-
-EXPOSE 9001
-
 VOLUME /tor
 VOLUME /torconfig
 
-RUN chown -R tor /etc/tor /tor /torconfig
+RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+ && apk -U add tor@testing \
+ && rm -f /var/cache/apk/* \
+ && chown -R tor /etc/tor /tor /torconfig
 
+EXPOSE 9001 9030
 USER tor
-
 ENTRYPOINT [ "tor" ]
