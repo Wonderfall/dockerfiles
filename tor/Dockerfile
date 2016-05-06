@@ -1,6 +1,7 @@
 FROM alpine:edge
 
 ARG ARM_VERSION=1.4.5.0
+ENV TERM=xterm
 
 VOLUME /tor
 VOLUME /torconfig
