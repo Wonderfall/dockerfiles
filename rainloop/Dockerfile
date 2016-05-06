@@ -26,6 +26,8 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && gpg --import /tmp/RainLoop.asc \
  && gpg --verify /tmp/rainloop-community-latest.zip.asc \
  && mkdir /rainloop && unzip -q /tmp/rainloop-community-latest.zip -d /rainloop \
+ && find /rainloop -type d -exec chmod 755 {} \; \
+ && find /rainloop -type f -exec chmod 644 {} \; \
  && apk del gnupg \
  && rm -rf /tmp/* /var/cache/apk/*
 
