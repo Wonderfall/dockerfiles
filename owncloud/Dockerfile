@@ -1,7 +1,7 @@
 FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG VERSION=9.0.1
+ARG VERSION=9.0.2
 ARG APCU=5.1.3
 ARG APCUBC=1.0.3
 
@@ -70,10 +70,6 @@ COPY run.sh /usr/local/bin/run.sh
 COPY cron /etc/periodic/15min/owncloud
 
 RUN chmod +x /usr/local/bin/run.sh /etc/periodic/15min/owncloud
-
-RUN cd /owncloud/lib/private/appframework/http/ \
- && rm request.php \
- && wget -q https://raw.githubusercontent.com/owncloud/core/a834531aef418688538adb809a796cf830c5385b/lib/private/appframework/http/request.php
 
 VOLUME /data /config /apps2
 EXPOSE 80
