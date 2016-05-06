@@ -5,8 +5,7 @@ ARG ISSO_VER=0.10.4
 
 ENV GID=1000 UID=1000
 
-RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
- && echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && apk -U add \
     python \
     python-dev \
@@ -16,7 +15,7 @@ RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/re
     sqlite \
     ca-certificates \
     build-base \
-    gosu@testing \
+    su-exec \
     tini@commuedge \
  && pip install --no-cache cffi \
  && pip install --no-cache misaka==1.0.2 \
