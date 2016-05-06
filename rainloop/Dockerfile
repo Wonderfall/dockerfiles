@@ -4,19 +4,20 @@ MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 ENV GID=1000 UID=1000
 
 RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+ && echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && apk -U add \
     nginx \
-    php-fpm \
-    php-curl \
-    php-iconv \
-    php-xml \
-    php-dom \
-    php-openssl \
-    php-json \
-    php-zlib \
-    php-pdo_mysql \
-    php-pdo_sqlite \
-    php-sqlite3 \
+    php7-fpm@testing \
+    php7-curl@testing \
+    php7-iconv@testing \
+    php7-xml@testing \
+    php7-dom@testing \
+    php7-openssl@testing \
+    php7-json@testing \
+    php7-zlib@testing \
+    php7-pdo_mysql@testing \
+    php7-pdo_sqlite@testing \
+    php7-sqlite3@testing \
     supervisor \
     gnupg \
     tini@commuedge \
@@ -32,7 +33,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && rm -rf /tmp/* /var/cache/apk/*
 
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY php-fpm.conf /etc/php/php-fpm.conf
+COPY php-fpm.conf /etc/php7/php-fpm.conf
 COPY supervisord.conf /usr/local/etc/supervisord.conf
 COPY run.sh /usr/local/bin/run.sh
 
