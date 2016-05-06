@@ -3,8 +3,7 @@ FROM alpine:edge
 ARG ARM_VERSION=1.4.5.0
 ENV TERM=xterm
 
-VOLUME /tor
-VOLUME /torconfig
+VOLUME /tor /torconfig
 
 RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && apk -U add tor@testing python openssl ca-certificates \
