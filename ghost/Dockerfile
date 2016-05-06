@@ -12,9 +12,9 @@ ENV GHOST_NODE_VERSION_CHECK=false \
     HIGHLIGHTER_COLOR=light \
     CUSTOM_SMTP=False \
     SMTP_HOST=mail.domain.tld \
-    SMTP_PASS=12345 \
+    SMTP_PASS=123456 \
     SMTP_USER=user \
-    SMTP_PORT=666 \
+    SMTP_PORT=587 \
     SMTP_SENDER_MAIL=user@domain.tld \
     SMTP_SENDER_NAME=Ghost \
     ENABLE_ISSO=False \
@@ -26,14 +26,13 @@ ENV GHOST_NODE_VERSION_CHECK=false \
 
 VOLUME /ghost/content
 
-RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
- && echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && apk -U add \
     ca-certificates \
     bash \
     grep \
     tini@commuedge \
-    gosu@testing \
+    su-exec \
  && wget -q https://ghost.org/zip/ghost-$VERSION.zip -P /tmp \
  && unzip -q /tmp/ghost-$VERSION.zip -d /ghost \
  && cd /ghost \

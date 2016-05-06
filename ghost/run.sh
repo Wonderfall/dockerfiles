@@ -55,4 +55,4 @@ if [ "$SYNTAX_HIGHLIGHTING" == "True" ] && [ ! -f /ghost/content/themes/casper/a
 fi
 
 chown -R $UID:$GID /ghost && cd /ghost
-gosu $UID:$GID npm start --production
+su-exec $UID:$GID npm start --production
