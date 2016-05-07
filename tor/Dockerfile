@@ -6,7 +6,7 @@ ARG TOR_USER_ID=45553
 
 ENV TERM=xterm
 
-VOLUME /usr/local/etc/tor
+VOLUME /usr/local/etc/tor /tordata
 
 RUN BUILD_DEPS=" \
     libevent-dev \
