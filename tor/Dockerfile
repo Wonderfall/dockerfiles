@@ -28,7 +28,7 @@ RUN BUILD_DEPS=" \
  && cd tor-${TOR_VERSION} \
  && ./configure --disable-asciidoc \
  && make && make install \
- && adduser -H -D -s /sbin/nologin -u ${TOR_USER_ID} tor \
+ && adduser -h /var/run/tor -D -s /sbin/nologin -u ${TOR_USER_ID} tor \
  && cd /tmp \
  && wget -q https://www.atagar.com/arm/resources/static/arm-${ARM_VERSION}.tar.bz2  \
  && tar xjf /tmp/arm-${ARM_VERSION}.tar.bz2 && cd arm && ./install \
