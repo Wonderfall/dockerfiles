@@ -3,19 +3,25 @@ MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
 ARG VERSION=2.16.1
 
+ARG GPG_matthieu="814E 346F A01A 20DB B04B  6807 B5DB D592 5590 A237"
+
 ENV GID=991 UID=991
 
 RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+ && BUILD_DEPS=" \
+    git \
+    tar \
+    build-base \
+    autoconf \
+    geoip-dev \
+    openssl \
+    ca-certificates" \
  && apk -U add \
     nginx \
     supervisor \
     libwebp \
-    git \
-    autoconf \
-    build-base \
     geoip \
-    geoip-dev \
     tini@commuedge \
     php7-fpm@testing \
     php7-gd@testing \
@@ -36,19 +42,27 @@ RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/re
  && phpize7 && ./configure --with-php-config=/usr/bin/php-config7 && make && make install \
  && echo 'extension=geoip.so' >> /etc/php7/conf.d/00_geoip.ini \
  && echo 'geoip.custom_directory=/piwik/misc' >> /etc/php7/php.ini \
- && apk del git autoconf build-base php7-dev php7-pear geoip-dev \
- && rm -rf /var/cache/apk/* /tmp/*
-
-RUN apk -U add openssl ca-certificates \
- && wget -qO- http://builds.piwik.org/piwik-$VERSION.tar.gz | tar xz \
- && wget -q http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz -P /piwik/misc \
+ && mkdir /piwik && cd /tmp \
+ && PIWIK_TARBALL="piwik-${VERSION}.tar.gz" \
+ && wget -q https://builds.piwik.org/${PIWIK_TARBALL} \
+ && wget -q https://builds.piwik.org/${PIWIK_TARBALL}.asc \
+ && wget -q https://builds.piwik.org/signature.asc \
+ && echo "Verifying authenticity of ${PIWIK_TARBALL}..." \
+ && gpg --import signature.asc \
+ && FINGERPRINT="$(LANG=C gpg --verify ${PIWIK_TARBALL}.asc ${PIWIK_TARBALL} 2>&1 \
+  | sed -n "s#Primary key fingerprint: \(.*\)#\1#p")" \
+ && if [ -z "${FINGERPRINT}" ]; then echo "Warning! Invalid GPG signature!" && exit 1; fi \
+ && if [ "${FINGERPRINT}" != "${GPG_matthieu}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
+ && echo "All seems good, now unpacking ${PIWIK_TARBALL}..." \
+ && tar xzf ${PIWIK_TARBALL} --strip 1 -C /piwik \
+ && wget -q https://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz -P /piwik/misc \
  && gzip -d /piwik/misc/GeoLiteCity.dat.gz \
  && mv /piwik/misc/GeoLiteCity.dat /piwik/misc/GeoIPCity.dat \
  && cd /piwik/libs/MaxMindGeoIP && rm geoip.inc \
  && wget -q https://raw.githubusercontent.com/cerlestes/piwik/cerlestes-patch-1/libs/MaxMindGeoIP/geoip.inc \
  && chmod +x geoip.inc \
- && apk del openssl ca-certificates \
- && rm -f /var/cache/apk/*
+ && apk del ${BUILD_DEPS} php7-dev php7-pear \
+ && rm -rf /var/cache/apk/* /tmp/*
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
@@ -61,7 +75,6 @@ VOLUME /config
 EXPOSE 80
 
 LABEL description "Open web analytics platform" \
-      piwik "Piwik v$VERSION"
+      piwik "Piwik v${VERSION}"
       
 CMD ["tini","--","run.sh"]
-
