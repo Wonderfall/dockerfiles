@@ -23,7 +23,7 @@ RUN BUILD_DEPS=" \
  && cd /tmp \
  && TOR_TARBALL="tor-${TOR_VERSION}.tar.gz" \
  && wget -q https://www.torproject.org/dist/${TOR_TARBALL} \
- && echo "Verifying ${TOR_TARBALL} using GPG..."
+ && echo "Verifying ${TOR_TARBALL} using GPG..." \
  && wget -q https://www.torproject.org/dist/${TOR_TARBALL}.asc \
  && gpg --keyserver keys.gnupg.net --recv-keys 0x165733EA \
  && FINGERPRINT="$(LANG=C gpg --verify ${TOR_TARBALL}.asc ${TOR_TARBALL} 2>&1 \
