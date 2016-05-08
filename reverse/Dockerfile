@@ -24,7 +24,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     libtool \
     pcre-dev \
     zlib-dev \
-    binutils
+    binutils \
     gnupg" \
  && apk -U add \
     ${BUILD_DEPS} \
