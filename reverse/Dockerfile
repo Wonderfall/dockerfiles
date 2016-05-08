@@ -79,7 +79,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     --with-http_v2_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module \
-    --with-openssl=/tmp/libressl \
+    --with-openssl=/tmp/libressl-${LIBRESSL_VERSION} \
     --with-cc-opt='-g -O2 -fstack-protector-strong -Wformat -Werror=format-security' \
     --with-ld-opt="-lrt" \
     --with-file-aio \
