@@ -8,7 +8,10 @@ ENV GID=991 UID=991
 RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && apk -U add \
+    gnupg \
     nginx \
+    supervisor \
+    tini@commuedge \
     php7-fpm@testing \
     php7-curl@testing \
     php7-iconv@testing \
@@ -20,15 +23,12 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     php7-pdo_mysql@testing \
     php7-pdo_sqlite@testing \
     php7-sqlite3@testing \
-    supervisor \
-    gnupg \
-    tini@commuedge \
  && cd /tmp \
  && wget -q http://repository.rainloop.net/v2/webmail/rainloop-community-latest.zip \
  && wget -q http://repository.rainloop.net/v2/webmail/rainloop-community-latest.zip.asc \
  && wget -q http://repository.rainloop.net/RainLoop.asc \
- && gpg --import RainLoop.asc \
  && echo "Verifying authenticity of rainloop-community-latest.zip using GPG..." \
+ && gpg --import RainLoop.asc \
  && FINGERPRINT="$(LANG=C gpg --verify rainloop-community-latest.zip.asc rainloop-community-latest.zip 2>&1 \
   | sed -n "s#Primary key fingerprint: \(.*\)#\1#p")" \
  && if [ -z "${FINGERPRINT}" ]; then echo "Warning! Invalid GPG signature!" && exit 1; fi \
