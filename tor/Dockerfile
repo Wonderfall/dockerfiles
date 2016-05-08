@@ -21,27 +21,31 @@ RUN BUILD_DEPS=" \
     libevent \
     openssl \
  && cd /tmp \
- && wget -q https://www.torproject.org/dist/tor-${TOR_VERSION}.tar.gz \
- && wget -q https://www.torproject.org/dist/tor-${TOR_VERSION}.tar.gz.asc \
+ && TOR_TARBALL="tor-${TOR_VERSION}.tar.gz" \
+ && wget -q https://www.torproject.org/dist/${TOR_TARBALL} \
+ && echo "Verifying ${TOR_TARBALL} using GPG..."
+ && wget -q https://www.torproject.org/dist/${TOR_TARBALL}.asc \
  && gpg --keyserver keys.gnupg.net --recv-keys 0x165733EA \
- && FINGERPRINT="$(LANG=C gpg --verify tor-${TOR_VERSION}.tar.gz.asc tor-${TOR_VERSION}.tar.gz 2>&1 \
+ && FINGERPRINT="$(LANG=C gpg --verify ${TOR_TARBALL}.asc ${TOR_TARBALL} 2>&1 \
   | sed -n "s#Primary key fingerprint: \(.*\)#\1#p")" \
  && if [ -z "${FINGERPRINT}" ]; then echo "Warning! Invalid GPG signature!" && exit 1; fi \
  && if [ "${FINGERPRINT}" != "${GPG_Mathewson}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
- && tar xzf tor-${TOR_VERSION}.tar.gz \
- && cd tor-${TOR_VERSION} \
- && ./configure --disable-asciidoc \
- && make && make install \
+ && echo "All seems good, now unpacking ${TOR_TARBALL}..." \
+ && tar xzf ${TOR_TARBALL} && cd tor-${TOR_VERSION} \
+ && ./configure --disable-asciidoc && make && make install \
  && adduser -h /var/run/tor -D -s /sbin/nologin -u ${TOR_USER_ID} tor \
  && cd /tmp \
- && wget -q https://www.atagar.com/arm/resources/static/arm-${ARM_VERSION}.tar.bz2  \
- && wget -q https://www.atagar.com/arm/resources/static/arm-${ARM_VERSION}.tar.bz2.asc \
+ && ARM_TARBALL="arm-${ARM_VERSION}.tar.bz2" \
+ && wget -q https://www.atagar.com/arm/resources/static/${ARM_TARBALL}  \
+ && echo "Verifying ${ARM_TARBALL}..." \
+ && wget -q https://www.atagar.com/arm/resources/static/${ARM_TARBALL}.asc \
  && gpg --keyserver pgp.mit.edu --recv-keys 0x9ABBEEC6 \
- && FINGERPRINT="$(LANG=C gpg --verify arm-${ARM_VERSION}.tar.bz2.asc arm-${ARM_VERSION}.tar.bz2 2>&1 \
+ && FINGERPRINT="$(LANG=C gpg --verify ${ARM_TARBALL}.asc ${ARM_TARBALL} 2>&1 \
   | sed -n "s#Primary key fingerprint: \(.*\)#\1#p")" \
  && if [ -z "${FINGERPRINT}" ]; then echo "Warning! Invalid GPG signature!" && exit 1; fi \
  && if [ "${FINGERPRINT}" != "${GPG_Johnson}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
- && tar xjf /tmp/arm-${ARM_VERSION}.tar.bz2 && cd arm && ./install \
+ && echo "All seems good, now unpacking ${ARM_TARBALL}..." \
+ && tar xjf /tmp/${ARM_TARBALL} && cd arm && ./install \
  && apk del ${BUILD_DEPS} \
  && rm -rf /var/cache/apk/* /tmp/*
 
