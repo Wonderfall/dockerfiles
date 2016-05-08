@@ -18,6 +18,7 @@ RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/re
     openssl \
     ca-certificates" \
  && apk -U add \
+    ${BUILD_DEPS} \
     nginx \
     supervisor \
     libwebp \
