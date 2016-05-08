@@ -16,7 +16,8 @@ RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/re
     autoconf \
     geoip-dev \
     openssl \
-    ca-certificates" \
+    ca-certificates \
+    gnupg" \
  && apk -U add \
     ${BUILD_DEPS} \
     nginx \
