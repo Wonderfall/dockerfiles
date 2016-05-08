@@ -1,7 +1,9 @@
 FROM alpine:3.3
-MAINTAINER Wonderfall <wonderfall@mondedie.fr>
+MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ENV GID=1000 UID=1000
+ARG GPG_rainloop="3B79 7ECE 694F 3B7B 70F3  11A4 ED7C 49D9 87DA 4591"
+
+ENV GID=991 UID=991
 
 RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
@@ -21,11 +23,17 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     supervisor \
     gnupg \
     tini@commuedge \
- && wget -q http://repository.rainloop.net/v2/webmail/rainloop-community-latest.zip -P /tmp \
- && wget -q http://repository.rainloop.net/v2/webmail/rainloop-community-latest.zip.asc -P /tmp \
- && wget -q http://repository.rainloop.net/RainLoop.asc -P /tmp \
- && gpg --import /tmp/RainLoop.asc \
- && gpg --verify /tmp/rainloop-community-latest.zip.asc \
+ && cd /tmp \
+ && wget -q http://repository.rainloop.net/v2/webmail/rainloop-community-latest.zip \
+ && wget -q http://repository.rainloop.net/v2/webmail/rainloop-community-latest.zip.asc \
+ && wget -q http://repository.rainloop.net/RainLoop.asc \
+ && gpg --import RainLoop.asc \
+ && echo "Verifying authenticity of rainloop-community-latest.zip using GPG..." \
+ && FINGERPRINT="$(LANG=C gpg --verify rainloop-community-latest.zip.asc rainloop-community-latest.zip 2>&1 \
+  | sed -n "s#Primary key fingerprint: \(.*\)#\1#p")" \
+ && if [ -z "${FINGERPRINT}" ]; then echo "Warning! Invalid GPG signature!" && exit 1; fi \
+ && if [ "${FINGERPRINT}" != "${GPG_rainloop}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
+ && echo "All seems good, now unzipping rainloop-community-latest.zip..." \
  && mkdir /rainloop && unzip -q /tmp/rainloop-community-latest.zip -d /rainloop \
  && find /rainloop -type d -exec chmod 755 {} \; \
  && find /rainloop -type f -exec chmod 644 {} \; \
@@ -41,5 +49,4 @@ RUN chmod +x /usr/local/bin/run.sh
 
 VOLUME /rainloop/data
 EXPOSE 80
-LABEL description "Fast, simple and modern webmail client"
 CMD ["tini","--","run.sh"]
