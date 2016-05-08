@@ -1,13 +1,13 @@
 FROM alpine:3.3
 
-ARG ARM_VERSION=1.4.5.0
 ARG TOR_VERSION=0.2.7.6
 ARG TOR_USER_ID=45553
+ARG ARM_VERSION=1.4.5.0
+
 ARG GPG_Mathewson="B35B F85B F194 89D0 4E28  C33C 2119 4EBB 1657 33EA"
+ARG GPG_Johnson="6827 8CC5 DD2D 1E85 C4E4  5AD9 0445 B7AB 9ABB EEC6"
 
 ENV TERM=xterm
-
-VOLUME /usr/local/etc/tor /tordata
 
 RUN BUILD_DEPS=" \
     libevent-dev \
@@ -35,10 +35,18 @@ RUN BUILD_DEPS=" \
  && adduser -h /var/run/tor -D -s /sbin/nologin -u ${TOR_USER_ID} tor \
  && cd /tmp \
  && wget -q https://www.atagar.com/arm/resources/static/arm-${ARM_VERSION}.tar.bz2  \
+ && wget -q https://www.atagar.com/arm/resources/static/arm-${ARM_VERSION}.tar.bz2.asc \
+ && gpg --keyserver pgp.mit.edu --recv-keys 0x9ABBEEC6 \
+ && FINGERPRINT="$(LANG=C gpg --verify arm-${ARM_VERSION}.tar.bz2.asc arm-${ARM_VERSION}.tar.bz2 2>&1 \
+  | sed -n "s#Primary key fingerprint: \(.*\)#\1#p")" \
+ && if [ -z "${FINGERPRINT}" ]; then echo "Warning! Invalid GPG signature!" && exit 1; fi \
+ && if [ "${FINGERPRINT}" != "${GPG_Johnson}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
  && tar xjf /tmp/arm-${ARM_VERSION}.tar.bz2 && cd arm && ./install \
  && apk del ${BUILD_DEPS} \
  && rm -rf /var/cache/apk/* /tmp/*
 
+VOLUME /usr/local/etc/tor /tordata
 EXPOSE 9001 9030
 USER tor
+
 ENTRYPOINT [ "tor" ]
