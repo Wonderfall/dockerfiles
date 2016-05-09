@@ -119,4 +119,4 @@ LABEL description="Secure reverse proxy using nginx" \
       libressl="LibreSSL v${LIBRESSL_VERSION}" \
       nginx="nginx v${NGINX_VERSION}"
 
-CMD ["tini","--","run.sh"]
+CMD ["/sbin/tini","--","run.sh"]

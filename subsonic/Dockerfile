@@ -23,4 +23,4 @@ VOLUME /data /musics /playlists /podcasts
 LABEL description "Open source media streamer" \
       subsonic "Subsonic v$VERSION"
 
-CMD ["tini","--","run.sh"]
+CMD ["/sbin/tini","--","run.sh"]

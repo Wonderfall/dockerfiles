@@ -49,4 +49,4 @@ RUN chmod +x /usr/local/bin/run.sh
 
 VOLUME /rainloop/data
 EXPOSE 80
-CMD ["tini","--","run.sh"]
+CMD ["/sbin/tini","--","run.sh"]

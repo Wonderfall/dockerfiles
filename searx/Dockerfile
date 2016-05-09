@@ -46,4 +46,4 @@ RUN wget -qO- https://github.com/asciimoo/searx/archive/master.tar.gz | tar xz -
 
 EXPOSE 8888
 LABEL description "A powerful meta-search engine"
-CMD ["tini","--","run.sh"]
+CMD ["/sbin/tini","--","run.sh"]

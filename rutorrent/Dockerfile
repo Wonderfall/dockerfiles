@@ -99,4 +99,4 @@ LABEL description="BitTorrent client with WebUI front-end" \
       mediainfo="mediainfo v$MEDIAINFO_VER" \
       filebot="Filebot v$FILEBOT_VER"
 
-CMD ["tini","--","startup"]
+CMD ["/sbin/tini","--","startup"]

@@ -62,4 +62,4 @@ EXPOSE 2368
 LABEL description="Ghost CMS ready for production" \
       ghost="Ghost v$VERSION"
 
-CMD ["tini","--","run.sh"]
+CMD ["/sbin/tini","--","run.sh"]

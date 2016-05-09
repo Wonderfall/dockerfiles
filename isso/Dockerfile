@@ -33,4 +33,4 @@ RUN chmod +x /usr/local/bin/run.sh
 
 EXPOSE 8080
 VOLUME /db /config
-CMD ["tini","--","run.sh"]
+CMD ["/sbin/tini","--","run.sh"]

@@ -43,4 +43,4 @@ RUN chmod +x /usr/local/bin/run.sh
 
 VOLUME /lychee/uploads /lychee/data
 EXPOSE 80
-CMD ["tini","--","run.sh"]
+CMD ["/sbin/tini","--","run.sh"]

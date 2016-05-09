@@ -79,4 +79,4 @@ EXPOSE 80
 LABEL description "Open web analytics platform" \
       piwik "Piwik v${VERSION}"
       
-CMD ["tini","--","run.sh"]
+CMD ["/sbin/tini","--","run.sh"]

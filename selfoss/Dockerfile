@@ -44,4 +44,4 @@ RUN chmod +x /usr/local/bin/startup /etc/periodic/15min/selfoss
 
 VOLUME /selfoss/data
 EXPOSE 80
-CMD ["tini","--","startup"]
+CMD ["/sbin/tini","--","startup"]

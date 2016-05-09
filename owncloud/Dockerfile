@@ -88,4 +88,4 @@ LABEL description="A server software for creating file hosting services" \
       apcu="apcu v${APCU_VERSION}" \
       apcu_bc="apcu_bc v${APCUBC_VERSION}"
 
-CMD ["tini","--","run.sh"]
+CMD ["/sbin/tini","--","run.sh"]
