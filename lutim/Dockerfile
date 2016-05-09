@@ -42,4 +42,4 @@ RUN chmod +x /usr/local/bin/run.sh
 
 EXPOSE 8181
 VOLUME /data /lutim/files
-CMD ["/sbin/tini","--","run.sh"]
+CMD ["tini","--","run.sh"]
