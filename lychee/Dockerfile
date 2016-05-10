@@ -1,7 +1,7 @@
 FROM alpine:3.3
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG VERSION=3.1.0
+ARG VERSION=3.1.1
 
 ENV UID=991 GID=991
 
