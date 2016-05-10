@@ -11,6 +11,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && apk -U add \
     nginx \
     libwebp@edge \
+    php7-mbstring@testing \
     php7-fpm@testing \
     php7-exif@testing \
     php7-gd@testing \
