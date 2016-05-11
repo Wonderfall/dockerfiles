@@ -12,7 +12,7 @@ Isso is a commenting server similar to Disqus. More info on the [official websit
 
 #### Build-time variables
 - **ISSO_VER** : version of Isso.
-- 
+
 #### Environment variables
 - **GID** : isso group id *(default : 991)*
 - **UID** : isso user id *(default : 991)*
