@@ -16,6 +16,7 @@ elif [ -f /config/config.php ]; then
 fi
 
 touch /var/run/php-fpm.sock
+mkdir /tmp/fastcgi /tmp/client_body
 chown -R owncloud:owncloud /owncloud /data /config /apps2 /var/run/php-fpm.sock /var/lib/nginx /tmp
 ln -s /apps2 /owncloud
 
