@@ -21,9 +21,15 @@
 
 If you want some security, versioning with tags should be available since 9.0 (e.g. the next tags will be 9.1, 9.2, etc. major updates as you can notice). I do not make tags for minor updates, like 8.2.1, 8.2.2, 8.2.x, since there are only bugfixes and security patches, which are strongly recommended.
 
+#### Build-time variables
+- **OWNCLOUD_VERSION** : version of ownCloud
+- **APCU_VERSION** : version of apcu pecl ext
+- **APCUBC_VERSION** : version of apcu_bc pecl ext
+- **GPG_owncloud** : fingerprint of the signing key
+
 #### Environment variables
-- **UID** : owncloud user id.
-- **GID** : owncloud group id.
+- **UID** : owncloud user id *(default : 991)*
+- **GID** : owncloud group id *(default : 991)*
 
 #### Volumes
 - **/data** : owncloud data (your files!).
@@ -101,9 +107,13 @@ db_owncloud:
     - MYSQL_PASSWORD=supersecretpassword
 ```
 
+#### Port
+- **80** (cf Reverse Proxy).
+
+
 #### Reverse proxy
-https://github.com/Wonderfall/dockerfiles/tree/master/reverse
-Notice that you don't have to add any headers since they're already included in the container (you avoid useless warnings from owncloud). It is strongly recommended to use ownCloud through an encrypted connection (HTTPS).
+https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration
+Note that you don't have to add any headers since they're already included in the container (you avoid useless warnings from owncloud). It is strongly recommended to use ownCloud through an encrypted connection (HTTPS).
 
 #### Enjoy!
 Go to your admin pannel, and check the **Security & setup warnings** section. If you see **"All checks passed"**, then you can congratulate yourself!

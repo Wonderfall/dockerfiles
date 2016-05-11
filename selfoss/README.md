@@ -1,4 +1,4 @@
-# hardware/selfoss
+# wonderfall/selfoss
 
 ![selfoss](https://i.imgur.com/8hJyBgk.png "selfoss")
 

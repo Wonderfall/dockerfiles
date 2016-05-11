@@ -6,17 +6,19 @@
 It is a web analytics platform. Piwik respects your privacy and gives you full control over your data.
 
 #### Features
-- Based on Alpine Linux 3.3 : lightweight and secure.
-- Functional installation. Pull and run.
+- Based on Alpine Linux.
 - Latest Piwik stable.
-- nginx stable + php-fpm stable.
-- pdo_mysql and mysqli available (mysql server not built-in).
+- nginx stable + PHP7.
+- mysql drivers (server not built-in).
 - Latest GeoLite City Database from maxmind.com.
-- External + automatic backup of configuration.
+
+#### Build-time variables
+- **VERSION** : version of Piwik
+- **GPG_matthieu** : fingerprint of signing key
 
 #### Environment variables
-- **GID** : piwik group id.
-- **UID** : piwik user id.
+- **GID** : piwik group id *(default : 991)*
+- **UID** : piwik user id *(default : 991)*
 
 #### Volumes
 - **/config** : configuration files
@@ -28,6 +30,7 @@ Piwik can update itself. It works well. I'm also maintaing this Dockerfile, so i
 According to Piwik, everything should be fine running this image. You shoudn't have any difficulties to setup your own instance of Piwik. Your `/config/config.ini.php` overwrites the one (in `/piwik/config`)used by Piwik each time the container is started. Moreover, the old config.ini.php is saved as `/config/config.ini.php.bkp` if you want to revert last changes. This should also guarantee transparency through Piwik's updates.
 
 If you're running Piwik behind a reverse proxy (most likely you do), add this to your `config.ini.php` :
+
 ```
 [General]
 #assume_secure_protocol = 1 #uncomment if you use https
@@ -37,7 +40,9 @@ proxy_host_headers[] = HTTP_X_FORWARDED_HOST
 ```
 
 #### Reverse proxy
+Use port **80**.
 https://github.com/Wonderfall/dockerfiles/tree/master/reverse
+https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration
 
 #### Docker Compose (example)
 ```
@@ -61,5 +66,3 @@ db_piwik:
     - MYSQL_USER=piwik
     - MYSQL_PASSWORD=asupersecretpassword
 ```
-
-

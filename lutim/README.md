@@ -8,6 +8,9 @@ It stores images and allows you to see them, download them or share them on soci
 
 Images are indefinitly stored unless you request that they will be deleted at first view or after 24 hours / one week / one month / one year.
 
+#### Build-time variables
+- **TINI_VER** : version of `tini`.
+
 #### Environment variables
 - **GROUPID** : lutim group id. *(default : 1000)*
 - **USERID** : lutim user id. *(default : 1000)*
@@ -24,22 +27,5 @@ Images are indefinitly stored unless you request that they will be deleted at fi
 - **/data** : where lutim's database is stored.
 - **/lutim/files** : location of uploaded files.
 
-#### Reverse proxy
-https://github.com/Wonderfall/dockerfiles/tree/master/reverse
-
-#### Docker compose (example)
-```
-lutim:
-  image: wonderfall/lutim
-  environment:
-    - GROUPID=1000
-    - USERID=1000
-    - SECRET=ZyCnLAhYKBIJrukuKZZJ
-    - CONTACT=user@domain.tld
-    - MAX_FILE_SIZE=100000000
-    - WEBROOT=/
-    - DOMAIN=domain.tld
-  volumes:
-    - /mnt/docker/lutim/data:/data
-    - /mnt/docker/lutim/files:/lutim/files
-```
+#### Ports
+- **8181** [(reverse proxy!)](https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration).
