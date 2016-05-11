@@ -27,6 +27,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     php7@testing \
     php7-fpm@testing \
     php7-intl@testing \
+    php7-mbstring@testing \
     php7-curl@testing \
     php7-gd@testing \
     php7-mcrypt@testing \
