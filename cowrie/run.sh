@@ -10,7 +10,7 @@ if [ "$JSON_LOG" == "False" ]; then
 fi
 
 mkdir -p /cowrie/log/tty
-mv -f /cowrie/custom/* /cowrie
+cp -R /cowrie/custom/* /cowrie
 chown -R $UID:$GID /cowrie
 
 su-exec $UID:$GID twistd -n -l /cowrie/log/cowrie.log cowrie
