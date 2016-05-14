@@ -32,6 +32,8 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     gmp \
     openssl \
     python \
+    py-setuptools \
+    openssh-client \
     tini@commuedge \
     su-exec \
  && cd /tmp \
