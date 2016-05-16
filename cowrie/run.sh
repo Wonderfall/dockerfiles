@@ -9,6 +9,7 @@ if [ "$JSON_LOG" == "False" ]; then
     sed -i "s|logfile = log/cowrie.json|#logfile = log/cowrie.json|g" cowrie.cfg
 fi
 
+rm twistd.pid
 mkdir -p /cowrie/log/tty
 cp -R /cowrie/custom/* /cowrie
 chown -R $UID:$GID /cowrie
