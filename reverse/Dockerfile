@@ -74,6 +74,8 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && sed -i -e "s/\"Server: nginx\" CRLF/\"Server: ${SIGNATURE}\" CRLF/g" \
     -e "s/\"Server: \" NGINX_VER CRLF/\"Server: ${SIGNATURE}\" NGINX_VER CRLF/g" \
     src/http/ngx_http_header_filter_module.c \
+ && wget https://trac.nginx.org/nginx/raw-attachment/ticket/959/preread_buffer.patch -P /tmp \
+ && cd src/http/v2 && patch < /tmp/preread_buffer.patch && cd ../../.. \
  && ./configure \
     --with-http_ssl_module \
     --with-http_v2_module \
