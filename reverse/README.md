@@ -1,27 +1,25 @@
 ## wonderfall/reverse
 
-![](https://i.goopics.net/lv.jpg) ![](https://i.goopics.net/lL.png) ![](https://upload.wikimedia.org/wikipedia/en/2/25/LibreSSL_logo.jpg)
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/115px-Nginx_logo.svg.png)
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/OpenSSL_logo.png/220px-OpenSSL_logo.png)
 
 #### What is this?
-It is nginx statically linked against LibreSSL, with embedded Brotli support. Secured by default (no root processes, even the master one).
+It is nginx statically linked against a custom OpenSSL build, with embedded Brotli support. Secured by default (no root processes, even the master one), it should be safe to use...
 
 #### Features
 - Based on Alpine Linux.
-- nginx built against LibreSSL.
-- HTTP/2 support.
-- Brotli compression support.
-- No root master process.
-- AIO Threads support.
-- No unnessary modules.
-- Optimized nginx configuration.
+- nginx built against OpenSSL.
+- OpenSSL : no weak algorithms.
+- OpenSSL : ChaCha20 ciphers support.
+- nginx : HTTP/2 (+NPN) support.
+- nginx : Brotli compression support (and configured).
+- nginx : no root master process.
+- nginx : AIO Threads support.
+- nginx : no unnessary modules.
+- nginx : optimized configuration.
 
 #### Notes
-It is required to :
-
-- chown your certs files with the right uid/pid
-- change `listen` directive to 8000/4430 instead of 80/443
-
-LibreSSL recommends Linux 3.17+.
+It is required to chown your certs files with the right uid/pid and change the `listen` directive to 8000/4430 instead of 80/443. Linux 3.17+, and the latest Docker stable are recommended.
 
 #### Volumes
 - **/sites-enabled** : vhosts files (*.conf)
@@ -32,7 +30,7 @@ LibreSSL recommends Linux 3.17+.
 
 #### Build-time variables
 - **NGINX_VERSION** : version of nginx
-- **LIBRESSL_VERSION** : version of LibreSSL
+- **OPENSSL_VERSION** : version of LibreSSL
 
 #### Environment variables
 - **GID** : nginx group id *(default : 991)*
