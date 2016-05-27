@@ -40,4 +40,8 @@ It is required to chown your certs files with the right uid/pid and change the `
 #### How to use it?
 https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration
 
-Some configuration files located in `/conf.d` are already provided, you can use them with the `include` directive. `ssl_params_d.conf` and `headers_params_d.conf` provide strong security, please check before or make your own configuration files...
+Some configuration files located in `/etc/nginx/conf` are already provided, you can use them with the `include` directive.
+
+- `ssl_params` : TLS (1.0, 1.1, 1.2), CHACHA20, AES 256/128. Nice balance between compatibility and security.
+- `headers_params` : HSTS (+ preload), XSS protection...
+- `proxy_params` : useful with `proxy_pass`.
