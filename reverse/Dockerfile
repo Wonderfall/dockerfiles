@@ -110,14 +110,16 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
 COPY nginx.conf /etc/nginx/conf/nginx.conf
 COPY run.sh /usr/local/bin/run.sh
 COPY ngxpasswd /usr/local/bin/ngxpasswd
-COPY ssl_params_d.conf /conf.d/ssl_params_d.conf
-COPY headers_params_d.conf /conf.d/headers_params_d.conf
-COPY proxy_params_d.conf /conf.d/proxy_params_d.conf
 
 RUN chmod +x /usr/local/bin/*
 
 EXPOSE 8000 4430
+
 VOLUME /sites-enabled /conf.d /passwds /certs /var/log/nginx
+
+COPY ssl_params_d.conf /conf.d/ssl_params_d.conf
+COPY headers_params_d.conf /conf.d/headers_params_d.conf
+COPY proxy_params_d.conf /conf.d/proxy_params_d.conf
 
 LABEL description="Secure reverse proxy using nginx" \
       openssl="OpenSSL v${OPENSSL_VERSION}" \
