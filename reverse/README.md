@@ -39,4 +39,5 @@ It is required to chown your certs files with the right uid/pid and change the `
 
 #### How to use it?
 https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration
+
 Some configuration files located in `/conf.d` are already provided, you can use them with the `include` directive. `ssl_params_d.conf` and `headers_params_d.conf` provide strong security, please check before or make your own configuration files...
