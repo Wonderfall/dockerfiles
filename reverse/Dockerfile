@@ -1,12 +1,12 @@
 FROM alpine:3.3
-MAINTAINER Wonderfall <wonderfall@mondedie.fr>
+MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG NGINX_VERSION=1.11.0
-ARG LIBRESSL_VERSION=2.3.4
+ARG OPENSSL_VERSION=1.0.2h
 ARG SIGNATURE=secret
 ARG BUILD_CORES
 
-ARG GPG_brent="A1EB 079B 8D3E B92B 4EBD  3139 663A F51B D5E4 D8D5"
+ARG GPG_matt="8657 ABB2 60F0 56B1 E519  0839 D9C4 D26D 0E60 4491"
 ARG GPG_mdounin="B0F4 2533 73F8 F6F5 10D4  2178 520A 9993 A1C0 52F8"
 
 ENV UID=991 GID=991
@@ -40,24 +40,24 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && mkdir /tmp/ngx_brotli && cd /tmp/ngx_brotli \
  && wget -qO- https://github.com/google/ngx_brotli/archive/master.tar.gz | tar xz --strip 1 \
  && cd /tmp \
- && LIBRESSL_TARBALL="libressl-${LIBRESSL_VERSION}.tar.gz" \
- && wget -q http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${LIBRESSL_TARBALL} \
- && echo "Verifying ${LIBRESSL_TARBALL} using GPG..." \
- && wget -q http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${LIBRESSL_TARBALL}.asc \
- && wget -q http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl.asc \
- && gpg --import libressl.asc \
- && FINGERPRINT="$(LANG=C gpg --verify ${LIBRESSL_TARBALL}.asc ${LIBRESSL_TARBALL} 2>&1 \
+ && OPENSSL_TARBALL="openssl-${OPENSSL_VERSION}.tar.gz" \
+ && wget -q https://www.openssl.org/source/${OPENSSL_TARBALL} \
+ && echo "Verifying both integrity and authenticity of ${OPENSLL_TARBALL} using GPG..." \
+ && wget -q https://www.openssl.org/source/${OPENSSL_TARBALL}.asc \
+ && wget -q https://www.openssl.org/source/${OPENSSL_TARBALL}.sha256 \
+ && echo "$(cat ${OPENSSL_TARBALL}.sha256)  ${OPENSSL_TARBALL}" > ${OPENSSL_TARBALL}.sha256 \
+ && CHECKSUM_STATE=$(echo -n $(sha256sum -c ${OPENSSL_TARBALL}.sha256) | tail -c 2) \
+ && if [ "${CHECKSUM_STATE}" != "OK" ]; then echo "Warning! Checksum does not match!" && exit 1; fi \
+ && gpg --recv-keys 0E604491 \
+ && FINGERPRINT="$(LANG=C gpg --verify ${OPENSSL_TARBALL}.asc ${OPENSSL_TARBALL} 2>&1 \
   | sed -n "s#Primary key fingerprint: \(.*\)#\1#p")" \
  && if [ -z "${FINGERPRINT}" ]; then echo "Warning! Invalid GPG signature!" && exit 1; fi \
- && if [ "${FINGERPRINT}" != "${GPG_brent}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
- && echo "All seems good, now unpacking ${LIBRESSL_TARBALL}..." \
- && tar xzf ${LIBRESSL_TARBALL} && cd libressl-${LIBRESSL_VERSION} \
- && ./configure \
-    LDFLAGS=-lrt \
-    CFLAGS=-fstack-protector-strong \
-    --prefix=/tmp/libressl/.openssl/ \
-    --enable-shared=no \
- && make install-strip -j ${NB_CORES} \
+ && if [ "${FINGERPRINT}" != "${GPG_matt}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
+ && echo "All seems good, now unpacking ${OPENSSL_TARBALL}..." \
+ && tar xzf ${OPENSSL_TARBALL} && cd openssl-${OPENSSL_VERSION} \
+ && wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch -O chacha.patch \
+ && patch -p1 < chacha.patch \
+ && ./config \
  && cd /tmp \
  && NGINX_TARBALL="nginx-${NGINX_VERSION}.tar.gz" \
  && wget -q http://nginx.org/download/${NGINX_TARBALL} \
@@ -79,9 +79,10 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     --with-http_v2_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module \
-    --with-openssl=/tmp/libressl-${LIBRESSL_VERSION} \
+    --with-openssl=/tmp/openssl-${OPENSSL_VERSION} \
+    --with-openssl-opt='no-ssl2 no-ssl3 no-camellia no-dsa no-rc2 no-rc4 no-rc5 no-md2 no-md4 no-krb5 no-comp no-idea no-shared enable-ec_nistp_64_gcc_128 -DOPENSSL_NO_HEARTBEATS -fstack-protector-strong' \
     --with-cc-opt='-g -O2 -fstack-protector-strong -Wformat -Werror=format-security' \
-    --with-ld-opt="-lrt" \
+    --with-ld-opt='-lrt' \
     --with-file-aio \
     --with-threads \
     --without-http_ssi_module \
@@ -116,7 +117,7 @@ EXPOSE 8000 4430
 VOLUME /sites-enabled /conf.d /passwds /certs /var/log/nginx
 
 LABEL description="Secure reverse proxy using nginx" \
-      libressl="LibreSSL v${LIBRESSL_VERSION}" \
+      openssl="OpenSSL v${OPENSSL_VERSION}" \
       nginx="nginx v${NGINX_VERSION}"
 
 CMD ["/sbin/tini","--","run.sh"]
