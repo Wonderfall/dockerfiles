@@ -1,6 +1,7 @@
 ## wonderfall/reverse
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/115px-Nginx_logo.svg.png)
+
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/OpenSSL_logo.png/220px-OpenSSL_logo.png)
 
 #### What is this?
@@ -38,3 +39,4 @@ It is required to chown your certs files with the right uid/pid and change the `
 
 #### How to use it?
 https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration
+Some configuration files located in `/conf.d` are already provided, you can use them with the `include` directive. `ssl_params_d.conf` and `headers_params_d.conf` provide strong security, please check before or make your own configuration files...
