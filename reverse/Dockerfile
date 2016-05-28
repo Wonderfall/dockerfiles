@@ -97,6 +97,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     --without-http_empty_gif_module \
     --without-http_browser_module \
     --prefix=/etc/nginx \
+    --http-proxy-temp-path=/tmp/proxy-temp \
     --http-log-path=/var/log/nginx/access.log \
     --error-log-path=/var/log/nginx/error.log \
     --sbin-path=/usr/local/sbin/nginx \
