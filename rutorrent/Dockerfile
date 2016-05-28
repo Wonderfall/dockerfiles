@@ -71,9 +71,9 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && mkdir -p /var/www && cd /var/www \
  && git clone https://github.com/Novik/ruTorrent.git rutorrent \
  && cd /var/www/rutorrent/plugins/ \
- && svn co http://rutorrent-logoff.googlecode.com/svn/trunk logoff \
+ && git clone https://github.com/Korni22/rutorrent-logoff logoff \
  && git clone https://github.com/xombiemp/rutorrentMobile.git mobile \
- && svn checkout http://rutorrent-pausewebui.googlecode.com/svn/trunk pausewebui \
+ && git clone https://github.com/Ardakilic/rutorrent-pausewebui pausewebui \
  && cd /var/www/rutorrent/plugins/theme/themes \
  && git clone https://github.com/Phlooo/ruTorrent-MaterialDesign.git Material \
  && mv /var/www/rutorrent /var/www/torrent \
