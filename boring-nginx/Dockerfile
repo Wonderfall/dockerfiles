@@ -26,7 +26,8 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     binutils \
     gnupg \
     cmake \
-    go" \
+    go \
+    clang" \
  && apk -U add \
     ${BUILD_DEPS} \
     pcre \
@@ -37,12 +38,14 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     openssl \
     tini@commuedge \
  && cd /tmp && git clone https://github.com/bagder/libbrotli && cd libbrotli \
- && ./autogen.sh && ./configure && make -j ${NB_CORES} && make install \
+ && ./autogen.sh && CC=clang CXX=clang++ ./configure \
+ && make -j ${NB_CORES} && make install \
  && mkdir /tmp/ngx_brotli && cd /tmp/ngx_brotli \
  && wget -qO- https://github.com/google/ngx_brotli/archive/master.tar.gz | tar xz --strip 1 \
  && cd /tmp && git clone https://boringssl.googlesource.com/boringssl \
  && cd boringssl \
- && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make -j ${NB_CORES} && cd .. \
+ && mkdir build && cd build && CC=clang CXX=clang++ cmake -DCMAKE_BUILD_TYPE=Release .. \
+ && make -j ${NB_CORES} && cd .. \
  && mkdir -p .openssl/lib/ && cd .openssl && ln -s ../include && cd .. \
  && cp build/crypto/libcrypto.a build/ssl/libssl.a .openssl/lib && cd /tmp \
  && NGINX_TARBALL="nginx-${NGINX_VERSION}.tar.gz" \
@@ -65,10 +68,10 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     -e '/SSL_R_BLOCK_CIPHER_PAD_IS_WRONG/d' \
     -e '/SSL_R_NO_CIPHERS_SPECIFIED/d' \
     src/event/ngx_event_openssl.c \
- && ./configure \
+ && CC=clang CXX=clang++ ./configure \
     --prefix=/etc/nginx \
     --sbin-path=/usr/local/sbin/nginx \
-    --with-cc-opt='-g -O2 -fstack-protector-strong -fPIE -Wformat -Werror=format-security -I ../boringssl/.openssl/include/' \
+    --with-cc-opt='-g -O3 -fstack-protector-strong -fPIE -Wformat -Werror=format-security -Wno-c++11-extensions -I ../boringssl/.openssl/include/' \
     --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -L ../boringssl/.openssl/lib' \
     --with-http_ssl_module \
     --with-http_v2_module \
