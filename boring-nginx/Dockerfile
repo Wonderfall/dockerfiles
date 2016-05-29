@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV UID=991 GID=991
@@ -27,7 +27,8 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     gnupg \
     cmake \
     go \
-    clang" \
+    clang \
+    clang-dev" \
  && apk -U add \
     ${BUILD_DEPS} \
     pcre \
