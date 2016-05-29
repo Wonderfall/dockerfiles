@@ -109,7 +109,7 @@ RUN chmod +x /usr/local/bin/*
 
 EXPOSE 8000 4430
 
-VOLUME /sites-enabled /conf.d /passwds /certs /var/log/nginx
+VOLUME /sites-enabled /www /conf.d /passwds /certs /var/log/nginx
 
 LABEL description="Secure nginx built from source." \
       openssl="BoringSSL (date of the container)." \
