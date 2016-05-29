@@ -1,0 +1,40 @@
+# HG changeset patch
+# User Piotr Sikora <piotrsikora at google.com>
+# Date 1446864006 28800
+#      Fri Nov 06 18:40:06 2015 -0800
+# Node ID 9716b76675442d78d750ee542e4c80fa86d9b355
+# Parent  8aef9afa46e31a112fa1ceaffaefbc5990dbde22
+SSL: cast hostname in SSL_set_tlsext_host_name().
+
+BoringSSL promoted this macro to a proper function,
+so it requires parameters with correct types now.
+
+Signed-off-by: Piotr Sikora <piotrsikora at google.com>
+
+diff -r 8aef9afa46e3 -r 9716b7667544 src/http/ngx_http_upstream.c
+--- a/src/http/ngx_http_upstream.c
++++ b/src/http/ngx_http_upstream.c
+@@ -1660,7 +1660,9 @@ ngx_http_upstream_ssl_name(ngx_http_requ
+     ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
+                    "upstream SSL server name: \"%s\"", name.data);
+ 
+-    if (SSL_set_tlsext_host_name(c->ssl->connection, name.data) == 0) {
++    if (SSL_set_tlsext_host_name(c->ssl->connection, (const char *) name.data)
++        == 0)
++    {
+         ngx_ssl_error(NGX_LOG_ERR, r->connection->log, 0,
+                       "SSL_set_tlsext_host_name(\"%s\") failed", name.data);
+         return NGX_ERROR;
+diff -r 8aef9afa46e3 -r 9716b7667544 src/stream/ngx_stream_proxy_module.c
+--- a/src/stream/ngx_stream_proxy_module.c
++++ b/src/stream/ngx_stream_proxy_module.c
+@@ -851,7 +851,8 @@ ngx_stream_proxy_ssl_name(ngx_stream_ses
+     ngx_log_debug1(NGX_LOG_DEBUG_STREAM, s->connection->log, 0,
+                    "upstream SSL server name: \"%s\"", name.data);
+ 
+-    if (SSL_set_tlsext_host_name(u->peer.connection->ssl->connection, name.data)
++    if (SSL_set_tlsext_host_name(u->peer.connection->ssl->connection,
++                                 (const char *) name.data)
+         == 0)
+     {
+         ngx_ssl_error(NGX_LOG_ERR, s->connection->log, 0,
