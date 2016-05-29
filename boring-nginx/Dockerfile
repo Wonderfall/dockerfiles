@@ -105,6 +105,9 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
 COPY nginx.conf /etc/nginx/conf/nginx.conf
 COPY run.sh /usr/local/bin/run.sh
 COPY ngxpasswd /usr/local/bin/ngxpasswd
+COPY ngxproxy /usr/local/bin/ngxproxy
+COPY vhost_http.conf /etc/nginx/conf/vhost_http.conf
+COPY vhost_https.conf /etc/nginx/conf/vhost_https.conf
 COPY ssl_params /etc/nginx/conf/ssl_params
 COPY headers_params /etc/nginx/conf/headers_params
 COPY proxy_params /etc/nginx/conf/proxy_params
