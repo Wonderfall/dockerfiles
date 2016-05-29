@@ -25,6 +25,7 @@ It is required to chown your certs files with the right uid/pid and change the `
 - **/certs** : SSL/TLS certificates
 - **/var/log/nginx** : nginx logs
 - **/passwds** : authentication files
+- **/www** : put your websites there
 
 #### Build-time variables
 - **NGINX_VERSION** : version of nginx
