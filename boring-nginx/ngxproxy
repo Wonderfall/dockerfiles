@@ -53,4 +53,4 @@ echo ""
 echo "It's done : ${NAME}.conf has been generated."
 echo "Restart boring-nginx to apply these modifications."
 echo ""
-exit 1
+exit 0
