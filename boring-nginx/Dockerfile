@@ -101,7 +101,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && make -j ${NB_CORES} && make install && make clean \
  && strip -s /usr/local/sbin/nginx \
  && apk del ${BUILD_DEPS} \
- && rm -rf /tmp/* /var/cache/apk/*
+ && rm -rf /tmp/* /var/cache/apk/* /root/.gnupg
 
 COPY nginx.conf /etc/nginx/conf/nginx.conf
 COPY run.sh /usr/local/bin/run.sh

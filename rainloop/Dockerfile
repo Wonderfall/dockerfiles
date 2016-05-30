@@ -38,7 +38,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && find /rainloop -type d -exec chmod 755 {} \; \
  && find /rainloop -type f -exec chmod 644 {} \; \
  && apk del gnupg \
- && rm -rf /tmp/* /var/cache/apk/*
+ && rm -rf /tmp/* /var/cache/apk/* /root/.gnupg
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf

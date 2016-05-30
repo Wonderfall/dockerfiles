@@ -47,7 +47,7 @@ RUN BUILD_DEPS=" \
  && echo "All seems good, now unpacking ${ARM_TARBALL}..." \
  && tar xjf /tmp/${ARM_TARBALL} && cd arm && ./install \
  && apk del ${BUILD_DEPS} \
- && rm -rf /var/cache/apk/* /tmp/*
+ && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
 
 VOLUME /usr/local/etc/tor /tordata
 EXPOSE 9001 9030

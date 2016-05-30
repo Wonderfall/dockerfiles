@@ -64,7 +64,7 @@ RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/re
  && wget -q https://raw.githubusercontent.com/cerlestes/piwik/cerlestes-patch-1/libs/MaxMindGeoIP/geoip.inc \
  && chmod +x geoip.inc \
  && apk del ${BUILD_DEPS} php7-dev php7-pear \
- && rm -rf /var/cache/apk/* /tmp/*
+ && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf

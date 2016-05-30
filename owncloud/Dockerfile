@@ -69,7 +69,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && cd ../apcu_bc-${APCUBC_VERSION} && phpize7 && ./configure --with-php-config=/usr/bin/php-config7 && make && make install \
  && sed -i "s/;env\[PATH\]/env\[PATH\]/g" /etc/php7/php-fpm.d/www.conf \
  && apk del ${BUILD_DEPS} php7-dev php7-pear \
- && rm -rf /var/cache/apk/* /tmp/*
+ && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf

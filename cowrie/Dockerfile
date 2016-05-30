@@ -75,7 +75,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && wget -qO- https://github.com/micheloosterhof/cowrie/archive/master.tar.gz | tar xz --strip 1 \
  && mv cowrie.cfg.dist cowrie.cfg \
  && apk del ${BUILD_DEPS} \
- && rm -rf /var/cache/apk/* /tmp/*
+ && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
 
 COPY run.sh /usr/local/bin/run.sh
 
