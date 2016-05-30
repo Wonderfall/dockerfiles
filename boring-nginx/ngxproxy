@@ -1,9 +1,9 @@
 #!/bin/sh
 
-echo ""
+echo
 echo "Welcome to ngxproxy utility."
 echo "We're about to create a new vhost."
-echo ""
+echo
 
 while [ "$NAME" == "" ]; do
     read -p "Name: " NAME
@@ -27,11 +27,11 @@ if [ "$WEBROOT" == "" ]; then
     WEBROOT="/"
 else
     echo "WARNING: Depending on the app, you might have to add a proxy header to get your custom webroot working."
-    
+
     while [[ "$CONFIGURE_WEBROOT" !=  "y" && "$CONFIGURE_WEBROOT" != "n" ]]; do
         read -p "Is it required to configure it? [y/n]: " CONFIGURE_WEBROOT
     done
-    
+
     if [ "$CONFIGURE_WEBROOT" == "y" ]; then
         while [ "$WEBROOT_HEADER" == "" ]; do
             read -p "Type the required proxy_set_header (something like X-Script-Name): " WEBROOT_HEADER
@@ -102,9 +102,7 @@ while [ "$MAX_BODY_SIZE" == "" ]; do
 done
 
 if [ "$MAX_BODY_SIZE" != "n" ]; then
-    sed -i "s|<MAX_BODY_SIZE>|$MAX_BODY_SIZE|g" /sites-enabled/$NAME.conf
-else
-    sed -i '/client_max_body_size/d' /sites-enabled/$NAME.conf
+    sed -i "s|#client_max_body_size <MAX_BODY_SIZE>|client_max_body_size $MAX_BODY_SIZE|g" /sites-enabled/$NAME.conf
 fi
 
 if [ "$CONFIGURE_WEBROOT" == "y" ]; then
@@ -118,7 +116,7 @@ sed -i \
     -e "s|<WEBROOT>|$WEBROOT|g" \
     /sites-enabled/$NAME.conf
 
-echo ""
+echo
 echo "It's done : $NAME.conf has been generated."
 
 while [[ "$RELOAD" !=  "y" && "$RELOAD" != "n" ]]; do
@@ -132,5 +130,5 @@ else
     echo "Restart manually nginx to enable this new vhost."
 fi
 
-echo ""
+echo
 exit 0

@@ -1,9 +1,9 @@
 #!/bin/sh
 
-echo ""
+echo
 echo "Welcome to ngxpasswd utility."
 echo "We're about to create a password file."
-echo ""
+echo
 
 cd /passwds || exit 1
 
@@ -46,8 +46,7 @@ if [ -f "/sites-enabled/$NAME.conf" ]; then
 
     if [ "$ADD" == "y" ]; then
         cd /etc/nginx/conf
-        sed -i "/location/r vhost_passwd.conf" /sites-enabled/$NAME.conf
-        sed -i "s/<NAME>/$NAME/g" /sites-enabled/$NAME.conf
+        sed -i -e 's/#auth/auth/g' -e "s/<NAME>/$NAME/g" /sites-enabled/$NAME.conf
         echo "Automatically added, please verify. Otherwise follow these instructions."
         echo
     fi
