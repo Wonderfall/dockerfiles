@@ -37,7 +37,7 @@ echo  "- User     :  $USER"
 echo  "- Password :  $PASSWORD"
 echo
 
-if [ -f "/sites-enabled/$NAME.conf" ]; then
+if [ -f "/sites-enabled/$NAME.conf" ] && [ grep -q '#auth' /sites-enabled/$NAME.conf ]; then
     echo "vhost at /sites-enabled/$NAME.conf detected."
 
     while [[ "$ADD" !=  "y" && "$ADD" != "n" ]]; do
