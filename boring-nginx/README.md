@@ -1,4 +1,4 @@
-## wonderfall/reverse
+## wonderfall/boring-nginx
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/115px-Nginx_logo.svg.png)
 
@@ -7,7 +7,7 @@ It is nginx statically linked against BoringSSL, with embedded Brotli support. S
 
 #### Features
 - Based on Alpine Linux.
-- nginx built against BoringSSL.
+- nginx built against **BoringSSL**.
 - nginx : HTTP/2 (+NPN) support.
 - nginx : Brotli compression support (and configured).
 - nginx : no root master process.
@@ -15,6 +15,8 @@ It is nginx statically linked against BoringSSL, with embedded Brotli support. S
 - nginx : no unnessary modules (except fastcgi).
 - nginx : pcre jit enabled.
 - nginx : optimized configuration.
+- ngxpasswd : generates a htpasswd file easily.
+- ngxproxy : generates a *proxy vhost* after asking you a few questions.
 
 #### Notes
 It is required to chown your certs files with the right uid/pid and change the `listen` directive to 8000/4430 instead of 80/443. Linux 3.17+, and the latest Docker stable are recommended.
@@ -39,8 +41,14 @@ It is required to chown your certs files with the right uid/pid and change the `
 #### How to use it?
 https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration
 
+You can use `ngxproxy` to generate a *vhost* through an easy process : `docker exec -ti nginx ngxproxy`
+
+`ngxpasswd` can generate htpasswd files : `docker exec -ti nginx ngxpasswd`
+
+Both utilites are interactive so you won't feel lost.
+
 Some configuration files located in `/etc/nginx/conf` are already provided, you can use them with the `include` directive.
 
-- `ssl_params` : TLS (1.0, 1.1, 1.2), CHACHA20, AES 256/128. Balance between compatibility and security.
-- `headers_params` : HSTS (+ preload), XSS protection...
-- `proxy_params` : useful with `proxy_pass`.
+- `ssl_params` : Provides a nice balance between compatibility and security.
+- `headers_params` : HSTS (+ preload), XSS protection, etc.
+- `proxy_params` : use with `proxy_pass`.
