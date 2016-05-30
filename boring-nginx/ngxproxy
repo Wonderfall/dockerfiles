@@ -21,6 +21,12 @@ while [ "$DOMAIN" == "" ]; do
     fi
 done
 
+read -p "Webroot (default is /) ": WEBROOT
+
+if [ "$WEBROOT" == "" ]; then
+    WEBROOT="/"
+fi
+
 while [ "$CONTAINER" == "" ]; do
     read -p "Container: " CONTAINER
     ping -c 1 $CONTAINER >/dev/null 2>&1
@@ -50,13 +56,13 @@ if [ "$HTTPS" == "y" ]; then
     while [ ! -f "$CERTIFICATE_PATH" ]; do
         read -p "Certificate path: " CERTIFICATE_PATH
     done
-    
+
     while [ ! -f "$KEY_PATH" ]; do
         read -p "Certificate key path: " KEY_PATH
     done
-    
+
     cp /etc/nginx/conf/vhost_https.conf /sites-enabled/${NAME}.conf
-    
+
     sed -i \
         -e "s|<CERTIFICATE_PATH>|$CERTIFICATE_PATH|g" \
         -e "s|<KEY_PATH>|$KEY_PATH|g" \
@@ -93,6 +99,7 @@ sed -i \
     -e "s|<DOMAIN>|$DOMAIN|g" \
     -e "s|<CONTAINER>|$CONTAINER|g" \
     -e "s|<PORT>|$PORT|g" \
+    -e "s|<WEBROOT>|$WEBROOT|g" \
     /sites-enabled/$NAME.conf
 
 echo ""
