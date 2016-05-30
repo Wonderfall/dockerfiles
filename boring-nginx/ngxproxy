@@ -5,24 +5,44 @@ echo "Welcome to ngxproxy utility."
 echo "We're about to create a new vhost."
 echo ""
 
-read -p "Name: " NAME
-read -p "Domain: " DOMAIN
-read -p "Container: " CONTAINER
+while [ "$NAME" == "" ]; do
+    read -p "Name: " NAME
+done
+
+while [ "$DOMAIN" == "" ]; do
+    read -p "Domain: " DOMAIN
+done
+
+while [ "$CONTAINER" == "" ]; do
+    read -p "Container: " CONTAINER
+done
+
 read -p "Port (blank means 80): " PORT
+
+if [ "$PORT" == "" ]; then
+    PORT="80"
+fi
 
 while [[ "$HTTPS" !=  "y" && "$HTTPS" != "n" ]]; do
     read -p "HTTPS [y/n]: " HTTPS
 done
 
 if [ "$HTTPS" == "y" ]; then
-    read -p "Certificate path: " CERTIFICATE_PATH
-    read -p "Certificate key path: " KEY_PATH
+    while [ ! -f "$CERTIFICATE_PATH" ]; do
+        read -p "Certificate path: " CERTIFICATE_PATH
+    done
+    
+    while [ ! -f "$KEY_PATH" ]; do
+        read -p "Certificate key path: " KEY_PATH
+    done
+    
     cp /etc/nginx/conf/vhost_https.conf /sites-enabled/${NAME}.conf
+    
     sed -i \
         -e "s|<CERTIFICATE_PATH>|${CERTIFICATE_PATH}|g" \
         -e "s|<KEY_PATH>|${KEY_PATH}|g" \
         /sites-enabled/${NAME}.conf
-        
+
     while [[ "$HEADERS" !=  "y" && "$HEADERS" != "n" ]]; do
         read -p "Secure headers [y/n]: " HEADERS
     done
@@ -35,19 +55,20 @@ else
     cp /etc/nginx/conf/vhost_http.conf /sites-enabled/${NAME}.conf
 fi
 
-
-read -p "Max body size (value in MB, or n): " MAX_BODY_SIZE
+while [ "$MAX_BODY_SIZE" == "" ]; do
+    read -p "Max body size (value in MB, or n): " MAX_BODY_SIZE
+done
 
 if [ "$MAX_BODY_SIZE" != "n" ]; then
-    sed -i "s|#client_max_body_size <MAX_BODY_SIZE>|client_max_body_size ${MAX_BODY_SIZE}|g" \
-        /sites-enabled/${NAME}.conf
+sed -i "s|#client_max_body_size <MAX_BODY_SIZE>|client_max_body_size ${MAX_BODY_SIZE}|g" \
+    /sites-enabled/${NAME}.conf
 fi
 
 sed -i \
-    -e "s|<DOMAIN>|${DOMAIN}|g" \
-    -e "s|<CONTAINER>|${CONTAINER}|g" \
-    -e "s|<PORT>|${PORT}|g" \
-    /sites-enabled/${NAME}.conf
+-e "s|<DOMAIN>|${DOMAIN}|g" \
+-e "s|<CONTAINER>|${CONTAINER}|g" \
+-e "s|<PORT>|${PORT}|g" \
+/sites-enabled/${NAME}.conf
 
 echo ""
 echo "It's done : ${NAME}.conf has been generated."
