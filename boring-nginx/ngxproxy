@@ -11,13 +11,18 @@ done
 
 while [ "$DOMAIN" == "" ]; do
     read -p "Domain: " DOMAIN
+    if [ "$(dig +short ${DOMAIN})" == "" ]; then
+        echo "WARNING: ${DOMAIN} couldn't be resolved. It may not work!"
+        echo "HINT: Is this domain correct? Did you update your DNS zone?"
+    fi
 done
 
 while [ "$CONTAINER" == "" ]; do
     read -p "Container: " CONTAINER
     ping -c 1 ${CONTAINER} >/dev/null 2>&1
-    if [ "$?" != "0" ]; then
-        echo "WARNING: ${CONTAINER} seems to be unavailable."
+    if [ "$?" != "0" ]; then
+        echo "WARNING: ${CONTAINER} seems to be unavailable. It may not work!"
+        echo "HINT: Did you correctly link the container?"
     fi
 done
 
