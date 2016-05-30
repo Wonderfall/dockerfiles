@@ -37,6 +37,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     libstdc++ \
     su-exec \
     openssl \
+    bind-tools \
     tini@commuedge \
  && cd /tmp && git clone https://github.com/bagder/libbrotli && cd libbrotli \
  && ./autogen.sh && CC=clang CXX=clang++ ./configure \
