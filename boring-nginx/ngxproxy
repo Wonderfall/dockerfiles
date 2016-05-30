@@ -108,7 +108,7 @@ else
 fi
 
 if [ "$CONFIGURE_WEBROOT" == "y" ]; then
-    sed -i "/proxy_pass/a \ \ \ proxy_set_header $WEBROOT_HEADER $WEBROOT;" /sites-enabled/$NAME.conf
+    sed -i "/proxy_pass/a \ \ \ \ proxy_set_header $WEBROOT_HEADER $WEBROOT;" /sites-enabled/$NAME.conf
 fi
 
 sed -i \
