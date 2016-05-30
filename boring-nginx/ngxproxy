@@ -15,6 +15,10 @@ done
 
 while [ "$CONTAINER" == "" ]; do
     read -p "Container: " CONTAINER
+    ping -c 1 CONTAINER
+    if [ "$?" != "0" ]; then
+        echo "WARNING: ${CONTAINER} seems to be unavailable."
+    fi
 done
 
 read -p "Port (blank means 80): " PORT
