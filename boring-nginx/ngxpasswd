@@ -57,6 +57,18 @@ echo  "Paste this to your vhost in order to enable auth :"
 echo  "        auth_basic \"Who's this?\";"
 echo  "        auth_basic_user_file /passwds/$NAME.htpasswd;"
 echo
-echo "Done."
+
+if [ "$ADD" == "y" ]; then
+    while [[ "$RELOAD" !=  "y" && "$RELOAD" != "n" ]]; do
+        read -p "Reload nginx now? [y/n]: " RELOAD
+    done
+
+    if [ "$RELOAD" == "y" ]; then
+        su-exec $UID:$GID nginx -s reload
+        echo "nginx successfully reloaded."
+    else
+        echo "Restart manually nginx to enable authentication."
+    fi
+fi
 
 exit 0
