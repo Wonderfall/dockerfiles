@@ -84,8 +84,8 @@ if [ "$HTTPS" == "y" ]; then
         read -p "Secure headers [y/n]: " HEADERS
     done
 
-    if [ "$HEADERS" == "n" ]; then
-        sed -i '/headers_params/d' /sites-enabled/$NAME.conf
+    if [ "$HEADERS" == "y" ]; then
+        sed -i 's|#include /etc/nginx/conf/headers_params|include /etc/nginx/conf/headers_params|g' /sites-enabled/$NAME.conf
     fi
 else
     cp /etc/nginx/conf/vhost_http.conf /sites-enabled/${NAME}.conf
