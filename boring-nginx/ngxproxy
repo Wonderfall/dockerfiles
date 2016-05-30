@@ -7,26 +7,30 @@ echo ""
 
 while [ "$NAME" == "" ]; do
     read -p "Name: " NAME
+    if [ -f "/sites-enabled/$NAME.conf" ]; then
+        echo "ERROR: /sites-enabled/$NAME.conf already exists."
+        exit 1
+    fi
 done
 
 while [ "$DOMAIN" == "" ]; do
     read -p "Domain: " DOMAIN
-    if [ "$(dig +short ${DOMAIN})" == "" ]; then
-        echo "WARNING: ${DOMAIN} couldn't be resolved. It may not work!"
+    if [ "$(dig +short $DOMAIN)" == "" ]; then
+        echo "WARNING: $DOMAIN couldn't be resolved. It may not work!"
         echo "HINT: Is this domain correct? Did you update your DNS zone?"
     fi
 done
 
 while [ "$CONTAINER" == "" ]; do
     read -p "Container: " CONTAINER
-    ping -c 1 ${CONTAINER} >/dev/null 2>&1
+    ping -c 1 $CONTAINER >/dev/null 2>&1
     if [ "$?" != "0" ]; then
-        echo "WARNING: ${CONTAINER} seems to be unavailable. It may not work!"
+        echo "WARNING: $CONTAINER seems to be unavailable. It may not work!"
         echo "HINT: Did you correctly link the container?"
     fi
 done
 
-read -p "Port (blank means 80): " PORT
+read -p "Port (default is 80): " PORT
 
 if [ "$PORT" == "" ]; then
     PORT="80"
@@ -48,9 +52,9 @@ if [ "$HTTPS" == "y" ]; then
     cp /etc/nginx/conf/vhost_https.conf /sites-enabled/${NAME}.conf
     
     sed -i \
-        -e "s|<CERTIFICATE_PATH>|${CERTIFICATE_PATH}|g" \
-        -e "s|<KEY_PATH>|${KEY_PATH}|g" \
-        /sites-enabled/${NAME}.conf
+        -e "s|<CERTIFICATE_PATH>|$CERTIFICATE_PATH|g" \
+        -e "s|<KEY_PATH>|$KEY_PATH|g" \
+        /sites-enabled/$NAME.conf
 
     while [[ "$HEADERS" !=  "y" && "$HEADERS" != "n" ]]; do
         read -p "Secure headers [y/n]: " HEADERS
@@ -58,7 +62,7 @@ if [ "$HTTPS" == "y" ]; then
 
     if [ "$HEADERS" == "y" ]; then
         sed -i 's|#include /etc/nginx/conf/headers_params|include /etc/nginx/conf/headers_params|g' \
-            /sites-enabled/${NAME}.conf
+            /sites-enabled/$NAME.conf
     fi
 else
     cp /etc/nginx/conf/vhost_http.conf /sites-enabled/${NAME}.conf
@@ -66,21 +70,39 @@ fi
 
 while [ "$MAX_BODY_SIZE" == "" ]; do
     read -p "Max body size (value in MB, or n): " MAX_BODY_SIZE
+    if ! [ "$MAX_BODY_SIZE" -eq "$MAX_BODY_SIZE" ] 2>/dev/null; then
+        if [ "$MAX_BODY_SIZE" != "n" ]; then
+            echo "ERROR: Incorrect value. Not an integer value."
+            exit 1
+        fi
+    fi
 done
 
 if [ "$MAX_BODY_SIZE" != "n" ]; then
-sed -i "s|#client_max_body_size <MAX_BODY_SIZE>|client_max_body_size ${MAX_BODY_SIZE}|g" \
-    /sites-enabled/${NAME}.conf
+    sed -i "s|<MAX_BODY_SIZE>|$MAX_BODY_SIZE|g" /sites-enabled/$NAME.conf
+else
+    sed -i '/client_max_body_size/d' /sites-enabled/$NAME.conf
 fi
 
 sed -i \
--e "s|<DOMAIN>|${DOMAIN}|g" \
--e "s|<CONTAINER>|${CONTAINER}|g" \
--e "s|<PORT>|${PORT}|g" \
-/sites-enabled/${NAME}.conf
+    -e "s|<DOMAIN>|$DOMAIN|g" \
+    -e "s|<CONTAINER>|$CONTAINER|g" \
+    -e "s|<PORT>|$PORT|g" \
+    /sites-enabled/$NAME.conf
 
 echo ""
-echo "It's done : ${NAME}.conf has been generated."
-echo "Restart boring-nginx to apply these modifications."
+echo "It's done : $NAME.conf has been generated."
+
+while [[ "$RELOAD" !=  "y" && "$RELOAD" != "n" ]]; do
+    read -p "Reload nginx now? [y/n]: " RELOAD
+done
+
+if [ "$RELOAD" == "y" ]; then
+    su-exec $UID:$GID nginx -s reload
+    echo "nginx successfully reloaded."
+else
+    echo "Restart manually nginx to enable this new vhost."
+fi
+
 echo ""
 exit 0
