@@ -21,7 +21,7 @@ while [ "$DOMAIN" == "" ]; do
     fi
 done
 
-read -p "Webroot (default is /) ": WEBROOT
+read -p "Webroot (default is /): " WEBROOT
 
 if [ "$WEBROOT" == "" ]; then
     WEBROOT="/"
