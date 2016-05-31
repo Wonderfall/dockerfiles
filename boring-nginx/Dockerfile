@@ -66,7 +66,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && ./configure \
     --prefix=/etc/nginx \
     --sbin-path=/usr/local/sbin/nginx \
-    --with-cc-opt="-g -O2 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -fPIE -fstack-protector-all -Wformat -Werror=format-security -I ../boringssl/.openssl/include/" \
+    --with-cc-opt="-g -O2 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -I ../boringssl/.openssl/include/" \
     --with-ld-opt="-Wl,-Bsymbolic-functions -Wl,-z,relro -L ../boringssl/.openssl/lib" \
     --with-http_ssl_module \
     --with-http_v2_module \
