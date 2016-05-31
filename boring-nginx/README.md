@@ -8,6 +8,7 @@ It is nginx statically linked against BoringSSL, with embedded Brotli support. S
 #### Features
 - Based on Alpine Linux.
 - nginx built against **BoringSSL**.
+- nginx : securely built using hardening gcc flags.
 - nginx : HTTP/2 (+NPN) support.
 - nginx : Brotli compression support (and configured).
 - nginx : no root master process.
@@ -41,11 +42,7 @@ It is required to chown your certs files with the right uid/pid and change the `
 #### How to use it?
 https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration
 
-You can use `ngxproxy` to generate a *vhost* through an easy process : `docker exec -ti nginx ngxproxy`
-
-`ngxpasswd` can generate htpasswd files : `docker exec -ti nginx ngxpasswd`
-
-Both utilites are interactive so you won't feel lost.
+You can use `ngxproxy` to generate a *vhost* through an easy process : `docker exec -ti nginx ngxproxy`. `ngxpasswd` can generate htpasswd files : `docker exec -ti nginx ngxpasswd`. Both utilites are interactive so you won't feel lost.
 
 Some configuration files located in `/etc/nginx/conf` are already provided, you can use them with the `include` directive.
 
