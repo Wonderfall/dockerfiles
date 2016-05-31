@@ -9,11 +9,12 @@ cd /passwds || exit 1
 
 while [ "$NAME" == "" ]; do
     read -p "Name: " NAME
-    if [ -f "/passwds/$NAME.htpasswd" ]; then
-        echo "ERROR: /passwds/$NAME.htpasswd already exists."
-        exit 1
-    fi
 done
+
+if [ -f "/passwds/$NAME.htpasswd" ]; then
+    echo "ERROR: /passwds/$NAME.htpasswd already exists."
+    exit 1
+fi
 
 while [ "$USER" == "" ]; do
     read -p "User: " USER
@@ -24,6 +25,8 @@ read -p "Password (leave blank to generate one): " PASSWORD
 if [ "$PASSWORD" == "" ]; then
     echo "Password was not defined, generating a random one..."
     PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
+elif [ ${#PASSWORD} -le 6 ]; then
+    echo "WARNING: Non-secure password."
 fi
 
 echo -n $USER:$(openssl passwd -apr1 $PASSWORD) >> $NAME.htpasswd
