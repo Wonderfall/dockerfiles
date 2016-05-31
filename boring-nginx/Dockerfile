@@ -3,7 +3,7 @@ MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV UID=991 GID=991
 
-ARG NGINX_VERSION=1.11.0
+ARG NGINX_VERSION=1.11.1
 ARG GPG_NGINX="B0F4 2533 73F8 F6F5 10D4  2178 520A 9993 A1C0 52F8"
 ARG SIGNATURE=secret
 ARG BUILD_CORES
@@ -26,9 +26,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     binutils \
     gnupg \
     cmake \
-    go \
-    clang \
-    clang-dev" \
+    go" \
  && apk -U add \
     ${BUILD_DEPS} \
     pcre \
@@ -40,12 +38,12 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     bind-tools \
     tini@commuedge \
  && cd /tmp && git clone https://github.com/bagder/libbrotli && cd libbrotli \
- && ./autogen.sh && CC=clang CXX=clang++ ./configure \
+ && ./autogen.sh && ./configure \
  && make -j ${NB_CORES} && make install \
  && mkdir /tmp/ngx_brotli && cd /tmp/ngx_brotli \
  && wget -qO- https://github.com/google/ngx_brotli/archive/master.tar.gz | tar xz --strip 1 \
  && cd /tmp && git clone https://boringssl.googlesource.com/boringssl && cd boringssl \
- && mkdir build && cd build && CC=clang CXX=clang++ cmake -DCMAKE_BUILD_TYPE=Release .. \
+ && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. \
  && make -j ${NB_CORES} && cd .. \
  && sed -i 's/OpenSSL 1.0.2 (compatible; BoringSSL)/BoringSSL/g' include/openssl/crypto.h \
  && mkdir -p .openssl/lib/ && cd .openssl && ln -s ../include && cd .. \
@@ -66,11 +64,11 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     -e "s/\"Server: \" NGINX_VER CRLF/\"Server: ${SIGNATURE}\" NGINX_VER CRLF/g" \
     src/http/ngx_http_header_filter_module.c \
  && patch -p1 < /tmp/boring.patch \
- && CC=clang CXX=clang++ ./configure \
+ && ./configure \
     --prefix=/etc/nginx \
     --sbin-path=/usr/local/sbin/nginx \
-    --with-cc-opt='-g -O3 -fstack-protector-strong -fPIE -Wformat -Werror=format-security -Wno-c++11-extensions -I ../boringssl/.openssl/include/' \
-    --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -L ../boringssl/.openssl/lib' \
+    --with-cc-opt="-g -O2 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -fPIE -fstack-protector-all -Wformat -Werror=format-security -I ../boringssl/.openssl/include/" \
+    --with-ld-opt="-Wl,-Bsymbolic-functions -Wl,-z,relro -L ../boringssl/.openssl/lib" \
     --with-http_ssl_module \
     --with-http_v2_module \
     --with-http_gzip_static_module \
