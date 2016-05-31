@@ -66,10 +66,6 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     -e "s/\"Server: \" NGINX_VER CRLF/\"Server: ${SIGNATURE}\" NGINX_VER CRLF/g" \
     src/http/ngx_http_header_filter_module.c \
  && patch -p1 < /tmp/boring.patch \
- && sed -i \
-    -e '/SSL_R_BLOCK_CIPHER_PAD_IS_WRONG/d' \
-    -e '/SSL_R_NO_CIPHERS_SPECIFIED/d' \
-    src/event/ngx_event_openssl.c \
  && CC=clang CXX=clang++ ./configure \
     --prefix=/etc/nginx \
     --sbin-path=/usr/local/sbin/nginx \
