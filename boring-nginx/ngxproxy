@@ -28,7 +28,7 @@ read -p "Webroot (default is /): " WEBROOT
 if [ "$WEBROOT" == "" ]; then
     WEBROOT="/"
 elif [ "$WEBROOT" != "/" ]; then
-    echo "WARNING: Depending on the app, you might have to add a proxy header to get your custom webroot working."
+    echo "WARNING: You might have to add a proxy header to get your custom webroot working."
 
     while [[ "$CONFIGURE_WEBROOT" !=  "y" && "$CONFIGURE_WEBROOT" != "n" ]]; do
         read -p "Is it required (by the app) to configure it? [y/n]: " CONFIGURE_WEBROOT
@@ -99,11 +99,9 @@ while [ "$MAX_BODY_SIZE" == "" ]; do
     read -p "Max body size in MB (integer/n): " MAX_BODY_SIZE
 done
 
-if ! [ "$MAX_BODY_SIZE" -eq "$MAX_BODY_SIZE" ] 2>/dev/null; then
-    if [ "$MAX_BODY_SIZE" != "n" ]; then
-        echo "ERROR: Incorrect value."
-        exit 1
-    fi
+if ! [ "$MAX_BODY_SIZE" -eq "$MAX_BODY_SIZE" ] 2>/dev/null && [ "$MAX_BODY_SIZE" != "n" ]; then
+    echo "ERROR: Incorrect value."
+    exit 1
 fi
 
 if [ "$MAX_BODY_SIZE" != "n" ]; then
