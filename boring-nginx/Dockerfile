@@ -45,7 +45,6 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && cd /tmp && git clone https://boringssl.googlesource.com/boringssl && cd boringssl \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. \
  && make -j ${NB_CORES} && cd .. \
- && sed -i 's/OpenSSL 1.0.2 (compatible; BoringSSL)/BoringSSL/g' include/openssl/crypto.h \
  && mkdir -p .openssl/lib/ && cd .openssl && ln -s ../include && cd .. \
  && cp build/crypto/libcrypto.a build/ssl/libssl.a .openssl/lib && cd /tmp \
  && NGINX_TARBALL="nginx-${NGINX_VERSION}.tar.gz" \
