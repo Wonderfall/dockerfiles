@@ -2,51 +2,55 @@
 
 echo
 echo "Welcome to ngxproxy utility."
-echo "We're about to create a new vhost."
+echo "We're about to create a new virtual host (AKA server block)."
 echo
 
 while [ "$NAME" == "" ]; do
     read -p "Name: " NAME
-    if [ -f "/sites-enabled/$NAME.conf" ]; then
-        echo "ERROR: /sites-enabled/$NAME.conf already exists."
-        exit 1
-    fi
 done
+
+if [ -f "/sites-enabled/$NAME.conf" ]; then
+    echo "ERROR: /sites-enabled/$NAME.conf already exists."
+    exit 1
+fi
 
 while [ "$DOMAIN" == "" ]; do
     read -p "Domain: " DOMAIN
-    if [ "$(dig +short $DOMAIN)" == "" ]; then
-        echo "WARNING: $DOMAIN couldn't be resolved. It may not work!"
-        echo "HINT: Is this domain correct? Did you update your DNS zone?"
-    fi
 done
+
+if [ "$(dig +short $DOMAIN)" == "" ]; then
+    echo "WARNING: $DOMAIN couldn't be resolved: it may not work!"
+    echo "HINT: Is this domain correct? Did you update your DNS zone?"
+fi
 
 read -p "Webroot (default is /): " WEBROOT
 
 if [ "$WEBROOT" == "" ]; then
     WEBROOT="/"
-else
+elif [ "$WEBROOT" != "/" ]; then
     echo "WARNING: Depending on the app, you might have to add a proxy header to get your custom webroot working."
 
     while [[ "$CONFIGURE_WEBROOT" !=  "y" && "$CONFIGURE_WEBROOT" != "n" ]]; do
-        read -p "Is it required to configure it? [y/n]: " CONFIGURE_WEBROOT
+        read -p "Is it required (by the app) to configure it? [y/n]: " CONFIGURE_WEBROOT
     done
 
     if [ "$CONFIGURE_WEBROOT" == "y" ]; then
         while [ "$WEBROOT_HEADER" == "" ]; do
-            read -p "Type the required proxy_set_header (something like X-Script-Name): " WEBROOT_HEADER
+            read -p "Type the required proxy_set_header (like X-Script-Name): " WEBROOT_HEADER
         done
     fi
 fi
 
 while [ "$CONTAINER" == "" ]; do
     read -p "Container: " CONTAINER
-    ping -c 1 $CONTAINER >/dev/null 2>&1
-    if [ "$?" != "0" ]; then
-        echo "WARNING: $CONTAINER seems to be unavailable. It may not work!"
-        echo "HINT: Did you correctly link the container?"
-    fi
 done
+
+ping -c 1 $CONTAINER >/dev/null 2>&1
+
+if [ "$?" != "0" ]; then
+    echo "WARNING: $CONTAINER seems to be unavailable. It may not work!"
+    echo "HINT: Did you correctly link the container?"
+fi
 
 read -p "Port (default is 80): " PORT
 
@@ -73,40 +77,41 @@ if [ "$HTTPS" == "y" ]; then
         read -p "Certificate key path: " KEY_PATH
     done
 
-    cp /etc/nginx/conf/vhost_https.conf /sites-enabled/${NAME}.conf
+    cp -f /etc/nginx/conf/vhost_https.conf /tmp/${NAME}.conf
 
     sed -i \
         -e "s|<CERTIFICATE_PATH>|$CERTIFICATE_PATH|g" \
         -e "s|<KEY_PATH>|$KEY_PATH|g" \
-        /sites-enabled/$NAME.conf
+        /tmp/$NAME.conf
 
     while [[ "$HEADERS" !=  "y" && "$HEADERS" != "n" ]]; do
         read -p "Secure headers [y/n]: " HEADERS
     done
 
     if [ "$HEADERS" == "y" ]; then
-        sed -i 's|#include /etc/nginx/conf/headers_params|include /etc/nginx/conf/headers_params|g' /sites-enabled/$NAME.conf
+        sed -i 's|#include /etc/nginx/conf/headers_params|include /etc/nginx/conf/headers_params|g' /tmp/$NAME.conf
     fi
 else
-    cp /etc/nginx/conf/vhost_http.conf /sites-enabled/${NAME}.conf
+    cp -f /etc/nginx/conf/vhost_http.conf /tmp/${NAME}.conf
 fi
 
 while [ "$MAX_BODY_SIZE" == "" ]; do
-    read -p "Max body size (value in MB, or n): " MAX_BODY_SIZE
-    if ! [ "$MAX_BODY_SIZE" -eq "$MAX_BODY_SIZE" ] 2>/dev/null; then
-        if [ "$MAX_BODY_SIZE" != "n" ]; then
-            echo "ERROR: Incorrect value. Not an integer value."
-            exit 1
-        fi
-    fi
+    read -p "Max body size in MB (integer/n): " MAX_BODY_SIZE
 done
 
+if ! [ "$MAX_BODY_SIZE" -eq "$MAX_BODY_SIZE" ] 2>/dev/null; then
+    if [ "$MAX_BODY_SIZE" != "n" ]; then
+        echo "ERROR: Incorrect value."
+        exit 1
+    fi
+fi
+
 if [ "$MAX_BODY_SIZE" != "n" ]; then
-    sed -i "s|#client_max_body_size <MAX_BODY_SIZE>|client_max_body_size $MAX_BODY_SIZE|g" /sites-enabled/$NAME.conf
+    sed -i "s|#client_max_body_size <MAX_BODY_SIZE>|client_max_body_size $MAX_BODY_SIZE|g" /tmp/$NAME.conf
 fi
 
 if [ "$CONFIGURE_WEBROOT" == "y" ]; then
-    sed -i "/proxy_pass/a \ \ \ \ proxy_set_header $WEBROOT_HEADER $WEBROOT;" /sites-enabled/$NAME.conf
+    sed -i "/proxy_pass/a \ \ \ \ proxy_set_header $WEBROOT_HEADER $WEBROOT;" /tmp/$NAME.conf
 fi
 
 sed -i \
@@ -114,10 +119,12 @@ sed -i \
     -e "s|<CONTAINER>|$CONTAINER|g" \
     -e "s|<PORT>|$PORT|g" \
     -e "s|<WEBROOT>|$WEBROOT|g" \
-    /sites-enabled/$NAME.conf
+    /tmp/$NAME.conf
+
+mv /tmp/$NAME.conf /sites-enabled/
 
 echo
-echo "It's done : $NAME.conf has been generated."
+echo "Done! $NAME.conf has been generated."
 
 while [[ "$RELOAD" !=  "y" && "$RELOAD" != "n" ]]; do
     read -p "Reload nginx now? [y/n]: " RELOAD
