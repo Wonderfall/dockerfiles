@@ -1,8 +1,8 @@
-diff -ur nginx-1.11.0/src/event/ngx_event_openssl.c nginx-1.11.0-patched/src/event/ngx_event_openssl.c
---- nginx-1.11.0/src/event/ngx_event_openssl.c	2016-05-24 16:54:42.000000000 +0100
-+++ nginx-1.11.0-patched/src/event/ngx_event_openssl.c	2016-05-26 18:12:03.114511014 +0100
+diff -ur nginx-1.11.1/src/event/ngx_event_openssl.c nginx-1.11.1-patched/src/event/ngx_event_openssl.c
+--- nginx-1.11.1/src/event/ngx_event_openssl.c	2016-06-01 07:32:19.447914116 +0200
++++ nginx-1.11.1-patched/src/event/ngx_event_openssl.c	2016-06-01 07:34:11.267362975 +0200
 @@ -1994,13 +1994,17 @@
- 
+
              /* handshake failures */
          if (n == SSL_R_BAD_CHANGE_CIPHER_SPEC                        /*  103 */
 +#ifdef SSL_R_BLOCK_CIPHER_PAD_IS_WRONG
@@ -19,13 +19,13 @@ diff -ur nginx-1.11.0/src/event/ngx_event_openssl.c nginx-1.11.0-patched/src/eve
              || n == SSL_R_NO_COMPRESSION_SPECIFIED                   /*  187 */
              || n == SSL_R_NO_SHARED_CIPHER                           /*  193 */
              || n == SSL_R_RECORD_LENGTH_MISMATCH                     /*  213 */
-diff -ur nginx-1.11.0/src/http/ngx_http_upstream.c nginx-1.11.0-patched/src/http/ngx_http_upstream.c
---- nginx-1.11.0/src/http/ngx_http_upstream.c	2016-05-24 16:54:43.000000000 +0100
-+++ nginx-1.11.0-patched/src/http/ngx_http_upstream.c	2016-05-26 18:12:23.166741658 +0100
+diff -ur nginx-1.11.1/src/http/ngx_http_upstream.c nginx-1.11.1-patched/src/http/ngx_http_upstream.c
+--- nginx-1.11.1/src/http/ngx_http_upstream.c	2016-06-01 07:32:25.935882743 +0200
++++ nginx-1.11.1-patched/src/http/ngx_http_upstream.c	2016-06-01 07:34:57.047131542 +0200
 @@ -1690,7 +1690,7 @@
      ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
                     "upstream SSL server name: \"%s\"", name.data);
- 
+
 -    if (SSL_set_tlsext_host_name(c->ssl->connection, name.data) == 0) {
 +    if (SSL_set_tlsext_host_name(c->ssl->connection, (const char*) name.data) == 0) {
          ngx_ssl_error(NGX_LOG_ERR, r->connection->log, 0,

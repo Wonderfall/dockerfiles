@@ -65,8 +65,8 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && patch -p1 < /tmp/boring.patch \
  && ./configure \
     --prefix=/etc/nginx \
-    --sbin-path=/usr/local/sbin/nginx \
-    --with-cc-opt="-g -O2 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -I ../boringssl/.openssl/include/" \
+    --sbin-path=/sbin/nginx \
+    --with-cc-opt="-g -O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -I ../boringssl/.openssl/include/" \
     --with-ld-opt="-Wl,-Bsymbolic-functions -Wl,-z,relro -L ../boringssl/.openssl/lib" \
     --with-http_ssl_module \
     --with-http_v2_module \
@@ -85,14 +85,11 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     --without-http_memcached_module \
     --without-http_empty_gif_module \
     --without-http_browser_module \
-    --http-proxy-temp-path=/tmp/proxy_temp \
-    --http-client-body-temp-path=/tmp/client_body_temp \
-    --http-fastcgi-temp-path=/tmp/fastcgi_temp \
     --http-log-path=/var/log/nginx/access.log \
     --error-log-path=/var/log/nginx/error.log \
     --add-module=/tmp/ngx_brotli \
  && make -j ${NB_CORES} && make install && make clean \
- && strip -s /usr/local/sbin/nginx \
+ && strip -s /sbin/nginx \
  && apk del ${BUILD_DEPS} \
  && rm -rf /tmp/* /var/cache/apk/* /root/.gnupg
 
