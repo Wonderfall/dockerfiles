@@ -75,7 +75,6 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     --with-file-aio \
     --with-threads \
     --with-pcre-jit \
-    --with-ipv6 \
     --without-http_ssi_module \
     --without-http_scgi_module \
     --without-http_uwsgi_module \
