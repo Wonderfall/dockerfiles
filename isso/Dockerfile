@@ -16,6 +16,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     python \
     py-setuptools \
     sqlite \
+    openssl \
     ca-certificates \
     su-exec \
     tini@commuedge \
