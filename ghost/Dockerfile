@@ -28,6 +28,7 @@ VOLUME /ghost/content
 
 RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && apk -U add \
+    openssl \
     ca-certificates \
     bash \
     grep \
@@ -41,7 +42,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && mv config.example.js config.js \
  && sed -i 's/127.0.0.1/0.0.0.0/g' config.js \
  && npm cache clean \
- && apk del ca-certificates \
+ && apk del ca-certificates openssl \
  && rm -rf /tmp/* /var/cache/apk/*
 
 COPY run.sh /usr/local/bin/run.sh
