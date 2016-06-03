@@ -51,13 +51,12 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && wget -q https://download.owncloud.org/community/${OWNCLOUD_TARBALL} \
  && wget -q https://download.owncloud.org/community/${OWNCLOUD_TARBALL}.sha256 \
  && wget -q https://download.owncloud.org/community/${OWNCLOUD_TARBALL}.asc \
- && wget -q https://owncloud.org/owncloud.asc \
  && wget -q https://pecl.php.net/get/apcu-${APCU_VERSION}.tgz \
  && wget -q https://pecl.php.net/get/apcu_bc-${APCUBC_VERSION}.tgz \
  && echo "Verifying both integrity and authenticity of ${OWNCLOUD_TARBALL}..." \
  && CHECKSUM_STATE=$(echo -n $(sha256sum -c ${OWNCLOUD_TARBALL}.sha256) | tail -c 2) \
  && if [ "${CHECKSUM_STATE}" != "OK" ]; then echo "Warning! Checksum does not match!" && exit 1; fi \
- && gpg --import owncloud.asc \
+ && gpg --recv-keys F6978A26 \
  && FINGERPRINT="$(LANG=C gpg --verify ${OWNCLOUD_TARBALL}.asc ${OWNCLOUD_TARBALL} 2>&1 \
   | sed -n "s#Primary key fingerprint: \(.*\)#\1#p")" \
  && if [ -z "${FINGERPRINT}" ]; then echo "Warning! Invalid GPG signature!" && exit 1; fi \
