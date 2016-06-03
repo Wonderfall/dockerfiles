@@ -1,5 +1,7 @@
 #!/bin/sh
-sed -i "s|base_url : False|base_url : $BASE_URL|g" searx/settings.yml
-sed -i "s/image_proxy : False/image_proxy : $IMAGE_PROXY/g" searx/settings.yml
-sed -i "s/ultrasecretkey/`openssl rand -hex 16`/g" searx/settings.yml
-python searx/webapp.py
+sed -i -e "s|base_url : False|base_url : ${BASE_URL}|g" \
+       -e "s/image_proxy : False/image_proxy : ${IMAGE_PROXY}/g" \
+       -e "s/ultrasecretkey/$(openssl rand -hex 16)/g" \
+       /usr/local/searx/searx/settings.yml
+
+python /usr/local/searx/searx/webapp.py

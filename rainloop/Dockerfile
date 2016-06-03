@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG GPG_rainloop="3B79 7ECE 694F 3B7B 70F3  11A4 ED7C 49D9 87DA 4591"

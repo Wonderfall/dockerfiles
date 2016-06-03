@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG MPFR_VERSION=3.1.4
@@ -36,8 +36,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     openssh-client \
     tini@commuedge \
     su-exec \
- && cd /tmp \
- && wget -q http://www.mpfr.org/mpfr-current/mpfr-${MPFR_VERSION}.tar.gz \
+ && cd /tmp && wget -q http://www.mpfr.org/mpfr-current/mpfr-${MPFR_VERSION}.tar.gz \
  && echo "Verifying authenticity of mpfr-${MPFR_VERSION}.tar.gz..." \
  && wget -q http://www.mpfr.org/mpfr-current/mpfr-${MPFR_VERSION}.tar.gz.asc \
  && gpg --recv-keys 98C3739D \
@@ -48,8 +47,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && echo "All seems good, now unpacking mpfr-${MPFR_VERSION}.tar.gz..." \
  && tar xzf mpfr-${MPFR_VERSION}.tar.gz && cd mpfr-${MPFR_VERSION} \
  && ./configure && make && make install \
- && cd /tmp \
- && wget -q ftp://ftp.gnu.org/gnu/mpc/mpc-${MPC_VERSION}.tar.gz \
+ && cd /tmp && wget -q ftp://ftp.gnu.org/gnu/mpc/mpc-${MPC_VERSION}.tar.gz \
  && echo "Verifying both integrity and authenticity of mpc-${MPC_VERSION}.tar.gz..." \
  && CHECKSUM=$(sha1sum mpc-${MPC_VERSION}.tar.gz | awk '{print $1}') \
  && if [ "${CHECKSUM}" != "${SHA1_MPC}" ]; then echo "Warning! Checksum does not match!" && exit 1; fi \

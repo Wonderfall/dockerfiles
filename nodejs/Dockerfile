@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
 ARG NODE_VER=4.4.5
@@ -17,6 +17,7 @@ RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
     grep \
     binutils \
     binutils-gold \
+    openssl \
     ca-certificates" \
  && apk -U add \
     $BUILD_DEPS \

@@ -1,14 +1,13 @@
-FROM alpine:3.3
+FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV GID=991 UID=991
 
 RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
- && echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
  && apk -U add \
     nginx \
-    libwebp@edge \
+    libwebp \
     php7-fpm@testing \
     php7-gd@testing \
     php7-mcrypt@testing \
@@ -16,12 +15,13 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     php7-zlib@testing \
     supervisor \
     tini@commuedge \
+    openssl \
     ca-certificates \
     tar \
  && mkdir zerobin && cd zerobin \
  && wget -qO- https://github.com/elrido/ZeroBin/archive/master.tar.gz | tar xz --strip 1 \
  && mv cfg/conf.ini.sample cfg/conf.ini \
- && apk del tar ca-certificates \
+ && apk del tar openssl ca-certificates \
  && rm -f /var/cache/apk/*
 
 COPY nginx.conf /etc/nginx/nginx.conf

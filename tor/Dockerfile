@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM alpine:edge
 
 ARG TOR_VERSION=0.2.7.6
 ARG TOR_USER_ID=45553

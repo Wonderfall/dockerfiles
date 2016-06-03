@@ -1,4 +1,4 @@
-FROM alpine:3.3
+FROM alpine:edge
 MAINTAINER xataz <https://github.com/xataz/dockerfiles>
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
@@ -15,7 +15,6 @@ ENV UID=991 \
 
 RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
- && echo "@community http://nl.alpinelinux.org/alpine/v3.3/community/" >> /etc/apk/repositories \
  && NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && BUILD_DEPS=" \
     build-base \
@@ -45,7 +44,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     supervisor \
     geoip \
     tini@commuedge \
-    openjdk8-jre@community \
+    openjdk8-jre@commuedge \
  && cd /tmp \
  && wget -q http://downloads.sourceforge.net/mktorrent/mktorrent-1.0.tar.gz \
  && tar xzvf mktorrent-1.0.tar.gz \
