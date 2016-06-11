@@ -51,13 +51,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && if [ -z "${FINGERPRINT}" ]; then echo "Warning! Invalid GPG signature!" && exit 1; fi \
  && if [ "${FINGERPRINT}" != "${GPG_LIBRESSL}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
  && echo "All seems good, now unpacking ${LIBRESSL_TARBALL}..." \
- && tar xzf ${LIBRESSL_TARBALL} && cd libressl-${LIBRESSL_VERSION} \
- && ./configure \
-    LDFLAGS=-lrt \
-    CFLAGS=-fstack-protector-strong \
-    --prefix=/tmp/libressl/.openssl/ \
-    --enable-shared=no \
- && make install-strip -j ${NB_CORES} \
+ && tar xzf ${LIBRESSL_TARBALL} \
  && NGINX_TARBALL="nginx-${NGINX_VERSION}.tar.gz" \
  && wget -q http://nginx.org/download/${NGINX_TARBALL} \
  && echo "Verifying ${NGINX_TARBALL} using GPG..." \
