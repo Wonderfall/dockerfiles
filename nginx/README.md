@@ -3,7 +3,7 @@
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/115px-Nginx_logo.svg.png)
 
 #### What is this?
-It is nginx statically linked against LibreSSL, with the following modules embedded : ngx_brotli (Brtoli compression support) and headers_more. Secured by default (no root processes, even the master one), so it should be safe to use.
+It is nginx statically linked against LibreSSL, with the following modules embedded : ngx_brotli (Brotli compression support) and headers_more. Secured by default (no root processes, even the master one), so it should be safe to use.
 
 #### Features
 - Based on Alpine Linux Edge.
