@@ -70,7 +70,7 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && if [ "${FINGERPRINT}" != "${GPG_NGINX}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
  && echo "All seems good, now unpacking ${NGINX_TARBALL}..." \
  && tar xzf ${NGINX_TARBALL} && cd nginx-${NGINX_VERSION} \
- && wget https://raw.githubusercontent.com/felixbuenemann/sslconfig/b8ebac6a337e8e4e373dfee76e7dfac3cc6c56e6/patches/nginx_1_9_15_http2_spdy.patch -O spdy.patch \
+ && wget https://raw.githubusercontent.com/felixbuenemann/sslconfig/updated-nginx-1.9.15-spdy-patch/patches/nginx_1_9_15_http2_spdy.patch -O spdy.patch \
  && patch -p1 < spdy.patch \
  && wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch \
  && patch -p1 < nginx__dynamic_tls_records.patch \
