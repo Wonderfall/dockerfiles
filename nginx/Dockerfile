@@ -4,6 +4,8 @@ MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 ENV UID=991 GID=991
 
 ARG NGINX_VERSION=1.11.1
+ARG LIBRESSL_VERSION=2.4.1
+ARG GPG_LIBRESSL="A1EB 079B 8D3E B92B 4EBD  3139 663A F51B D5E4 D8D5"
 ARG GPG_NGINX="B0F4 2533 73F8 F6F5 10D4  2178 520A 9993 A1C0 52F8"
 ARG BUILD_CORES
 
@@ -38,8 +40,24 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && cd /tmp \
  && git clone https://github.com/google/ngx_brotli \
  && git clone https://github.com/openresty/headers-more-nginx-module \
- && git clone https://github.com/openssl/openssl.git && cd openssl && ./config \
- && cd /tmp \
+ && LIBRESSL_TARBALL="libressl-${LIBRESSL_VERSION}.tar.gz" \
+ && wget -q http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${LIBRESSL_TARBALL} \
+ && echo "Verifying ${LIBRESSL_TARBALL} using GPG..." \
+ && wget -q http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${LIBRESSL_TARBALL}.asc \
+ && wget -q http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl.asc \
+ && gpg --import libressl.asc \
+ && FINGERPRINT="$(LANG=C gpg --verify ${LIBRESSL_TARBALL}.asc ${LIBRESSL_TARBALL} 2>&1 \
+  | sed -n "s#Primary key fingerprint: \(.*\)#\1#p")" \
+ && if [ -z "${FINGERPRINT}" ]; then echo "Warning! Invalid GPG signature!" && exit 1; fi \
+ && if [ "${FINGERPRINT}" != "${GPG_LIBRESSL}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
+ && echo "All seems good, now unpacking ${LIBRESSL_TARBALL}..." \
+ && tar xzf ${LIBRESSL_TARBALL} && cd libressl-${LIBRESSL_VERSION} \
+ && ./configure \
+    LDFLAGS=-lrt \
+    CFLAGS=-fstack-protector-strong \
+    --prefix=/tmp/libressl/.openssl/ \
+    --enable-shared=no \
+ && make install-strip -j ${NB_CORES} \
  && NGINX_TARBALL="nginx-${NGINX_VERSION}.tar.gz" \
  && wget -q http://nginx.org/download/${NGINX_TARBALL} \
  && echo "Verifying ${NGINX_TARBALL} using GPG..." \
@@ -59,10 +77,9 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && ./configure \
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
-    --with-cc-opt='-O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -fPIE -fstack-protector-strong -Wformat -Werror=format-security' \
+    --with-cc-opt='-O3 -fPIE -fstack-protector-strong -Wformat -Werror=format-security' \
     --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro' \
-    --with-openssl=/tmp/openssl \
-    --with-openssl-opt='no-ssl3 no-camellia no-dsa no-rc2 no-rc4 no-rc5 no-md2 no-md4 no-comp no-idea no-shared enable-ec_nistp_64_gcc_128 -DOPENSSL_NO_HEARTBEATS -D_FORTIFY_SOURCE=2 -fstack-protector-strong' \
+    --with-openssl=/tmp/libressl-${LIBRESSL_VERSION} \
     --with-http_ssl_module \
     --with-http_v2_module \
     --with-http_spdy_module \
