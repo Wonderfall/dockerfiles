@@ -117,8 +117,8 @@ EXPOSE 8000 4430
 
 VOLUME /sites-enabled /www /conf.d /passwds /certs /var/log/nginx
 
-LABEL description="Secure nginx built from source." \
-      openssl="LibreSSL ${LIBRESSL_VERSION}" \
+LABEL description="nginx built from source." \
+      openssl="LibreSSL ${LIBRESSL_VERSION}." \
       nginx="nginx ${NGINX_VERSION}."
 
 CMD ["/sbin/tini","--","run.sh"]
