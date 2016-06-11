@@ -1,20 +1,23 @@
-## wonderfall/boring-nginx
+## wonderfall/nginx
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/115px-Nginx_logo.svg.png)
 
 #### What is this?
-It is nginx statically linked against BoringSSL, with embedded Brotli support. Secured by default (no root processes, even the master one), it should be safe to use...
+It is nginx statically linked against LibreSSL, with the following modules embedded : ngx_brotli (Brtoli compression support) and headers_more. Secured by default (no root processes, even the master one), so it should be safe to use.
 
 #### Features
-- Based on Alpine Linux.
-- nginx built against **BoringSSL**.
+- Based on Alpine Linux Edge.
+- nginx built against **LibreSSL**.
+- nginx : Cloudfare's SPDY patch.
+- nginx : Cloudfare's dynamic TLS records patch.
 - nginx : securely built using hardening gcc flags.
 - nginx : HTTP/2 (+NPN) support.
 - nginx : Brotli compression support (and configured).
+- nginx : Headers More module.
 - nginx : no root master process.
 - nginx : AIO Threads support.
 - nginx : no unnessary modules (except fastcgi).
-- nginx : pcre jit enabled.
+- nginx : pcre-jit enabled.
 - nginx : optimized configuration.
 - ngxpasswd : generates a htpasswd file easily.
 - ngxproxy : generates a *proxy vhost* after asking you a few questions.
@@ -32,8 +35,10 @@ It is required to chown your certs files with the right uid/pid and change the `
 
 #### Build-time variables
 - **NGINX_VERSION** : version of nginx
+- **LIBRESSL_VERSION** : version of LibreSSL
 - **GPG_NGINX** : fingerprint of signing key package
-- **SIGNATURE** : HTTP signature of nginx, default is *secret*
+- **GPG_LIBRESSL** : fingerprint of signing key package
+- **BUILD_CORES** : number of cores you'd like to build with (default : all)
 
 #### Environment variables
 - **GID** : nginx group id *(default : 991)*
