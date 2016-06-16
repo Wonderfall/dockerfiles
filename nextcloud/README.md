@@ -16,9 +16,6 @@
 
 **This image is meant to be used behind a secure reverse proxy.**
 
-#### Tags
-- `latest`, `9.0` : nextcloud 9.0.x (actual version : 9.0.50).
-
 #### Build-time variables
 - **NEXTCLOUD_VERSION** : version of nextcloud
 - **APCU_VERSION** : version of apcu pecl ext
@@ -55,10 +52,10 @@ Hey, you should add the following code to your config.php in order to enable app
 You have to use an external database container, it is thus allowing better security and less complexity. I suggest you to use MariaDB, which is a reliable database server. For instance, you can use the official `mariadb` image available as an automated build that you can find on Docker Hub. Since sqlite is supected by nextcloud to cause some troubles with sync clients, sqlite databases are not suported.
 
 #### Once runned!
-Go to your nextcloud instance, change `/ocwww/data` to `/data` (recommended), and fill in all the fields to configure your database. Don't forget to type a strong password. You should also avoid to name your admin account "admin".
+Go to your nextcloud instance, change `/nextcloud/data` to `/data` (recommended), and fill in all the fields to configure your database. Don't forget to type a strong password. You should also avoid to name your admin account "admin".
 
 #### Configure
-When you mount `/config`, you don't really mount `/ocwww/nextcloud/config`. `/config` should contain `config.php`, although this is not the one actually used by nextcloud. However, each time you restart the container, `/config/config.php` overwrites `/ocwww/config/config.php`. Before that, `/ocwww/config/config.php` is copied as `/config/config.php.bkp`, so you can easily revert changes.
+When you mount `/config`, you don't really mount `/nextcloud/nextcloud/config`. `/config` should contain `config.php`, although this is not the one actually used by nextcloud. However, each time you restart the container, `/config/config.php` overwrites `/nextcloud/config/config.php`. Before that, `/nextcloud/config/config.php` is copied as `/nextcloud/config.php.bkp`, so you can easily revert changes.
 
 Now, nextcloud should be 100% functionnal. APCu can be enabled if you set it correctly in the config.php file (see further). **system cron is already active**. **You should switch** from `AJAX cron` to `cron` (system cron) in the admin pannel. By the way, **I highly recommend encryption**! My buid is fully-compatible with the encryption module. 
 
@@ -83,7 +80,7 @@ reverse:
   ...
 
 nextcloud:
-  image: wonderfall/nextcloud:9.0
+  image: wonderfall/nextcloud
   links:
     - db_nextcloud:db_nextcloud
   environment:
@@ -111,7 +108,5 @@ db_nextcloud:
 
 #### Reverse proxy
 https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration
-Note that you don't have to add any headers since they're already included in the container (you avoid useless warnings from nextcloud). It is strongly recommended to use nextcloud through an encrypted connection (HTTPS).
 
-#### Enjoy!
-Go to your admin pannel, and check the **Security & setup warnings** section. If you see **"All checks passed"**, then you can congratulate yourself!
+You don't have to add any headers since they're already included in the container (you avoid useless warnings from nextcloud). It is strongly recommended to use nextcloud through an encrypted connection (HTTPS).
