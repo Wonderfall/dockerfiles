@@ -1,2 +1,0 @@
-#!/bin/sh
-su - owncloud -c "php7 -f /owncloud/cron.php" > /dev/null 2>&1

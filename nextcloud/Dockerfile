@@ -1,11 +1,11 @@
 FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG OWNCLOUD_VERSION=9.0.2
+ARG NEXTCLOUD_VERSION=9.0.50
 ARG APCU_VERSION=5.1.5
 ARG APCUBC_VERSION=1.0.3
 
-ARG GPG_owncloud="E303 6906 AD9F 3080 7351  FAC3 2D5D 5E97 F697 8A26"
+ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
 ENV GID=991 UID=991
 
@@ -46,23 +46,24 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
     php7-openssl@testing \
     php7-dev@testing \
     php7-pear@testing \
- && mkdir /owncloud && cd /tmp \
- && OWNCLOUD_TARBALL="owncloud-${OWNCLOUD_VERSION}.tar.bz2" \
- && wget -q https://download.owncloud.org/community/${OWNCLOUD_TARBALL} \
- && wget -q https://download.owncloud.org/community/${OWNCLOUD_TARBALL}.sha256 \
- && wget -q https://download.owncloud.org/community/${OWNCLOUD_TARBALL}.asc \
+ && mkdir /nextcloud && cd /tmp \
+ && NEXTCLOUD_TARBALL="nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" \
+ && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL} \
+ && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL}.sha256 \
+ && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL}.asc \
  && wget -q https://pecl.php.net/get/apcu-${APCU_VERSION}.tgz \
  && wget -q https://pecl.php.net/get/apcu_bc-${APCUBC_VERSION}.tgz \
- && echo "Verifying both integrity and authenticity of ${OWNCLOUD_TARBALL}..." \
- && CHECKSUM_STATE=$(echo -n $(sha256sum -c ${OWNCLOUD_TARBALL}.sha256) | tail -c 2) \
+ && echo "Verifying both integrity and authenticity of ${NEXTCLOUD_TARBALL}..." \
+ && CHECKSUM_STATE=$(echo -n $(sha256sum -c ${NEXTCLOUD_TARBALL}.sha256) | tail -c 2) \
  && if [ "${CHECKSUM_STATE}" != "OK" ]; then echo "Warning! Checksum does not match!" && exit 1; fi \
- && gpg --recv-keys F6978A26 \
- && FINGERPRINT="$(LANG=C gpg --verify ${OWNCLOUD_TARBALL}.asc ${OWNCLOUD_TARBALL} 2>&1 \
+ && wget -q https://nextcloud.com/nextcloud.asc \
+ && gpg --import nextcloud.asc \
+ && FINGERPRINT="$(LANG=C gpg --verify ${NEXTCLOUD_TARBALL}.asc ${NEXTCLOUD_TARBALL} 2>&1 \
   | sed -n "s#Primary key fingerprint: \(.*\)#\1#p")" \
  && if [ -z "${FINGERPRINT}" ]; then echo "Warning! Invalid GPG signature!" && exit 1; fi \
- && if [ "${FINGERPRINT}" != "${GPG_owncloud}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
- && echo "All seems good, now unpacking ${OWNCLOUD_TARBALL}..." \
- && tar xjf ${OWNCLOUD_TARBALL} --strip 1 -C /owncloud \
+ && if [ "${FINGERPRINT}" != "${GPG_nextcloud}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
+ && echo "All seems good, now unpacking ${NEXTCLOUD_TARBALL}..." \
+ && tar xjf ${NEXTCLOUD_TARBALL} --strip 1 -C /nextcloud \
  && tar xzf apcu-${APCU_VERSION}.tgz && tar xzf apcu_bc-${APCUBC_VERSION}.tgz \
  && cd apcu-${APCU_VERSION} && phpize7 && ./configure --with-php-config=/usr/bin/php-config7 && make && make install \
  && cd ../apcu_bc-${APCUBC_VERSION} && phpize7 && ./configure --with-php-config=/usr/bin/php-config7 && make && make install \
@@ -76,15 +77,15 @@ COPY opcache.ini /etc/php7/conf.d/00_opcache.ini
 COPY apcu.ini /etc/php7/conf.d/00_apcu.ini
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY run.sh /usr/local/bin/run.sh
-COPY cron /etc/periodic/15min/owncloud
+COPY cron /etc/periodic/15min/nextcloud
 
-RUN chmod +x /usr/local/bin/run.sh /etc/periodic/15min/owncloud
+RUN chmod +x /usr/local/bin/run.sh /etc/periodic/15min/nextcloud
 
 VOLUME /data /config /apps2
 EXPOSE 80
 
 LABEL description="A server software for creating file hosting services" \
-      owncloud="ownCloud v${OWNCLOUD_VERSION}" \
+      nextcloud="ownCloud v${NEXTCLOUD_VERSION}" \
       apcu="apcu v${APCU_VERSION}" \
       apcu_bc="apcu_bc v${APCUBC_VERSION}"
 
