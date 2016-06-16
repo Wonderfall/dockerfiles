@@ -85,7 +85,7 @@ VOLUME /data /config /apps2
 EXPOSE 80
 
 LABEL description="A server software for creating file hosting services" \
-      nextcloud="ownCloud v${NEXTCLOUD_VERSION}" \
+      nextcloud="Nextcloud v${NEXTCLOUD_VERSION}" \
       apcu="apcu v${APCU_VERSION}" \
       apcu_bc="apcu_bc v${APCUBC_VERSION}"
 
