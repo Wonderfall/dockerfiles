@@ -4,17 +4,16 @@
 
 #### Features
 - Based on **Alpine Linux** (edge).
+- Image built upon recommendations (sha256 sum + PGP).
 - **Ready to update** : data and apps persistence.
-- **nginx** is the webserver.
-- **PHP 7** version is used.
-- **OPCache** (opcode cache) is configured to provide better performances.
-- **APCu** (data store) is installed, so you can benefit from memory caching.
-- **system cron** is already configured (you can disable AJAX cron).
+- **nginx**, **PHP 7**.
+- **OPCache** (opcode cache) already configured.
+- **APCu** (data store) already installed.
+- **system cron** already configured.
 - **MySQL/MariaDB** compatibility (server not built-in).
-- **Secure installation**, it verifies both integrity and authenticity (sha256sum && gpg).
-- **UID/GID flexibility**, you won't bother about permissions.
+- **UID/GID** flexibility.
 
-**This image is meant to be used behind a secure reverse proxy.**
+This image is meant to be used behind a secure reverse proxy.
 
 #### Build-time variables
 - **NEXTCLOUD_VERSION** : version of nextcloud
@@ -27,11 +26,11 @@
 - **GID** : nextcloud group id *(default : 991)*
 
 #### Volumes
-- **/data** : nextcloud data (your files!).
-- **/config** : configuration files (contains config.php).
-- **/apps2** : nextcloud downloaded apps (like calendar, contacts, etc.).
+- **/data** : nextcloud data.
+- **/config** : configuration files.
+- **/apps2** : nextcloud downloaded apps.
 
-Hey, you should add the following code to your config.php in order to enable apps persistence :
+Add the following code to your `config.php` in order to enable apps persistence :
 
 ```
   "apps_paths" => array (
@@ -48,37 +47,28 @@ Hey, you should add the following code to your config.php in order to enable app
   ),
 ```
 
-#### About the database
-You have to use an external database container, it is thus allowing better security and less complexity. I suggest you to use MariaDB, which is a reliable database server. For instance, you can use the official `mariadb` image available as an automated build that you can find on Docker Hub. Since sqlite is supected by nextcloud to cause some troubles with sync clients, sqlite databases are not suported.
+#### Database
+You have to use an external database container. I suggest you to use MariaDB, which is a reliable database server. For example, you can use the official `mariadb` image available as an automated build that you can find on Docker Hub. Since sqlite is supected by Nextcloud to cause some troubles with sync clients, sqlite databases are not suported as they shouldn't be used.
 
-#### Once runned!
-Go to your nextcloud instance, change `/nextcloud/data` to `/data` (recommended), and fill in all the fields to configure your database. Don't forget to type a strong password. You should also avoid to name your admin account "admin".
+#### Setup
+Go to your fresh Nextcloud instance, change `/nextcloud/data` to `/data` (recommended), and fill in all the fields to configure your database. Don't forget to provide with a strong password. You should choose another name for the administration account (not 'admin' which is the default one).
 
 #### Configure
-When you mount `/config`, you don't really mount `/nextcloud/nextcloud/config`. `/config` should contain `config.php`, although this is not the one actually used by nextcloud. However, each time you restart the container, `/config/config.php` overwrites `/nextcloud/config/config.php`. Before that, `/nextcloud/config/config.php` is copied as `/nextcloud/config.php.bkp`, so you can easily revert changes.
+`/config` should contain `config.php`, though this is not the file actually used by Nextcloud. Each time you restart the container, `/config/config.php` overwrites `/nextcloud/config/config.php`. Before that, `/nextcloud/config/config.php` is copied as `/nextcloud/config/config.php.bkp`, so you can easily revert changes.
 
-Now, nextcloud should be 100% functionnal. APCu can be enabled if you set it correctly in the config.php file (see further). **system cron is already active**. **You should switch** from `AJAX cron` to `cron` (system cron) in the admin pannel. By the way, **I highly recommend encryption**! My buid is fully-compatible with the encryption module. 
+In the admin pannel, you should switch from `AJAX cron` to `cron` (system cron). By the way, **I highly recommend encryption**! Why not?
 
-*config.php parameters can be found [here](https://doc.nextcloud.org/server/9.0/admin_manual/configuration_server/config_sample_php_parameters.html) and [there](https://doc.nextcloud.org/server/9.0/admin_manual/installation/apps_management_installation.html)* This is espacially useful when you're using a reverse proxy, and/or if you'd like to keep your 3rd-party plugins across updates (you should use the /apps volume to do that). **READ THE DOCUMENTATION.**
-
-#### How do I update?
-Just pull the newer image, and recreate the container. As you may know, backups are highly recommended (don't fear that, Docker just makes things a lot easier!), and even if it's boring, do it, do it, do it! The version directive in your `/config/config.php` is automatically updated with the one eventually generated by nextcloud after an upgrade.
-
-#### Enable APCU
-Add this line to your config.php :
+To **enable APCU**, add this line to your config.php :
 
 ```
   'memcache.local' => '\OC\Memcache\APCu',
 ```
 
+#### How do I update?
+Just pull the newer image, and recreate the container.
+
 #### Docker Compose (example)
 ```
-reverse:
-  ...
-  links:
-    - nextcloud:nextcloud
-  ...
-
 nextcloud:
   image: wonderfall/nextcloud
   links:
@@ -103,10 +93,9 @@ db_nextcloud:
 ```
 
 #### Port
-- **80** (cf Reverse Proxy).
-
+- **80**.
 
 #### Reverse proxy
 https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration
 
-You don't have to add any headers since they're already included in the container (you avoid useless warnings from nextcloud). It is strongly recommended to use nextcloud through an encrypted connection (HTTPS).
+Headers are already sent by the container. It is strongly recommended to use Nextcloud through an encrypted connection (HTTPS).
