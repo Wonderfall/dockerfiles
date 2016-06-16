@@ -48,10 +48,10 @@ Add the following code to your `config.php` in order to enable apps persistence 
 ```
 
 #### Database
-You have to use an external database container. I suggest you to use MariaDB, which is a reliable database server. For example, you can use the official `mariadb` image available as an automated build that you can find on Docker Hub. Since sqlite is supected by Nextcloud to cause some troubles with sync clients, sqlite databases are not suported as they shouldn't be used.
+You have to use an external database container. I suggest you to use MariaDB, which is a reliable database server. For example, you can use the official `mariadb` image available as an automated build that you can find on Docker Hub. Since sqlite is supected by Nextcloud to cause some troubles with sync clients, sqlite databases are not suported as they shouldn't be used. 
 
 #### Setup
-Go to your fresh Nextcloud instance, change `/nextcloud/data` to `/data` (recommended), and fill in all the fields to configure your database. Don't forget to provide with a strong password. You should choose another name for the administration account (not 'admin' which is the default one).
+Go to your fresh Nextcloud instance, change `/nextcloud/data` to `/data` (recommended), and fill in all the fields to configure your database. Don't forget to provide with a strong password. You should choose another name for the administration account (not 'admin' which is the default one). The database host is the name of the database container, which is linked to the nexcloud container. You can see below an example of docker-compose.
 
 #### Configure
 `/config` should contain `config.php`, though this is not the file actually used by Nextcloud. Each time you restart the container, `/config/config.php` overwrites `/nextcloud/config/config.php`. Before that, `/nextcloud/config/config.php` is copied as `/nextcloud/config/config.php.bkp`, so you can easily revert changes.
