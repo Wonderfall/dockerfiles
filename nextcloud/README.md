@@ -1,6 +1,6 @@
 ## wonderfall/nextcloud
 
-![](https://nextcloud.com/wp-content/themes/next/assets/img/common/logo_nextcloud_white.svg?8d74c5)
+![](https://pix.schrodinger.io/lwq5gNX5/mSPk3B7c.png)
 
 #### Features
 - Based on **Alpine Linux** (edge).
