@@ -10,7 +10,7 @@
 - **OPCache** (opcode cache) already configured.
 - **APCu** (data store) already installed.
 - **system cron** already configured.
-- **MySQL/MariaDB** compatibility (server not built-in).
+- **MySQL/MariaDB/PG-SQL** compatibility (server not built-in).
 - **UID/GID** flexibility.
 
 This image is meant to be used behind a secure reverse proxy.
