@@ -1,7 +1,7 @@
 FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG LYCHEE_VERSION=3.1.1
+ARG LYCHEE_VERSION=3.1.2
 ARG IMAGICK_EXT_VERSION=3.4.2
 
 ENV UID=991 GID=991
