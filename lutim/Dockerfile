@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends --no-install-su
     shared-mime-info \
     perlmagick \
  && cpan install Carton \
+ && cpan install JavaScript::Minifier::XS \
  && mkdir /lutim && cd /lutim \
  && wget -qO- https://github.com/ldidry/lutim/archive/master.tar.gz | tar xz --strip 1 \
  && carton install \
