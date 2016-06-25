@@ -1,6 +1,8 @@
 FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
+ARG BOINC_USER_ID=35854
+
 RUN BUILD_DEPS=" \
     build-base \
     git \
@@ -22,7 +24,11 @@ RUN BUILD_DEPS=" \
  && ./configure --disable-server --enable-client CXXFLAGS="-O3 " \
  && make \
  && make install \
+ && adduser -h /home/boinc -D -s /sbin/nologin -u ${BOINC_USER_ID} boinc \
  && apk del ${BUILD_DEPS} \
  && rm -rf /var/cache/apk/* /tmp/*
 
+USER boinc
+WORKDIR /home/boinc
+VOLUME /home/boinc
 ENTRYPOINT [ "boinc" ]
