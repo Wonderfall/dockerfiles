@@ -69,23 +69,23 @@ Just pull the newer image, and recreate the container.
 
 #### Docker Compose (example)
 ```
-nextcloud:
-  image: wonderfall/nextcloud
-  links:
-    - db_nextcloud:db_nextcloud
-  environment:
-    - UID=1000
-    - GID=1000
-  volumes:
-    - /mnt/nextcloud/data:/data
-    - /mnt/nextcloud/config:/config
-    - /mnt/nextcloud/apps:/apps2
-
-db_nextcloud:
-  image: mariadb:10
-  volumes:
-    - /mnt/nextcloud/db:/var/lib/mysql
-  environment:
+version: '2'
+services:
+  nextcloud:
+    restart: always
+    image: wonderfall/nextcloud
+    depends_on:
+      - mariadb
+    volumes:
+      - ./nextcloud/data:/data
+      - ./nextcloud/config:/config
+      - ./nextcloud/apps:/apps2
+  mariadb:
+    restart: always
+    image: mariadb:10.1.14
+    volumes:
+     - ./mariadb:/var/lib/mysql
+    environment:
     - MYSQL_ROOT_PASSWORD=supersecretpassword
     - MYSQL_DATABASE=nextcloud
     - MYSQL_USER=nextcloud
