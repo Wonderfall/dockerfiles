@@ -9,7 +9,7 @@ ARG GPG_LIBRESSL="A1EB 079B 8D3E B92B 4EBD  3139 663A F51B D5E4 D8D5"
 ARG GPG_NGINX="B0F4 2533 73F8 F6F5 10D4  2178 520A 9993 A1C0 52F8"
 ARG BUILD_CORES
 
-RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && BUILD_DEPS=" \
     build-base \
@@ -53,10 +53,10 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && echo "All seems good, now unpacking ${LIBRESSL_TARBALL}..." \
  && tar xzf ${LIBRESSL_TARBALL} \
  && NGINX_TARBALL="nginx-${NGINX_VERSION}.tar.gz" \
- && wget -q http://nginx.org/download/${NGINX_TARBALL} \
+ && wget -q https://nginx.org/download/${NGINX_TARBALL} \
  && echo "Verifying ${NGINX_TARBALL} using GPG..." \
- && wget -q http://nginx.org/download/${NGINX_TARBALL}.asc \
- && wget -q http://nginx.org/keys/mdounin.key \
+ && wget -q https://nginx.org/download/${NGINX_TARBALL}.asc \
+ && wget -q https://nginx.org/keys/mdounin.key \
  && gpg --import mdounin.key \
  && FINGERPRINT="$(LANG=C gpg --verify ${NGINX_TARBALL}.asc ${NGINX_TARBALL} 2>&1 \
   | sed -n "s#Primary key fingerprint: \(.*\)#\1#p")" \
