@@ -4,7 +4,7 @@ MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 ARG NEXTCLOUD_VERSION=9.0.51
 ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
-ENV GID=991 UID=991
+ENV GID=991 UID=991 HTTP_PORT=80
 
 RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
@@ -56,7 +56,8 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && sed -i "s/;env\[PATH\]/env\[PATH\]/g" /etc/php7/php-fpm.d/www.conf \
  && rm /etc/php7/conf.d/apcu.ini \
  && apk del ${BUILD_DEPS} \
- && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
+ && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg \
+ && if [ -n ${HTTP_PORT} ]; then sed -i "s/listen 80;/listen ${HTTP_PORT};/g" /etc/nginx/nginx.conf; fi
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
@@ -70,7 +71,7 @@ RUN chmod +x /usr/local/bin/run.sh /etc/periodic/15min/nextcloud
 
 VOLUME /data /config /apps2
 
-EXPOSE 80
+EXPOSE $HTTP_PORT
 
 LABEL description="A server software for creating file hosting services" \
       nextcloud="Nextcloud v${NEXTCLOUD_VERSION}"
