@@ -5,7 +5,6 @@ ENV UID=991 GID=991
 
 ARG NGINX_VERSION=1.11.1
 ARG GPG_NGINX="B0F4 2533 73F8 F6F5 10D4  2178 520A 9993 A1C0 52F8"
-ARG SIGNATURE=secret
 ARG BUILD_CORES
 
 COPY boring.patch /tmp/boring.patch
@@ -38,11 +37,12 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     bind-tools \
     tini@commuedge \
  && cd /tmp && git clone https://github.com/bagder/libbrotli && cd libbrotli \
- && ./autogen.sh && ./configure \
- && make -j ${NB_CORES} && make install \
- && mkdir /tmp/ngx_brotli && cd /tmp/ngx_brotli \
- && wget -qO- https://github.com/google/ngx_brotli/archive/master.tar.gz | tar xz --strip 1 \
- && cd /tmp && git clone https://boringssl.googlesource.com/boringssl && cd boringssl \
+ && ./autogen.sh && ./configure && make -j ${NB_CORES} && make install \
+ && cd /tmp \
+ && git clone https://github.com/google/ngx_brotli \
+ && git clone https://github.com/openresty/headers-more-nginx-module \
+ && git clone https://boringssl.googlesource.com/boringssl \
+ && cd boringssl \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. \
  && make -j ${NB_CORES} && cd .. \
  && mkdir -p .openssl/lib/ && cd .openssl && ln -s ../include && cd .. \
@@ -59,14 +59,15 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && if [ "${FINGERPRINT}" != "${GPG_NGINX}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
  && echo "All seems good, now unpacking ${NGINX_TARBALL}..." \
  && tar xzf ${NGINX_TARBALL} && cd nginx-${NGINX_VERSION} \
- && sed -i -e "s/\"Server: nginx\" CRLF/\"Server: ${SIGNATURE}\" CRLF/g" \
-    -e "s/\"Server: \" NGINX_VER CRLF/\"Server: ${SIGNATURE}\" NGINX_VER CRLF/g" \
-    src/http/ngx_http_header_filter_module.c \
+ && wget -q https://raw.githubusercontent.com/felixbuenemann/sslconfig/updated-nginx-1.9.15-spdy-patch/patches/nginx_1_9_15_http2_spdy.patch -O spdy.patch \
+ && patch -p1 < spdy.patch \
+ && wget -q https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch \
+ && patch -p1 < nginx__dynamic_tls_records.patch \
  && patch -p1 < /tmp/boring.patch \
  && ./configure \
     --prefix=/etc/nginx \
-    --sbin-path=/sbin/nginx \
-    --with-cc-opt="-g -O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -I ../boringssl/.openssl/include/" \
+    --sbin-path=/usr/sbin/nginx \
+    --with-cc-opt="-O3 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -I ../boringssl/.openssl/include/" \
     --with-ld-opt="-Wl,-Bsymbolic-functions -Wl,-z,relro -L ../boringssl/.openssl/lib" \
     --with-http_ssl_module \
     --with-http_v2_module \
@@ -87,9 +88,10 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     --without-http_browser_module \
     --http-log-path=/var/log/nginx/access.log \
     --error-log-path=/var/log/nginx/error.log \
+    --add-module=/tmp/headers-more-nginx-module \
     --add-module=/tmp/ngx_brotli \
  && make -j ${NB_CORES} && make install && make clean \
- && strip -s /sbin/nginx \
+ && strip -s /usr/sbin/nginx \
  && apk del ${BUILD_DEPS} \
  && rm -rf /tmp/* /var/cache/apk/* /root/.gnupg
 
