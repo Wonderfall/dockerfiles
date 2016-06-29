@@ -10,7 +10,7 @@ ARG BUILD_CORES
 
 COPY boring.patch /tmp/boring.patch
 
-RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && BUILD_DEPS=" \
     build-base \
@@ -48,10 +48,10 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && mkdir -p .openssl/lib/ && cd .openssl && ln -s ../include && cd .. \
  && cp build/crypto/libcrypto.a build/ssl/libssl.a .openssl/lib && cd /tmp \
  && NGINX_TARBALL="nginx-${NGINX_VERSION}.tar.gz" \
- && wget -q http://nginx.org/download/${NGINX_TARBALL} \
+ && wget -q https://nginx.org/download/${NGINX_TARBALL} \
  && echo "Verifying ${NGINX_TARBALL} using GPG..." \
- && wget -q http://nginx.org/download/${NGINX_TARBALL}.asc \
- && wget -q http://nginx.org/keys/mdounin.key \
+ && wget -q https://nginx.org/download/${NGINX_TARBALL}.asc \
+ && wget -q https://nginx.org/keys/mdounin.key \
  && gpg --import mdounin.key \
  && FINGERPRINT="$(LANG=C gpg --verify ${NGINX_TARBALL}.asc ${NGINX_TARBALL} 2>&1 \
   | sed -n "s#Primary key fingerprint: \(.*\)#\1#p")" \
