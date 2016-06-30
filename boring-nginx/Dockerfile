@@ -36,12 +36,12 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     openssl \
     bind-tools \
     tini@commuedge \
- && cd /tmp && git clone https://github.com/bagder/libbrotli && cd libbrotli \
+ && cd /tmp && git clone https://github.com/bagder/libbrotli --depth=1 && cd libbrotli \
  && ./autogen.sh && ./configure && make -j ${NB_CORES} && make install \
  && cd /tmp \
- && git clone https://github.com/google/ngx_brotli \
- && git clone https://github.com/openresty/headers-more-nginx-module \
- && git clone https://boringssl.googlesource.com/boringssl \
+ && git clone https://github.com/google/ngx_brotli --depth=1 \
+ && git clone https://github.com/openresty/headers-more-nginx-module --depth=1 \
+ && git clone https://boringssl.googlesource.com/boringssl --depth=1 \
  && cd boringssl \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. \
  && make -j ${NB_CORES} && cd .. \
