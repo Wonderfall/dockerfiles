@@ -36,6 +36,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     php7-xmlreader@testing \
     php7-posix@testing \
     php7-openssl@testing \
+    php7-ldap@testing \
     php7-apcu@testing \
  && mkdir /nextcloud && cd /tmp \
  && NEXTCLOUD_TARBALL="nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" \
