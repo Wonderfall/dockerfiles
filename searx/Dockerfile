@@ -3,7 +3,7 @@ MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV BASE_URL=False IMAGE_PROXY=False
 
-RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && BUILD_DEPS=" \
     build-base \
     python-dev \

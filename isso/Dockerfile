@@ -5,7 +5,7 @@ ARG ISSO_VER=0.10.4
 
 ENV GID=1000 UID=1000
 
-RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && BUILD_DEPS=" \
     python-dev \
     libffi-dev \

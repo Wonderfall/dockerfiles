@@ -18,7 +18,7 @@ RUN BUILD_DEPS=" \
     libstdc++ \
     curl \
  && cd /tmp \
- && git clone https://github.com/BOINC/boinc.git \
+ && git clone https://github.com/BOINC/boinc.git --depth=1 \
  && cd boinc \
  && ./_autosetup \
  && ./configure --disable-server --enable-client CXXFLAGS="-O3 " \

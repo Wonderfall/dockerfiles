@@ -13,8 +13,8 @@ ENV UID=991 \
     WEBROOT=/ \
     PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 
-RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
- && echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+ && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && BUILD_DEPS=" \
     build-base \
@@ -49,8 +49,8 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && wget -q http://downloads.sourceforge.net/mktorrent/mktorrent-1.0.tar.gz \
  && tar xzvf mktorrent-1.0.tar.gz \
  && svn checkout http://svn.code.sf.net/p/xmlrpc-c/code/stable xmlrpc-c \
- && git clone https://github.com/rakshasa/libtorrent.git \
- && git clone https://github.com/rakshasa/rtorrent.git \
+ && git clone https://github.com/rakshasa/libtorrent.git --depth=1 \
+ && git clone https://github.com/rakshasa/rtorrent.git --depth=1 \
  && wget -q http://mediaarea.net/download/binary/mediainfo/${MEDIAINFO_VER}/MediaInfo_CLI_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
  && wget -q http://mediaarea.net/download/binary/libmediainfo0/${MEDIAINFO_VER}/MediaInfo_DLL_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
  && tar xzf MediaInfo_DLL_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
@@ -68,13 +68,13 @@ RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/ap
  && cd /tmp/rtorrent && git checkout ${RTORRENT_VER} && ./autogen.sh && ./configure --with-xmlrpc-c \
  && make -j ${NB_CORES} && make install \
  && mkdir -p /var/www && cd /var/www \
- && git clone https://github.com/Novik/ruTorrent.git rutorrent \
+ && git clone https://github.com/Novik/ruTorrent.git rutorrent --depth=1 \
  && cd /var/www/rutorrent/plugins/ \
- && git clone https://github.com/Korni22/rutorrent-logoff logoff \
- && git clone https://github.com/xombiemp/rutorrentMobile.git mobile \
- && git clone https://github.com/Ardakilic/rutorrent-pausewebui pausewebui \
+ && git clone https://github.com/Korni22/rutorrent-logoff logoff --depth=1 \
+ && git clone https://github.com/xombiemp/rutorrentMobile.git mobile --depth=1 \
+ && git clone https://github.com/Ardakilic/rutorrent-pausewebui pausewebui --depth=1 \
  && cd /var/www/rutorrent/plugins/theme/themes \
- && git clone https://github.com/Phlooo/ruTorrent-MaterialDesign.git Material \
+ && git clone https://github.com/Phlooo/ruTorrent-MaterialDesign.git Material --depth=1 \
  && mv /var/www/rutorrent /var/www/torrent \
  && mkdir /filebot \
  && wget -q http://downloads.sourceforge.net/project/filebot/filebot/FileBot_${FILEBOT_VER}/FileBot_${FILEBOT_VER}-portable.zip -P /tmp \

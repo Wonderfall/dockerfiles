@@ -26,7 +26,7 @@ ENV GHOST_NODE_VERSION_CHECK=false \
 
 VOLUME /ghost/content
 
-RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && apk -U add \
     openssl \
     ca-certificates \

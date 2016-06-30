@@ -5,7 +5,7 @@ ARG VERSION=6.0
 ENV GID=991 UID=991
 WORKDIR /subsonic
 
-RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && apk -U add \
     ffmpeg \
     openjdk8-jre@commuedge \

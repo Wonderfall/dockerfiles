@@ -15,7 +15,7 @@ ENV UID=1000 \
     FACING_IP=9.9.9.9 \
     JSON_LOG=False
 
-RUN echo "@commuedge http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && BUILD_DEPS=" \
     build-base \
     libtool \
