@@ -1,38 +1,35 @@
 FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
-ARG NODE_VER=6.2.2
-ARG NPM_VER=3
+ARG NODE_VERSION=6.2.2
+ARG NPM_VERSION=3
 ARG BUILD_CORES
 
 RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && BUILD_DEPS=" \
-    git \
     make \
     gcc \
     g++ \
     python \
     linux-headers \
     paxctl \
-    grep \
-    binutils \
     binutils-gold \
     openssl \
     ca-certificates" \
  && apk -U add \
-    $BUILD_DEPS \
+    ${BUILD_DEPS} \
     libgcc \
     libstdc++ \
  && cd /tmp \
- && wget -qO- https://nodejs.org/dist/v$NODE_VER/node-v$NODE_VER.tar.gz | tar zxf - \
- && cd node-v$NODE_VER \
+ && wget -qO- https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}.tar.gz | tar zxf - \
+ && cd node-v${NODE_VERSION} \
  && ./configure --prefix=/usr --without-snapshot \
- && make -j $NB_CORES && make install && make clean \
+ && make -j ${NB_CORES} && make install && make clean \
  && paxctl -cm /usr/bin/node \
- && npm install -g npm@$NPM_VER \
+ && npm install -g npm@${NPM_VERSION} \
  && find /usr/lib/node_modules/npm -name test -o -name .bin -type d | xargs rm -rf \
  && strip -s /usr/bin/node \
- && apk del $BUILD_DEPS \
+ && apk del ${BUILD_DEPS} \
  && rm -rf \
     /tmp/* \
     /var/cache/apk/* \
