@@ -13,6 +13,7 @@ ENV USERID=1000 \
 
 RUN apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
     wget \
+    git \
     perl \
     make \
     gcc \
@@ -21,13 +22,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends --no-install-su
     shared-mime-info \
     perlmagick \
  && cpan install Carton \
- && mkdir /lutim && cd /lutim \
- && wget -qO- https://github.com/ldidry/lutim/archive/master.tar.gz | tar xz --strip 1 \
+ && git clone https://framagit.org/luc/lutim.git --depth=1 \
+ && cd /lutim \
  && carton install \
  && wget -q https://github.com/krallin/tini/releases/download/v$TINI_VER/tini_$TINI_VER.deb -P /tmp \
  && dpkg -i /tmp/tini_$TINI_VER.deb \
  && apt-get purge -y \
     wget \
+    git \
     make \
     gcc \
     libssl-dev \
