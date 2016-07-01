@@ -2,7 +2,7 @@
 
 ![](https://pix.schrodinger.io/lwq5gNX5/mSPk3B7c.png)
 
-#### Features
+##### Features
 - Based on **Alpine Linux** (edge).
 - Image built upon recommendations (sha256 sum + PGP).
 - **Ready to update** : data and apps persistence.
@@ -14,6 +14,11 @@
 - **UID/GID** flexibility.
 
 This image is meant to be used behind a secure reverse proxy.
+
+#### Tags
+- **latest** : latest stable version.
+- **9.0** : latest 9.0.x version.
+- **daily** : latest code.
 
 #### Build-time variables
 - **NEXTCLOUD_VERSION** : version of nextcloud

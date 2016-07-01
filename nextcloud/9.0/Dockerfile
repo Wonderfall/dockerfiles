@@ -8,12 +8,13 @@ ENV GID=991 UID=991
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
- && BUILD_DEPS="gnupg tar ca-certificates" \
+ && BUILD_DEPS="gnupg tar" \
  && apk -U add \
     ${BUILD_DEPS} \
     nginx \
     supervisor \
     openssl \
+    ca-certificates \
     tini@commuedge \
     php7@testing \
     php7-fpm@testing \
@@ -54,15 +55,13 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && if [ "${FINGERPRINT}" != "${GPG_nextcloud}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
  && echo "All seems good, now unpacking ${NEXTCLOUD_TARBALL}..." \
  && tar xjf ${NEXTCLOUD_TARBALL} --strip 1 -C /nextcloud \
- && sed -i "s/;env\[PATH\]/env\[PATH\]/g" /etc/php7/php-fpm.d/www.conf \
- && rm /etc/php7/conf.d/apcu.ini \
  && apk del ${BUILD_DEPS} \
  && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
 COPY opcache.ini /etc/php7/conf.d/00_opcache.ini
-COPY apcu.ini /etc/php7/conf.d/00_apcu.ini
+COPY apcu.ini /etc/php7/conf.d/apcu.ini
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY run.sh /usr/local/bin/run.sh
 COPY cron /etc/periodic/15min/nextcloud
