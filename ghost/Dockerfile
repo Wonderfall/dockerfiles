@@ -1,7 +1,7 @@
 FROM wonderfall/node
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
-ARG VERSION=0.8.0
+ARG VERSION=0.9.0-beta.2
 
 ENV GHOST_NODE_VERSION_CHECK=false \
     GID=991 \
@@ -34,8 +34,8 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     grep \
     tini@commuedge \
     su-exec \
- && wget -q https://ghost.org/zip/ghost-$VERSION.zip -P /tmp \
- && unzip -q /tmp/ghost-$VERSION.zip -d /ghost \
+ && wget -q https://github.com/TryGhost/Ghost/releases/download/${VERSION}/Ghost-${VERSION}.zip -P /tmp \
+ && unzip -q /tmp/Ghost-$VERSION.zip -d /ghost \
  && cd /ghost \
  && npm install --production \
  && mv content/themes/casper casper \
