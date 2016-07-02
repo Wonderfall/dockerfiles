@@ -12,7 +12,12 @@
 - LDAP support.
 - UID/GID flexibility.
 
-This image is meant to be used behind a secure reverse proxy.
+| Docker Hub Image     | Base Image     | Image Size   |
+| -------------------  | -------------- | ---------- |
+| **wonderfall/nextcloud**  | **alpine:edge** | **201.9 MB**   |    
+| greyltc/nextcloud  | archlinux  | 2.439 GB   |
+| thallian/nextcloud | alpine | 227 MB   |
+| mrxra/nextcloud | debian:jessie | 1.045 GB   |
 
 #### Tags
 - **latest** : latest stable version.
@@ -49,7 +54,7 @@ docker run -d --name nextcloud --link db_nextcloud:db_nextcloud -e UID=1000 -e G
 
 **Below you can find a docker-compose file, which is very useful !**
 
-Now you have to use a reverse proxy in order to access to your container through Internet, details on it are available at the end of the README.md.
+Now you have to use a **reverse proxy** in order to access to your container through Internet, steps and details are available at the end of the README.md.
 
 Browse to Nextcloud setup page, then :
 - **Data folder** : change `/nextcloud/data` to `/data`.
@@ -62,7 +67,6 @@ Browse to Nextcloud setup page, then :
 
 #### Configure
 In the admin panel, you should switch from `AJAX cron` to `cron` (system cron).
-
 To **enable APCU**, add this line to your config.php :
 
 ```
@@ -130,7 +134,6 @@ You can update everything with `docker-compose pull` followed by `docker-compose
 
 #### Reverse proxy
 You should be familiar with reverse proxying, otherwise you should read some documentation about it. If you're using nginx, there are two possibilites :
-
 - nginx is on the host : use the IP address you can get with `docker inspect nextcloud | grep IPAddress\" | head -n1 | grep -Eo "[0-9.]+" `. But whenever the container is restarted or recreated, its IP address can change.
 
 - nginx is in a container, things are easier : https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration (example). If you don't get it : **nextcloud is linked to nginx** (containers) so you can use `proxy_pass http://nextcloud`. Very easy. I suggest you to use my image `wonderfall/nginx`, which provides a tool named `ngxproxy` aiming at automatically create a vhost file. You will be asked a few questions.
