@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.4
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
 ARG ISSO_VER=0.10.4
