@@ -12,16 +12,11 @@
 - LDAP support.
 - UID/GID flexibility.
 
-| Docker Hub Image     | Base Image     | Image Size   |
-| -------------------  | -------------- | ---------- |
-| **wonderfall/nextcloud**  | **alpine:edge** | **201.9 MB**   |    
-| greyltc/nextcloud  | archlinux  | 2.439 GB   |
-| thallian/nextcloud | alpine | 227 MB   |
-| mrxra/nextcloud | debian:jessie | 1.045 GB   |
-
 #### Tags
 - **latest** : latest stable version.
-- **9.0** : latest 9.0.x version.
+- **9.0** : latest 9.0.x version. (stable)
+- **10.0** : latest 10.0.x version (beta!)
+- **test** : latest test version provided by Nextcloud (RC, Beta...)
 - **daily** : latest code (daily build).
 
 #### Build-time variables

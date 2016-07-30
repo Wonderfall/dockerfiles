@@ -1,6 +1,8 @@
 FROM alpine:3.4
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
+ARG NEXTCLOUD_VERSION=10.0beta
+
 ENV GID=991 UID=991
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
@@ -38,7 +40,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     php7-ldap@testing \
     php7-apcu@testing \
  && mkdir /nextcloud && cd /tmp \
- && wget -q https://download.nextcloud.com/server/daily/latest.tar.bz2 \
+ && wget -q https://download.nextcloud.com/server/prereleases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2 \
  && tar xjf latest.tar.bz2 --strip 1 -C /nextcloud \
  && apk del ${BUILD_DEPS} \
  && rm -rf /var/cache/apk/* /tmp/*

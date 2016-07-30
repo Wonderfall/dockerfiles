@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.4
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG NEXTCLOUD_VERSION=9.0.53
@@ -32,6 +32,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     php7-iconv@testing \
     php7-pdo_mysql@testing \
     php7-pdo_pgsql@testing \
+    php7-pgsql@testing \
     php7-zlib@testing \
     php7-zip@testing \
     php7-xmlreader@testing \
