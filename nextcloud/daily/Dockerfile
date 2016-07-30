@@ -12,6 +12,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     supervisor \
     openssl \
     ca-certificates \
+    libsmbclient \
     tini@commuedge \
     php7@testing \
     php7-fpm@testing \
@@ -30,13 +31,16 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     php7-pdo_mysql@testing \
     php7-pdo_pgsql@testing \
     php7-pgsql@testing \
+    php7-sqlite3@testing \
     php7-zlib@testing \
     php7-zip@testing \
     php7-xmlreader@testing \
     php7-posix@testing \
     php7-openssl@testing \
     php7-ldap@testing \
+    php7-ftp@testing \
     php7-apcu@testing \
+    php7-redis@testing \
  && mkdir /nextcloud && cd /tmp \
  && wget -q https://download.nextcloud.com/server/daily/latest.tar.bz2 \
  && tar xjf latest.tar.bz2 --strip 1 -C /nextcloud \

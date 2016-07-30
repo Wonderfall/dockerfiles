@@ -8,8 +8,8 @@
 - Data and apps persistence (easy to update, just recreate the container).
 - OPCache (opcode cache) & APCu (data store) already configured.
 - system cron configured (15min periodic), replaces AJAX cron.
-- MySQL and PostgreSQL support (server not built-in).
-- LDAP support.
+- MySQL, PostgreSQL (server not built-in) and sqlite3 support.
+- Redis, FTP, SMB, LDAP support.
 - UID/GID flexibility.
 
 #### Tags
