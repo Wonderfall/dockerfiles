@@ -34,7 +34,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     php7-pdo_mysql@testing \
     php7-pdo_pgsql@testing \
     php7-pgsql@testing \
-    php7-sqlite3@testing \
+    php7-pdo_sqlite@testing \
     php7-zlib@testing \
     php7-zip@testing \
     php7-xmlreader@testing \
