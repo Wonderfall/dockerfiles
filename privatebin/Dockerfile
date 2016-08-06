@@ -17,7 +17,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     php7-json@testing \
     php7-zlib@testing \
  && mkdir zerobin && cd zerobin \
- && wget -qO- https://github.com/elrido/ZeroBin/archive/master.tar.gz | tar xz --strip 1 \
+ && wget -qO- https://github.com/PrivateBin/PrivateBin/archive/master.tar.gz | tar xz --strip 1 \
  && mv cfg/conf.ini.sample cfg/conf.ini \
  && apk del $BUILD_DEPS \
  && rm -f /var/cache/apk/*
