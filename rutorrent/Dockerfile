@@ -23,6 +23,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     automake \
     autoconf \
     wget \
+    tar \
     subversion \
     cppunit-dev \
     openssl-dev \
@@ -49,8 +50,10 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && wget -q http://downloads.sourceforge.net/mktorrent/mktorrent-1.0.tar.gz \
  && tar xzvf mktorrent-1.0.tar.gz \
  && svn checkout http://svn.code.sf.net/p/xmlrpc-c/code/stable xmlrpc-c \
- && git clone https://github.com/rakshasa/libtorrent.git --depth=1 \
- && git clone https://github.com/rakshasa/rtorrent.git --depth=1 \
+ && mkdir libtorrent rtorrent \
+ && cd libtorrent && wget -qO- https://github.com/rakshasa/libtorrent/archive/${LIBTORRENT_VER}.tar.gz | tar xz --strip 1 \
+ && cd ../rtorrent && wget -qO- https://github.com/rakshasa/rtorrent/archive/${RTORRENT_VER}.tar.gz | tar xz --strip 1 \
+ && cd /tmp \
  && wget -q http://mediaarea.net/download/binary/mediainfo/${MEDIAINFO_VER}/MediaInfo_CLI_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
  && wget -q http://mediaarea.net/download/binary/libmediainfo0/${MEDIAINFO_VER}/MediaInfo_DLL_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
  && tar xzf MediaInfo_DLL_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
@@ -63,9 +66,9 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && cd /tmp/MediaInfo_CLI_GNU_FromSource && ./CLI_Compile.sh \
  && cd /tmp/MediaInfo_CLI_GNU_FromSource/MediaInfo/Project/GNU/CLI && make install \
  && cd /tmp/xmlrpc-c && ./configure && make -j ${NB_CORES} && make install \
- && cd /tmp/libtorrent && git checkout ${LIBTORRENT_VER} && ./autogen.sh && ./configure \
+ && cd /tmp/libtorrent && ./autogen.sh && ./configure \
  && make -j ${NB_CORES} && make install \
- && cd /tmp/rtorrent && git checkout ${RTORRENT_VER} && ./autogen.sh && ./configure --with-xmlrpc-c \
+ && cd /tmp/rtorrent && ./autogen.sh && ./configure --with-xmlrpc-c \
  && make -j ${NB_CORES} && make install \
  && mkdir -p /var/www && cd /var/www \
  && git clone https://github.com/Novik/ruTorrent.git rutorrent --depth=1 \
