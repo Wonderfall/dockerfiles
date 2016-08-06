@@ -66,9 +66,9 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && cd /tmp/MediaInfo_CLI_GNU_FromSource && ./CLI_Compile.sh \
  && cd /tmp/MediaInfo_CLI_GNU_FromSource/MediaInfo/Project/GNU/CLI && make install \
  && cd /tmp/xmlrpc-c && ./configure && make -j ${NB_CORES} && make install \
- && cd /tmp/libtorrent && git checkout ${LIBTORRENT_VER} && ./autogen.sh && ./configure \
+ && cd /tmp/libtorrent && ./autogen.sh && ./configure \
  && make -j ${NB_CORES} && make install \
- && cd /tmp/rtorrent && git checkout ${RTORRENT_VER} && ./autogen.sh && ./configure --with-xmlrpc-c \
+ && cd /tmp/rtorrent && ./autogen.sh && ./configure --with-xmlrpc-c \
  && make -j ${NB_CORES} && make install \
  && mkdir -p /var/www && cd /var/www \
  && git clone https://github.com/Novik/ruTorrent.git rutorrent --depth=1 \
