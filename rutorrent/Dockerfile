@@ -23,7 +23,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     automake \
     autoconf \
     wget \
-    tar
+    tar \
     subversion \
     cppunit-dev \
     openssl-dev \
