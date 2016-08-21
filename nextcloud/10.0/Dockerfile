@@ -1,7 +1,7 @@
 FROM alpine:3.4
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG NEXTCLOUD_VERSION=10.0beta
+ARG NEXTCLOUD_VERSION=10.0RC1
 
 ENV GID=991 UID=991
 
@@ -65,6 +65,6 @@ VOLUME /data /config /apps2
 EXPOSE 80
 
 LABEL description="A server software for creating file hosting services" \
-      nextcloud="Nextcloud ${NEXTCLOUD_VERSION}"
+      nextcloud="Nextcloud 10.0 RC1"
 
 CMD ["/sbin/tini","--","run.sh"]
