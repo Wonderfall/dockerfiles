@@ -1,7 +1,7 @@
 FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
-ARG NODE_VERSION=4.4.7
+ARG NODE_VERSION=4.5.0
 ARG NPM_VERSION=3
 ARG BUILD_CORES
 
