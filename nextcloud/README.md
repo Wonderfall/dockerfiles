@@ -1,5 +1,7 @@
 ## wonderfall/nextcloud
 
+[![](https://images.microbadger.com/badges/image/wonderfall/nextcloud.svg)](http://microbadger.com/images/wonderfall/nextcloud "Get your own image badge on microbadger.com")
+
 ![](https://pix.schrodinger.io/lwq5gNX5/mSPk3B7c.png)
 
 #### Features
