@@ -16,9 +16,9 @@
 
 #### Tags
 - **latest** : latest stable version.
-- **9.0** : latest 9.0.x version. (stable)
-- **10.0** : latest 10.0.x version (beta!)
-- **test** : latest test version provided by Nextcloud (RC, Beta...)
+- **10.0** : latest 10.0.x version (stable)
+- **9.0** : latest 9.0.x version. (oldstable)
+- **test** (if any) : latest test version provided by Nextcloud (RC, Beta...)
 - **daily** : latest code (daily build).
 
 #### Build-time variables
@@ -86,8 +86,6 @@ Add the following lines to your `config.php` in order to enable apps persistence
       ),
   ),
 ```
-
-**Note :** The container must be restarted after any change to `/config/config.php`.
 
 #### Update
 Pull a newer image, then recreate the container :
