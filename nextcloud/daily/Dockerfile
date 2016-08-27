@@ -14,6 +14,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     ca-certificates \
     libsmbclient \
     samba-client \
+    su-exec \
     tini@commuedge \
     php7@commuedge \
     php7-fpm@commuedge \
@@ -55,9 +56,10 @@ COPY opcache.ini /etc/php7/conf.d/00_opcache.ini
 COPY apcu.ini /etc/php7/conf.d/apcu.ini
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY run.sh /usr/local/bin/run.sh
+COPY occ /usr/local/bin/occ
 COPY cron /etc/periodic/15min/nextcloud
 
-RUN chmod +x /usr/local/bin/run.sh /etc/periodic/15min/nextcloud
+RUN chmod +x /usr/local/bin/* /etc/periodic/15min/nextcloud
 
 VOLUME /data /config /apps2
 
