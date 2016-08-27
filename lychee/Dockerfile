@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.4
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG LYCHEE_VERSION=3.1.2
@@ -7,7 +7,6 @@ ARG IMAGICK_EXT_VERSION=3.4.2
 ENV UID=991 GID=991
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
- && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && BUILD_DEPS=" \
     imagemagick-dev \
     tar \
@@ -20,16 +19,16 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     ${BUILD_DEPS} \
     nginx \
     libwebp \
-    php7-mbstring@testing \
-    php7-fpm@testing \
-    php7-exif@testing \
-    php7-gd@testing \
-    php7-json@testing \
-    php7-mysqli@testing \
-    php7-zip@testing \
-    php7-session@testing \
-    php7-pear@testing \
-    php7-dev@testing \
+    php7-mbstring@commuedge \
+    php7-fpm@commuedge \
+    php7-exif@commuedge \
+    php7-gd@commuedge \
+    php7-json@commuedge \
+    php7-mysqli@commuedge \
+    php7-zip@commuedge \
+    php7-session@commuedge \
+    php7-pear@commuedge \
+    php7-dev@commuedge \
     supervisor \
     imagemagick \
     tini@commuedge \

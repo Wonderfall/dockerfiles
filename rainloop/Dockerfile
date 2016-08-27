@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.4
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG GPG_rainloop="3B79 7ECE 694F 3B7B 70F3  11A4 ED7C 49D9 87DA 4591"
@@ -6,23 +6,22 @@ ARG GPG_rainloop="3B79 7ECE 694F 3B7B 70F3  11A4 ED7C 49D9 87DA 4591"
 ENV GID=991 UID=991
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
- && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && apk -U add \
     gnupg \
     nginx \
     supervisor \
     tini@commuedge \
-    php7-fpm@testing \
-    php7-curl@testing \
-    php7-iconv@testing \
-    php7-xml@testing \
-    php7-dom@testing \
-    php7-openssl@testing \
-    php7-json@testing \
-    php7-zlib@testing \
-    php7-pdo_mysql@testing \
-    php7-pdo_sqlite@testing \
-    php7-sqlite3@testing \
+    php7-fpm@commuedge \
+    php7-curl@commuedge \
+    php7-iconv@commuedge \
+    php7-xml@commuedge \
+    php7-dom@commuedge \
+    php7-openssl@commuedge \
+    php7-json@commuedge \
+    php7-zlib@commuedge \
+    php7-pdo_mysql@commuedge \
+    php7-pdo_sqlite@commuedge \
+    php7-sqlite3@commuedge \
  && cd /tmp \
  && wget -q http://repository.rainloop.net/v2/webmail/rainloop-community-latest.zip \
  && wget -q http://repository.rainloop.net/v2/webmail/rainloop-community-latest.zip.asc \

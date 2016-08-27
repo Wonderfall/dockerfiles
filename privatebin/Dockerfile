@@ -1,21 +1,20 @@
-FROM alpine:edge
+FROM alpine:3.4
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV GID=991 UID=991
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
- && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && BUILD_DEPS="tar openssl ca-certificates" \
  && apk -U add \
     $BUILD_DEPS \
     nginx \
     supervisor \
     tini@commuedge \
-    php7-fpm@testing \
-    php7-gd@testing \
-    php7-mcrypt@testing \
-    php7-json@testing \
-    php7-zlib@testing \
+    php7-fpm@commuedge \
+    php7-gd@commuedge \
+    php7-mcrypt@commuedge \
+    php7-json@commuedge \
+    php7-zlib@commuedge \
  && mkdir zerobin && cd zerobin \
  && wget -qO- https://github.com/PrivateBin/PrivateBin/archive/master.tar.gz | tar xz --strip 1 \
  && mv cfg/conf.ini.sample cfg/conf.ini \

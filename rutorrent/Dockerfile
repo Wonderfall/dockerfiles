@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.4
 MAINTAINER xataz <https://github.com/xataz/dockerfiles>
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
@@ -14,7 +14,6 @@ ENV UID=991 \
     PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
- && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && BUILD_DEPS=" \
     build-base \
@@ -35,9 +34,9 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     ffmpeg \
     ca-certificates \
     nginx \
-    php7@testing \
-    php7-fpm@testing \
-    php7-json@testing \
+    php7@commuedge \
+    php7-fpm@commuedge \
+    php7-json@commuedge \
     curl \
     gzip \
     zip \
