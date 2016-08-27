@@ -13,6 +13,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     openssl \
     ca-certificates \
     libsmbclient \
+    samba-client \
     tini@commuedge \
     php7@testing \
     php7-fpm@testing \
