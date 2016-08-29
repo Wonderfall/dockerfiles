@@ -9,7 +9,7 @@ chown -R subsonic:subsonic /data /playlists /subsonic
 
 sleep 7 # avoid 503
 
-su subsonic << EOF
+exec su subsonic << EOF
 java -Xmx200m \
   -Dsubsonic.home=/data \
   -Dsubsonic.host=0.0.0.0 \

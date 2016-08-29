@@ -8,4 +8,4 @@ sed -i -e 's/<contact>/'$CONTACT'/g' \
        -e 's/<domain>/'$DOMAIN'/g' \
        -e 's|<webroot>|'$WEBROOT'|g' /lutim/lutim.conf
 chown -R lutim:lutim /lutim /data
-cd /lutim && su lutim -c "carton exec hypnotoad -f /lutim/script/lutim"
+cd /lutim && exec su lutim -c "carton exec hypnotoad -f /lutim/script/lutim"

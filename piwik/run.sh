@@ -9,4 +9,4 @@ elif [ -f /config/config.ini.php ]; then
 fi
 
 chown -R piwik:piwik /piwik /config /var/run/php-fpm.sock /var/lib/nginx /tmp
-supervisord -c /usr/local/etc/supervisord.conf
+exec supervisord -c /usr/local/etc/supervisord.conf

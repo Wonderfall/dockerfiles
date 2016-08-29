@@ -12,4 +12,4 @@ chown -R nextcloud:nextcloud /nextcloud /data /config /apps2 /var/run/php-fpm.so
 ln -s /config/config.php /nextcloud/config/config.php
 ln -s /apps2 /nextcloud
 
-supervisord -c /etc/supervisor/supervisord.conf
+exec supervisord -c /etc/supervisor/supervisord.conf
