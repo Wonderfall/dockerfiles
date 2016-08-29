@@ -4,4 +4,4 @@ sed -i -e "s|base_url : False|base_url : ${BASE_URL}|g" \
        -e "s/ultrasecretkey/$(openssl rand -hex 16)/g" \
        /usr/local/searx/searx/settings.yml
 
-python /usr/local/searx/searx/webapp.py
+exec python /usr/local/searx/searx/webapp.py
