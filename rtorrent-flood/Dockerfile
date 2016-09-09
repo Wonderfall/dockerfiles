@@ -12,7 +12,7 @@ ENV UID=991 \
     FLOOD_SECRET=supersecret \
     PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 
-RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@community https://nl.alpinelinux.org/alpine/v3.4/community" >> /etc/apk/repositories \
  && NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && BUILD_DEPS=" \
     build-base \
@@ -38,8 +38,8 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     unrar \
     supervisor \
     geoip \
-    tini@commuedge \
-    openjdk8-jre@commuedge \
+    tini@community \
+    openjdk8-jre@community \
  && cd /tmp \
  && wget -q http://downloads.sourceforge.net/mktorrent/mktorrent-1.0.tar.gz \
  && tar xzvf mktorrent-1.0.tar.gz \
