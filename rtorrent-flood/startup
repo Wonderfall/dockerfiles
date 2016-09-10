@@ -11,7 +11,6 @@ mkdir -p /data/Media/Music
 
 sed -i -e "s/<FLOOD_SECRET>/$FLOOD_SECRET/g" /usr/flood/config.js
 rm -f /data/.session/rtorrent.lock
-touch /run/rtorrent.sock
-chown -R torrent:torrent /run/rtorrent.sock /data /home/torrent /filebot /usr/flood
+chown -R torrent:torrent /data /home/torrent /filebot /usr/flood
 
 exec /usr/bin/supervisord -c /etc/supervisord.conf
