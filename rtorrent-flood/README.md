@@ -13,6 +13,10 @@
 - **49184** (bind it).
 - **3000** [(reverse proxy!)](https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration)
 
+#### Tags
+- **latest** : latest versions of rTorrent/libtorrent.
+- Use **$RTORRENT_VER-$LIBTORRENT_VER** to get specific versions of rTorrent/libtorrent.
+
 #### Volumes
 - **/data** : your downloaded torrents, session files, symlinks...
 - **/usr/flood/server/db** : Flood databases.
