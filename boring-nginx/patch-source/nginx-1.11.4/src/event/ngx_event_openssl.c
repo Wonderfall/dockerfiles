@@ -118,9 +118,7 @@ ngx_ssl_init(ngx_log_t *log)
 
 #else
 
-#ifndef OPENSSL_IS_BORINGSSL
     OPENSSL_config(NULL);
-#endif
 
     SSL_library_init();
     SSL_load_error_strings();
@@ -588,6 +586,30 @@ ngx_ssl_password_callback(char *buf, int size, int rwflag, void *userdata)
     ngx_memcpy(buf, pwd->data, size);
 
     return size;
+}
+
+
+ngx_int_t
+ngx_ssl_ciphers(ngx_conf_t *cf, ngx_ssl_t *ssl, ngx_str_t *ciphers,
+    ngx_uint_t prefer_server_ciphers)
+{
+    if (SSL_CTX_set_cipher_list(ssl->ctx, (char *) ciphers->data) == 0) {
+        ngx_ssl_error(NGX_LOG_EMERG, ssl->log, 0,
+                      "SSL_CTX_set_cipher_list(\"%V\") failed",
+                      ciphers);
+        return NGX_ERROR;
+    }
+
+    if (prefer_server_ciphers) {
+        SSL_CTX_set_options(ssl->ctx, SSL_OP_CIPHER_SERVER_PREFERENCE);
+    }
+
+#if (OPENSSL_VERSION_NUMBER < 0x10100001L && !defined LIBRESSL_VERSION_NUMBER)
+    /* a temporary 512-bit RSA key is required for export versions of MSIE */
+    SSL_CTX_set_tmp_rsa_callback(ssl->ctx, ngx_ssl_rsa512_key_callback);
+#endif
+
+    return NGX_OK;
 }
 
 
@@ -1994,17 +2016,15 @@ ngx_ssl_connection_error(ngx_connection_t *c, int sslerr, ngx_err_t err,
 
             /* handshake failures */
         if (n == SSL_R_BAD_CHANGE_CIPHER_SPEC                        /*  103 */
-#ifdef SSL_R_BLOCK_CIPHER_PAD_IS_WRONG
             || n == SSL_R_BLOCK_CIPHER_PAD_IS_WRONG                  /*  129 */
-#endif
             || n == SSL_R_DIGEST_CHECK_FAILED                        /*  149 */
             || n == SSL_R_ERROR_IN_RECEIVED_CIPHER_LIST              /*  151 */
             || n == SSL_R_EXCESSIVE_MESSAGE_SIZE                     /*  152 */
             || n == SSL_R_LENGTH_MISMATCH                            /*  159 */
+#ifdef SSL_R_NO_CIPHERS_PASSED
             || n == SSL_R_NO_CIPHERS_PASSED                          /*  182 */
-#ifdef SSL_R_NO_CIPHERS_SPECIFIED
-            || n == SSL_R_NO_CIPHERS_SPECIFIED                       /*  183 */
 #endif
+            || n == SSL_R_NO_CIPHERS_SPECIFIED                       /*  183 */
             || n == SSL_R_NO_COMPRESSION_SPECIFIED                   /*  187 */
             || n == SSL_R_NO_SHARED_CIPHER                           /*  193 */
             || n == SSL_R_RECORD_LENGTH_MISMATCH                     /*  213 */
@@ -2921,13 +2941,6 @@ failed:
 }
 
 
-#ifdef OPENSSL_NO_SHA256
-#define ngx_ssl_session_ticket_md  EVP_sha1
-#else
-#define ngx_ssl_session_ticket_md  EVP_sha256
-#endif
-
-
 static int
 ngx_ssl_session_ticket_key_callback(ngx_ssl_conn_t *ssl_conn,
     unsigned char *name, unsigned char *iv, EVP_CIPHER_CTX *ectx,
@@ -2938,12 +2951,21 @@ ngx_ssl_session_ticket_key_callback(ngx_ssl_conn_t *ssl_conn,
     ngx_array_t                   *keys;
     ngx_connection_t              *c;
     ngx_ssl_session_ticket_key_t  *key;
+    const EVP_MD                  *digest;
+    const EVP_CIPHER              *cipher;
 #if (NGX_DEBUG)
     u_char                         buf[32];
 #endif
 
     c = ngx_ssl_get_connection(ssl_conn);
     ssl_ctx = c->ssl->session_ctx;
+
+    cipher = EVP_aes_128_cbc();
+#ifdef OPENSSL_NO_SHA256
+    digest = EVP_sha1();
+#else
+    digest = EVP_sha256();
+#endif
 
     keys = SSL_CTX_get_ex_data(ssl_ctx, ngx_ssl_session_ticket_keys_index);
     if (keys == NULL) {
@@ -2960,13 +2982,29 @@ ngx_ssl_session_ticket_key_callback(ngx_ssl_conn_t *ssl_conn,
                        ngx_hex_dump(buf, key[0].name, 16) - buf, buf,
                        SSL_session_reused(ssl_conn) ? "reused" : "new");
 
-        RAND_bytes(iv, 16);
-        EVP_EncryptInit_ex(ectx, EVP_aes_128_cbc(), NULL, key[0].aes_key, iv);
-        HMAC_Init_ex(hctx, key[0].hmac_key, 16,
-                     ngx_ssl_session_ticket_md(), NULL);
+        if (RAND_bytes(iv, EVP_CIPHER_iv_length(cipher)) != 1) {
+            ngx_ssl_error(NGX_LOG_ALERT, c->log, 0, "RAND_bytes() failed");
+            return -1;
+        }
+
+        if (EVP_EncryptInit_ex(ectx, cipher, NULL, key[0].aes_key, iv) != 1) {
+            ngx_ssl_error(NGX_LOG_ALERT, c->log, 0,
+                          "EVP_EncryptInit_ex() failed");
+            return -1;
+        }
+
+#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+        if (HMAC_Init_ex(hctx, key[0].hmac_key, 16, digest, NULL) != 1) {
+            ngx_ssl_error(NGX_LOG_ALERT, c->log, 0, "HMAC_Init_ex() failed");
+            return -1;
+        }
+#else
+        HMAC_Init_ex(hctx, key[0].hmac_key, 16, digest, NULL);
+#endif
+
         ngx_memcpy(name, key[0].name, 16);
 
-        return 0;
+        return 1;
 
     } else {
         /* decrypt session ticket */
@@ -2990,9 +3028,20 @@ ngx_ssl_session_ticket_key_callback(ngx_ssl_conn_t *ssl_conn,
                        ngx_hex_dump(buf, key[i].name, 16) - buf, buf,
                        (i == 0) ? " (default)" : "");
 
-        HMAC_Init_ex(hctx, key[i].hmac_key, 16,
-                     ngx_ssl_session_ticket_md(), NULL);
-        EVP_DecryptInit_ex(ectx, EVP_aes_128_cbc(), NULL, key[i].aes_key, iv);
+#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+        if (HMAC_Init_ex(hctx, key[i].hmac_key, 16, digest, NULL) != 1) {
+            ngx_ssl_error(NGX_LOG_ALERT, c->log, 0, "HMAC_Init_ex() failed");
+            return -1;
+        }
+#else
+        HMAC_Init_ex(hctx, key[i].hmac_key, 16, digest, NULL);
+#endif
+
+        if (EVP_DecryptInit_ex(ectx, cipher, NULL, key[i].aes_key, iv) != 1) {
+            ngx_ssl_error(NGX_LOG_ALERT, c->log, 0,
+                          "EVP_DecryptInit_ex() failed");
+            return -1;
+        }
 
         return (i == 0) ? 1 : 2 /* renew */;
     }
