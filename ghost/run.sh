@@ -55,4 +55,4 @@ if [ "$SYNTAX_HIGHLIGHTING" == "True" ] && [ ! -f /ghost/content/themes/casper/a
 fi
 
 chown -R $UID:$GID /ghost && cd /ghost
-exec su-exec $UID:$GID tini -- npm start --production
+exec su-exec $UID:$GID /sbin/tini -- npm start --production
