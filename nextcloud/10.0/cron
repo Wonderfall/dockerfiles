@@ -1,2 +1,2 @@
 #!/bin/sh
-php7 -f /nextcloud/cron.php > /dev/null 2>&1
+su-exec $UID:$GID php7 -f /nextcloud/cron.php > /dev/null 2>&1
