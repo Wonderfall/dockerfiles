@@ -18,7 +18,6 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && apk -U add \
     ${BUILD_DEPS} \
     nginx \
-    libwebp \
     php7-mbstring@commuedge \
     php7-fpm@commuedge \
     php7-exif@commuedge \
@@ -29,7 +28,8 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     php7-session@commuedge \
     php7-pear@commuedge \
     php7-dev@commuedge \
-    supervisor \
+    s6 \
+    su-exec \
     imagemagick \
     tini@commuedge \
  && sed -i -e "s/max_execution_time = 30/max_execution_time = 200/g" \
@@ -48,11 +48,13 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
-COPY supervisord.conf /usr/local/etc/supervisord.conf
+COPY s6.d /etc/s6.d
 COPY run.sh /usr/local/bin/run.sh
 
-RUN chmod +x /usr/local/bin/run.sh
+RUN chmod +x /usr/local/bin/run.sh /etc/s6.d/*/*
 
 VOLUME /lychee/uploads /lychee/data
-EXPOSE 80
-CMD ["/sbin/tini","--","run.sh"]
+
+EXPOSE 8888
+
+CMD ["run.sh"]

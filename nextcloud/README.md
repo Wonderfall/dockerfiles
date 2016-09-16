@@ -30,7 +30,7 @@
 - **GID** : nextcloud group id *(default : 991)*
 
 #### Port
-- **80**.
+- **8888** (recently changed, nginx now runs without root)
 
 #### Volumes
 - **/data** : Nextcloud data.

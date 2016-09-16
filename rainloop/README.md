@@ -11,7 +11,6 @@ Rainloop is a simple, modern & fast web-based client. More info on the [official
 - Contacts (DB) : sqlite, or mysql (server not built-in)
 - nginx + PHP7
 
-
 #### Build-time variables
 - **GPG_rainloop** : fingerprint of signing key
 
@@ -21,6 +20,9 @@ Rainloop is a simple, modern & fast web-based client. More info on the [official
 
 #### Volumes
 - **/rainloop/data** : data files.
+
+#### Ports
+- **8888***
 
 #### Reverse proxy
 https://github.com/Wonderfall/dockerfiles/tree/master/reverse

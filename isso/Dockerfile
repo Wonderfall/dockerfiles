@@ -28,8 +28,11 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && rm -rf /var/cache/apk/* /tmp/*
 
 COPY run.sh /usr/local/bin/run.sh
+
 RUN chmod +x /usr/local/bin/run.sh
 
 EXPOSE 8080
+
 VOLUME /db /config
-CMD ["/sbin/tini","--","run.sh"]
+
+CMD ["run.sh"]

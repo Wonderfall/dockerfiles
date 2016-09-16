@@ -15,4 +15,4 @@ Paste securely.
 - **/zerobin/data**
 
 #### Ports
-- **80** [(reverse proxy!)](https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration)
+- **8888** [(reverse proxy!)](https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration)

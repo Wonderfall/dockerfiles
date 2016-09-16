@@ -80,5 +80,7 @@ COPY run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
 
 VOLUME /cowrie/log /cowrie/dl /cowrie/custom
+
 EXPOSE 2222
-CMD ["/sbin/tini","--","run.sh"]
+
+CMD ["run.sh"]

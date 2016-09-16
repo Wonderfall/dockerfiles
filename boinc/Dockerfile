@@ -1,9 +1,13 @@
 FROM alpine:3.4
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG BOINC_USER_ID=35854
+ARG BUILD_CORES
 
-RUN BUILD_DEPS=" \
+ENV UID=991 GID=991
+
+RUN echo "@community https://nl.alpinelinux.org/alpine/v3.4/community" >> /etc/apk/repositories \
+ && NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
+ && BUILD_DEPS=" \
     build-base \
     git \
     m4 \
@@ -14,6 +18,8 @@ RUN BUILD_DEPS=" \
     libnotify-dev" \
  && apk -U add \
     ${BUILD_DEPS} \
+    su-exec \
+    tini@community \
     libnotify \
     libstdc++ \
     curl \
@@ -22,13 +28,15 @@ RUN BUILD_DEPS=" \
  && cd boinc \
  && ./_autosetup \
  && ./configure --disable-server --enable-client CXXFLAGS="-O3 " \
- && make \
+ && make -j ${NB_CORES} \
  && make install \
- && adduser -h /home/boinc -D -s /sbin/nologin -u ${BOINC_USER_ID} boinc \
  && apk del ${BUILD_DEPS} \
  && rm -rf /var/cache/apk/* /tmp/*
 
-USER boinc
-WORKDIR /home/boinc
-VOLUME /home/boinc
-ENTRYPOINT [ "boinc" ]
+COPY run.sh /usr/local/bin/run.sh
+
+RUN chmod +x /usr/local/bin/run.sh
+
+VOLUME /boinc
+
+CMD ["run.sh"]

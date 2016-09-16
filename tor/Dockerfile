@@ -1,15 +1,17 @@
 FROM alpine:3.4
+MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG TOR_VERSION=0.2.8.7
-ARG TOR_USER_ID=45553
 ARG ARM_VERSION=1.4.5.0
 
 ARG GPG_Mathewson="B35B F85B F194 89D0 4E28  C33C 2119 4EBB 1657 33EA"
 ARG GPG_Johnson="6827 8CC5 DD2D 1E85 C4E4  5AD9 0445 B7AB 9ABB EEC6"
 
-ENV TERM=xterm
+ENV TERM=xterm \
+    UID=991 GID=991
 
-RUN BUILD_DEPS=" \
+RUN echo "@community https://nl.alpinelinux.org/alpine/v3.4/community" >> /etc/apk/repositories \
+ && BUILD_DEPS=" \
     libevent-dev \
     openssl-dev \
     build-base \
@@ -17,6 +19,8 @@ RUN BUILD_DEPS=" \
     ca-certificates" \
  && apk -U add \
     ${BUILD_DEPS} \
+    su-exec \
+    tini@community \
     python \
     libevent \
     openssl \
@@ -33,7 +37,6 @@ RUN BUILD_DEPS=" \
  && echo "All seems good, now unpacking ${TOR_TARBALL}..." \
  && tar xzf ${TOR_TARBALL} && cd tor-${TOR_VERSION} \
  && ./configure --disable-asciidoc && make && make install \
- && adduser -h /var/run/tor -D -s /sbin/nologin -u ${TOR_USER_ID} tor \
  && cd /tmp \
  && ARM_TARBALL="arm-${ARM_VERSION}.tar.bz2" \
  && wget -q https://www.atagar.com/arm/resources/static/${ARM_TARBALL}  \
@@ -49,8 +52,12 @@ RUN BUILD_DEPS=" \
  && apk del ${BUILD_DEPS} \
  && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
 
-VOLUME /usr/local/etc/tor /tordata
-EXPOSE 9001 9030
-USER tor
+COPY run.sh /usr/local/bin/run.sh
 
-ENTRYPOINT [ "tor" ]
+RUN chmod +x /usr/local/bin/run.sh
+
+VOLUME /tor/config /tor/data
+
+EXPOSE 9001 9030
+
+ENTRYPOINT ["run.sh"]

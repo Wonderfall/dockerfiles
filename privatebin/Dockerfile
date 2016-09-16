@@ -8,7 +8,8 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && apk -U add \
     $BUILD_DEPS \
     nginx \
-    supervisor \
+    s6 \
+    su-exec \
     tini@commuedge \
     php7-fpm@commuedge \
     php7-gd@commuedge \
@@ -23,13 +24,13 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
-COPY supervisord.conf /usr/local/etc/supervisord.conf
 COPY run.sh /usr/local/bin/run.sh
+COPY s6.d /etc/s6.d
 
-RUN chmod +x /usr/local/bin/run.sh
+RUN chmod +x /usr/local/bin/run.sh /etc/s6.d/*/*
 
 VOLUME /zerobin/data
 
-EXPOSE 80
+EXPOSE 8888
 
-CMD ["/sbin/tini","--","run.sh"]
+CMD ["run.sh"]

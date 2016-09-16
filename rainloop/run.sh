@@ -1,4 +1,3 @@
 #!/bin/sh
-addgroup -g ${GID} rainloop && adduser -h /rainloop -s /bin/sh -D -G rainloop -u ${UID} rainloop
-chown -R rainloop:rainloop /rainloop /var/run/php-fpm.sock /var/lib/nginx /tmp
-exec supervisord -c /usr/local/etc/supervisord.conf
+chown -R $UID:$GID /rainloop /etc/nginx /etc/php7 /var/log /var/lib/nginx /tmp /etc/s6.d
+exec su-exec $UID:$GID /sbin/tini -- /bin/s6-svscan /etc/s6.d

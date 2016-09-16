@@ -1,5 +1,4 @@
 #!/bin/sh
-addgroup -g ${GID} lychee && adduser -h /lychee -s /bin/sh -D -G lychee -u ${UID} lychee
 mkdir /lychee/uploads/big /lychee/uploads/import /lychee/uploads/medium /lychee/uploads/thumb
-chown -R lychee:lychee /lychee /var/run/php-fpm.sock /var/lib/nginx /tmp
-exec supervisord -c /usr/local/etc/supervisord.conf
+chown -R $UID:$GID /lychee /etc/nginx /etc/php7 /var/log /var/lib/nginx /tmp /etc/s6.d
+exec su-exec $UID:$GID /sbin/tini -- /bin/s6-svscan /etc/s6.d

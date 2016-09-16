@@ -1,7 +1,7 @@
 FROM alpine:3.4
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ENV GID=991 UID=991
+ENV UID=991 GID=991
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
@@ -9,13 +9,12 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && apk -U add \
     ${BUILD_DEPS} \
     nginx \
-    supervisor \
+    s6 \
     openssl \
     ca-certificates \
     libsmbclient \
     samba-client \
     su-exec \
-    tini@commuedge \
     php7@commuedge \
     php7-fpm@commuedge \
     php7-intl@commuedge \
@@ -54,18 +53,18 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
 COPY opcache.ini /etc/php7/conf.d/00_opcache.ini
 COPY apcu.ini /etc/php7/conf.d/apcu.ini
-COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY run.sh /usr/local/bin/run.sh
 COPY occ /usr/local/bin/occ
 COPY cron /etc/periodic/15min/nextcloud
+COPY s6.d /etc/s6.d
 
-RUN chmod +x /usr/local/bin/* /etc/periodic/15min/nextcloud
+RUN chmod +x /usr/local/bin/* /etc/periodic/15min/nextcloud /etc/s6.d/*/*
 
 VOLUME /data /config /apps2
 
-EXPOSE 80
+EXPOSE 8888
 
 LABEL description="A server software for creating file hosting services" \
       nextcloud="Nextcloud daily build"
 
-CMD ["/sbin/tini","--","run.sh"]
+CMD ["run.sh"]

@@ -23,4 +23,4 @@ Lychee is a free photo-management tool, which runs on your server or web-space. 
 - **/lychee/data** : data files.
 
 #### Ports
-- **80** [(reverse proxy!)](https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration)
+- **8888** [(reverse proxy!)](https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration)

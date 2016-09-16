@@ -1,7 +1,8 @@
 FROM alpine:3.4
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ENV BASE_URL=False IMAGE_PROXY=False
+ENV BASE_URL=False IMAGE_PROXY=False \
+    UID=991 GID=991
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && BUILD_DEPS=" \
@@ -16,6 +17,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     ca-certificates" \
  && apk -U add \
     ${BUILD_DEPS} \
+    su-exec \
     python \
     libxml2 \
     libxslt \
@@ -25,8 +27,6 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && mkdir /usr/local/searx && cd /usr/local/searx \
  && wget -qO- https://github.com/asciimoo/searx/archive/master.tar.gz | tar xz --strip 1 \
  && sed -i "s/127.0.0.1/0.0.0.0/g" searx/settings.yml \
- && adduser -D -h /usr/local/searx -s /bin/sh searx searx \
- && chown -R searx:searx /usr/local/searx \
  && apk del ${BUILD_DEPS} \
  && rm -f /var/cache/apk/*
 
@@ -34,8 +34,6 @@ COPY run.sh /usr/local/bin/run.sh
 
 RUN chmod +x /usr/local/bin/run.sh
 
-USER searx
-
 EXPOSE 8888
 
-CMD ["/sbin/tini","--","run.sh"]
+CMD ["run.sh"]

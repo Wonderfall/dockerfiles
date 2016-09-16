@@ -1,5 +1,5 @@
-FROM wonderfall/node:stable
-MAINTAINER Wonderfall <wonderfall@mondedie.fr>
+FROM xataz/node:6
+MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG VERSION=0.10.1
 
@@ -63,4 +63,4 @@ EXPOSE 2368
 LABEL description="Ghost CMS ready for production" \
       ghost="Ghost v$VERSION"
 
-CMD ["/sbin/tini","--","run.sh"]
+CMD ["run.sh"]

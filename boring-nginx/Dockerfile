@@ -115,4 +115,4 @@ LABEL description="Secure nginx built from source." \
       openssl="BoringSSL (date of the container)." \
       nginx="nginx ${NGINX_VERSION}."
 
-CMD ["/sbin/tini","--","run.sh"]
+CMD ["run.sh"]

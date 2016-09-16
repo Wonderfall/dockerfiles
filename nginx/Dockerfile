@@ -121,4 +121,4 @@ LABEL description="nginx built from source." \
       openssl="LibreSSL ${LIBRESSL_VERSION}." \
       nginx="nginx ${NGINX_VERSION}."
 
-CMD ["/sbin/tini","--","run.sh"]
+CMD ["run.sh"]

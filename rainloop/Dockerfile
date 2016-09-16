@@ -3,13 +3,14 @@ MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG GPG_rainloop="3B79 7ECE 694F 3B7B 70F3  11A4 ED7C 49D9 87DA 4591"
 
-ENV GID=991 UID=991
+ENV UID=991 GID=991
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && apk -U add \
     gnupg \
     nginx \
-    supervisor \
+    s6 \
+    su-exec \
     tini@commuedge \
     php7-fpm@commuedge \
     php7-curl@commuedge \
@@ -41,11 +42,13 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
-COPY supervisord.conf /usr/local/etc/supervisord.conf
+COPY s6.d /etc/s6.d
 COPY run.sh /usr/local/bin/run.sh
 
-RUN chmod +x /usr/local/bin/run.sh
+RUN chmod +x /usr/local/bin/run.sh /etc/s6.d/*/*
 
 VOLUME /rainloop/data
-EXPOSE 80
-CMD ["/sbin/tini","--","run.sh"]
+
+EXPOSE 8888
+
+CMD ["run.sh"]

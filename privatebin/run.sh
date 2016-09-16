@@ -1,5 +1,3 @@
 #!/bin/sh
-addgroup -g ${GID} zerobin && adduser -h /zerobin -s /bin/sh -D -G zerobin -u ${UID} zerobin
-touch /var/run/php-fpm.sock
-chown -R zerobin:zerobin /zerobin /var/run/php-fpm.sock /var/lib/nginx /tmp
-exec supervisord -c /usr/local/etc/supervisord.conf
+chown -R $UID:$GID /zerobin /etc/nginx /etc/php7 /var/log /var/lib/nginx /tmp /etc/s6.d
+exec su-exec $UID:$GID /sbin/tini -- /bin/s6-svscan /etc/s6.d
