@@ -1,15 +1,12 @@
 #!/bin/sh
-addgroup -g ${GID} subsonic && adduser -h /subsonic -s /bin/sh -D -G subsonic -u ${UID} subsonic
 
 mkdir -p /data/transcode
 ln -s /usr/bin/ffmpeg /data/transcode/ffmpeg
 ln -s /usr/bin/lame /data/transcode/lame
 
-chown -R subsonic:subsonic /data /playlists /subsonic
+chown -R $UID:$GID /data /playlists /subsonic
 
-sleep 7 # avoid 503
-
-exec su subsonic << EOF
+exec su-exec $UID:$GID tini -- \
 java -Xmx200m \
   -Dsubsonic.home=/data \
   -Dsubsonic.host=0.0.0.0 \
@@ -21,4 +18,3 @@ java -Xmx200m \
   -Dsubsonic.defaultPlaylistFolder=/playlists \
   -Djava.awt.headless=true \
   -jar subsonic-booter-jar-with-dependencies.jar
-EOF
