@@ -8,7 +8,7 @@
 - ARM included, allowing real-time monitoring.
 
 #### Usages
-- As a relay ([french article](https://cats.schrodinger.io/un-relais-tor-avec-docker/)).
+- As a relay ([french article](https://wonderfall.xyz/un-relais-tor-avec-docker/)).
 - As a hidden service dir.
 
 ### Build-time variables
@@ -19,10 +19,12 @@
 
 #### Environment variables
 - **TERM** = xterm (ARM requirement)
+- **UID** = tor user id
+- **GID** = tor group id
 
 #### Volumes
-- **/usr/local/etc/tor** : tor configuration files.
-- **/tordata** : tor data.
+- **/tor/config** : tor configuration files.
+- **/tor/data** : tor data.
 
 #### Ports
 - **9001** (bind it) : ORPort.
