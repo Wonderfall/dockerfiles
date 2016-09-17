@@ -1,7 +1,7 @@
-FROM xataz/node:6
+FROM mhart/alpine-node-auto:6
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG VERSION=0.10.1
+ARG GHOST_VERSION=0.11.0
 
 ENV GHOST_NODE_VERSION_CHECK=false \
     GID=991 \
@@ -34,8 +34,8 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     grep \
     tini@commuedge \
     su-exec \
- && wget -q https://github.com/TryGhost/Ghost/releases/download/${VERSION}/Ghost-${VERSION}.zip -P /tmp \
- && unzip -q /tmp/Ghost-$VERSION.zip -d /ghost \
+ && wget -q https://ghost.org/zip/ghost-${GHOST_VERSION}.zip -P /tmp \
+ && unzip -q /tmp/ghost-${GHOST_VERSION}.zip -d /ghost \
  && cd /ghost \
  && npm install --production \
  && mv content/themes/casper casper \
