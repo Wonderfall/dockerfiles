@@ -1,5 +1,4 @@
 #!/bin/sh
-addgroup -g ${GID} torrent && adduser -h /home/torrent -s /bin/sh -G torrent -D -u ${UID} torrent
 
 mkdir -p /data/torrents
 mkdir -p /data/.watch
@@ -11,6 +10,6 @@ mkdir -p /data/Media/Music
 
 sed -i -e "s/<FLOOD_SECRET>/$FLOOD_SECRET/g" /usr/flood/config.js
 rm -f /data/.session/rtorrent.lock
-chown -R torrent:torrent /data /home/torrent /filebot /usr/flood
+chown -R $UID:$GID /data /home/torrent /tmp /filebot /usr/flood /etc/s6.d
 
-exec /usr/bin/supervisord -c /etc/supervisord.conf
+exec su-exec $GID:$UID /bin/s6-svscan /etc/s6.d

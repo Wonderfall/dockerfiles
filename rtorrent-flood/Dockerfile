@@ -6,8 +6,7 @@ ARG LIBTORRENT_VER=0.13.6
 ARG FILEBOT_VER=4.7.2
 ARG BUILD_CORES
 
-ENV UID=991 \
-    GID=991 \
+ENV UID=991 GID=991 \
     FLOOD_SECRET=supersecret \
     PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 
@@ -34,8 +33,9 @@ RUN echo "@community https://nl.alpinelinux.org/alpine/v3.4/community" >> /etc/a
     gzip \
     zip \
     unrar \
-    supervisor \
-    tini@community \
+    s6 \
+    su-exec \
+    python \
     openjdk8-jre@community \
  && cd /tmp && mkdir libtorrent rtorrent \
  && cd libtorrent && wget -qO- https://github.com/rakshasa/libtorrent/archive/${LIBTORRENT_VER}.tar.gz | tar xz --strip 1 \
@@ -58,14 +58,14 @@ RUN echo "@community https://nl.alpinelinux.org/alpine/v3.4/community" >> /etc/a
  && rm -rf /var/cache/apk/* /tmp/*
 
 COPY config.js /usr/flood/
-COPY supervisord.ini /etc/supervisor.d/
-COPY startup /usr/bin/
+COPY s6.d /etc/s6.d
+COPY run.sh /usr/bin/
 COPY postdl /usr/bin/
 COPY postrm /usr/bin/
 COPY config.js /usr/flood/
 COPY rtorrent.rc /home/torrent/.rtorrent.rc
 
-RUN chmod +x /usr/bin/* \
+RUN chmod +x /usr/bin/* /etc/s6.d/*/* \
  && cd /usr/flood && ./node_modules/.bin/gulp dist
 
 VOLUME /data /usr/flood/server/db
@@ -77,4 +77,4 @@ LABEL description="BitTorrent client with WebUI front-end" \
       libtorrent="libtorrent v$LIBTORRENT_VER" \
       filebot="Filebot v$FILEBOT_VER"
 
-CMD ["/sbin/tini","--","startup"]
+CMD ["run.sh"]
