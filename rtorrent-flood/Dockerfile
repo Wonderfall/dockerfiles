@@ -1,4 +1,4 @@
-FROM wonderfall/node:stable
+FROM mhart/alpine-node-auto:6
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG RTORRENT_VER=0.9.6
