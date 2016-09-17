@@ -39,4 +39,4 @@ RUN chmod +x /usr/local/bin/run.sh
 
 VOLUME /boinc
 
-CMD ["run.sh"]
+ENTRYPOINT ["run.sh"]
