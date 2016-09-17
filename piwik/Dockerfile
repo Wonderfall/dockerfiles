@@ -1,14 +1,13 @@
-FROM alpine:edge
+FROM alpine:3.4
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
-ARG VERSION=2.16.1
+ARG VERSION=2.16.2
 
 ARG GPG_matthieu="814E 346F A01A 20DB B04B  6807 B5DB D592 5590 A237"
 
-ENV GID=991 UID=991
+ENV UID=991 GID=991
 
-RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
- && echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && BUILD_DEPS=" \
     git \
     tar \
@@ -21,25 +20,24 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
  && apk -U add \
     ${BUILD_DEPS} \
     nginx \
-    supervisor \
-    libwebp \
+    s6 \
+    su-exec \
     geoip \
-    tini@commuedge \
-    php7-fpm@testing \
-    php7-gd@testing \
-    php7-curl@testing \
-    php7-session@testing \
-    php7-json@testing \
-    php7-ctype@testing \
-    php7-mbstring@testing \
-    php7-iconv@testing \
-    php7-zlib@testing \
-    php7-dom@testing \
-    php7-openssl@testing \
-    php7-mysqli@testing \
-    php7-pdo_mysql@testing \
-    php7-dev@testing \
-    php7-pear@testing \
+    php7-fpm@commuedge \
+    php7-gd@commuedge \
+    php7-curl@commuedge \
+    php7-session@commuedge \
+    php7-json@commuedge \
+    php7-ctype@commuedge \
+    php7-mbstring@commuedge \
+    php7-iconv@commuedge \
+    php7-zlib@commuedge \
+    php7-dom@commuedge \
+    php7-openssl@commuedge \
+    php7-mysqli@commuedge \
+    php7-pdo_mysql@commuedge \
+    php7-dev@commuedge \
+    php7-pear@commuedge \
  && cd /tmp && git clone https://github.com/Zakay/geoip && cd geoip \
  && phpize7 && ./configure --with-php-config=/usr/bin/php-config7 && make && make install \
  && echo 'extension=geoip.so' >> /etc/php7/conf.d/00_geoip.ini \
@@ -68,15 +66,16 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
-COPY supervisord.conf /usr/local/etc/supervisord.conf
+COPY s6.d /etc/s6.d
 COPY run.sh /usr/local/bin/run.sh
 
-RUN chmod +x /usr/local/bin/run.sh
+RUN chmod +x /usr/local/bin/run.sh /etc/s6.d/*/*
 
 VOLUME /config
-EXPOSE 80
+
+EXPOSE 8888
 
 LABEL description "Open web analytics platform" \
       piwik "Piwik v${VERSION}"
-      
-CMD ["/sbin/tini","--","run.sh"]
+
+CMD ["run.sh"]
