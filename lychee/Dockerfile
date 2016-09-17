@@ -31,7 +31,6 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     s6 \
     su-exec \
     imagemagick \
-    tini@commuedge \
  && sed -i -e "s/max_execution_time = 30/max_execution_time = 200/g" \
     -e "s/post_max_size = 8M/post_max_size = 100M/g" \
     -e "s/upload_max_filesize = 2M/upload_max_filesize = 20M/g" \

@@ -10,7 +10,6 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     nginx \
     s6 \
     su-exec \
-    tini@commuedge \
     php7-fpm@commuedge \
     php7-gd@commuedge \
     php7-mcrypt@commuedge \
