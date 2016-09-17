@@ -3,7 +3,8 @@ MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG VERSION=6.0
 
-ENV GID=991 UID=991
+ENV UID=991 GID=991 \
+    HTTPSPORT=0
 
 WORKDIR /subsonic
 
@@ -20,7 +21,7 @@ COPY run.sh /usr/local/bin/run.sh
 
 RUN chmod +x /usr/local/bin/run.sh
 
-EXPOSE 4040
+EXPOSE 4040 4050
 
 VOLUME /data /musics /playlists /podcasts
 

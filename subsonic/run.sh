@@ -7,11 +7,11 @@ ln -s /usr/bin/lame /data/transcode/lame
 chown -R $UID:$GID /data /playlists /subsonic
 
 exec su-exec $UID:$GID tini -- \
-java -Xmx200m \
+java -Xmx256m \
   -Dsubsonic.home=/data \
   -Dsubsonic.host=0.0.0.0 \
   -Dsubsonic.port=4040 \
-  -Dsubsonic.httpsPort=0 \
+  -Dsubsonic.httpsPort=$HTTPSPORT \
   -Dsubsonic.contextPath=/ \
   -Dsubsonic.defaultMusicFolder=/musics \
   -Dsubsonic.defaultPodcastFolder=/podcasts \
