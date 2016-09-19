@@ -4,7 +4,8 @@ MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 ARG NEXTCLOUD_VERSION=10.0.0
 ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
-ENV UID=991 GID=991
+ENV UID=991 GID=991 \
+    UPLOAD_MAX_SIZE=10G
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \

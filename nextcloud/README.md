@@ -28,6 +28,7 @@
 #### Environment variables
 - **UID** : nextcloud user id *(default : 991)*
 - **GID** : nextcloud group id *(default : 991)*
+- **UPLOAD_MAX_SIZE** : maximum upload size *(default : 10G)*
 
 #### Port
 - **8888** (recently changed, nginx now runs without root)
