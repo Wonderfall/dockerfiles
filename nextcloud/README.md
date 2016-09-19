@@ -4,6 +4,10 @@
 
 ![](https://pix.schrodinger.io/lwq5gNX5/mSPk3B7c.png)
 
+
+#### Error 502?
+Before https://github.com/Wonderfall/dockerfiles/commit/9cbccd93dcbe5048ee428d22965d2d4c9d68cb84, wonderfall/nextcloud used the listen port 80. Now it's **8888** due to OS restrictions (non-root user cannot use port 80). Sorry for the inconvenience!
+
 #### Features
 - Based on **Alpine Linux** (edge), with **nginx** and **PHP 7**.
 - Package authenticity check during build process (sha256sum + GPG).
@@ -30,7 +34,7 @@
 - **GID** : nextcloud group id *(default : 991)*
 - **UPLOAD_MAX_SIZE** : maximum upload size *(default : 10G)*
 - **APC_SHM_SIZE** : apc memory size *(default : 128M)*
-- **OPCACHE_MEM_SIZE** : opcache memoery size in megabytes *(default : 128)*
+- **OPCACHE_MEM_SIZE** : opcache memory size in megabytes *(default : 128)*
 
 #### Port
 - **8888** (recently changed, nginx now runs without root)
