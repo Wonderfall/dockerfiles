@@ -29,6 +29,8 @@
 - **UID** : nextcloud user id *(default : 991)*
 - **GID** : nextcloud group id *(default : 991)*
 - **UPLOAD_MAX_SIZE** : maximum upload size *(default : 10G)*
+- **APC_SHM_SIZE** : apc memory size *(default : 128M)*
+- **OPCACHE_MEM_SIZE** : opcache memoery size in megabytes *(default : 128)*
 
 #### Port
 - **8888** (recently changed, nginx now runs without root)

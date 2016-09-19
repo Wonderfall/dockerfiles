@@ -2,7 +2,9 @@ FROM alpine:3.4
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV UID=991 GID=991 \
-    UPLOAD_MAX_SIZE=10G
+    UPLOAD_MAX_SIZE=10G \
+    APC_SHM_SIZE=128M \
+    OPCACHE_MEM_SIZE=128
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
