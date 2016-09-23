@@ -14,6 +14,7 @@
 - MySQL, PostgreSQL (server not built-in) and sqlite3 support.
 - Redis, FTP, SMB, LDAP support.
 - GNU Libiconv for php iconv extension (avoiding errors with some apps).
+- No root processes. Never.
 - Environment variables provided (see below).
 
 #### Tags
