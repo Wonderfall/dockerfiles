@@ -96,7 +96,7 @@ COPY run.sh /usr/local/bin/run.sh
 COPY occ /usr/local/bin/occ
 COPY s6.d /etc/s6.d
 
-RUN chmod +x /usr/local/bin/* /etc/s6.d/*/*
+RUN chmod +x /usr/local/bin/* /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
 
 VOLUME /data /config /apps2
 

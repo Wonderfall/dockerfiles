@@ -26,7 +26,7 @@ COPY php-fpm.conf /etc/php7/php-fpm.conf
 COPY run.sh /usr/local/bin/run.sh
 COPY s6.d /etc/s6.d
 
-RUN chmod +x /usr/local/bin/run.sh /etc/s6.d/*/*
+RUN chmod +x /usr/local/bin/run.sh /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
 
 VOLUME /zerobin/data
 

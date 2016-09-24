@@ -65,7 +65,7 @@ COPY postrm /usr/bin/
 COPY config.js /usr/flood/
 COPY rtorrent.rc /home/torrent/.rtorrent.rc
 
-RUN chmod +x /usr/bin/* /etc/s6.d/*/* \
+RUN chmod +x /usr/bin/* /etc/s6.d/*/* /etc/s6.d/.s6-svscan/* \
  && cd /usr/flood && ./node_modules/.bin/gulp dist
 
 VOLUME /data /usr/flood/server/db
