@@ -4,7 +4,7 @@
 
 ![](https://s32.postimg.org/69nev7aol/Nextcloud_logo.png)
 
-:warning: [It has been reported](https://github.com/Wonderfall/dockerfiles/issues/37) that his image might not work well with old versions of aufs. Please update aufs to 4.x or later, or use overlay/btfs as a replacement.
+:warning: [It has been reported](https://github.com/Wonderfall/dockerfiles/issues/37) that his image might not work well with old versions of aufs. Please update aufs to 4.x or later, or use overlay/btrfs as a replacement.
 
 :warning: HTTP port has recently changed, it's now **8888**. You will have to modify your reverse proxy settings.
 
