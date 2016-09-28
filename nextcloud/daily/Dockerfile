@@ -71,7 +71,8 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && wget -q https://download.nextcloud.com/server/daily/latest.tar.bz2 \
  && tar xjf latest.tar.bz2 --strip 1 -C /nextcloud \
  && apk del ${BUILD_DEPS} php7-pear php7-dev \
- && rm -rf /var/cache/apk/* /tmp/*
+ && rm -rf /var/cache/apk/* /tmp/* \
+ && sed -i 's/expose_php =.*/expose_php = Off/' /etc/php7/php.ini
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
