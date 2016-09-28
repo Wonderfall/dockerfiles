@@ -2,7 +2,11 @@
 
 [![](https://images.microbadger.com/badges/version/wonderfall/nextcloud.svg)](http://microbadger.com/images/wonderfall/nextcloud "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/wonderfall/nextcloud.svg)](http://microbadger.com/images/wonderfall/nextcloud "Get your own image badge on microbadger.com")
 
-![](https://pix.schrodinger.io/lwq5gNX5/mSPk3B7c.png)
+![](https://s32.postimg.org/69nev7aol/Nextcloud_logo.png)
+
+:warning: [It has been reported](https://github.com/Wonderfall/dockerfiles/issues/37) that his image might not work well with old versions of aufs. Please update aufs to 4.x or later, or use overlay/btfs as a replacement.
+
+:warning: HTTP port has recently changed, it's now **8888**. You will have to modify your reverse proxy settings.
 
 #### Features
 - Based on Alpine Linux.
