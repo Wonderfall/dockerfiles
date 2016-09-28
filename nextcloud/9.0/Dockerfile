@@ -86,7 +86,8 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && echo "All seems good, now unpacking ${NEXTCLOUD_TARBALL}..." \
  && tar xjf ${NEXTCLOUD_TARBALL} --strip 1 -C /nextcloud \
  && apk del ${BUILD_DEPS} php7-pear php7-dev \
- && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
+ && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg \
+ && sed -i 's/expose_php =.*/expose_php = Off/' /etc/php7/php.ini
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
