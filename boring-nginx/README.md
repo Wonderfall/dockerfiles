@@ -20,7 +20,10 @@ It is nginx statically linked against BoringSSL, with embedded Brotli support. S
 - ngxproxy : generates a *proxy vhost* after asking you a few questions.
 
 #### Notes
-It is required to chown your certs files with the right uid/pid and change the `listen` directive to 8000/4430 instead of 80/443. Linux 3.17+, and the latest Docker stable are recommended.
+- It is required to change the `listen` directive to 8000/4430 instead of 80/443.
+- Linux 3.17+, and the latest Docker stable are recommended.
+- BoringSSL is naming ECDH curves differently, some modifications will be required if you want to use your own SSL/TLS config file. For example, `secp384r1` (OpenSSL, LibreSSL) is `P-384` (BoringSSL). BoringSSL does support multiple curves with its implementation of `SSL_CTX_set1_curves_list()`, an example is provided in the default `/etc/nginx/confssl_params`. `X25519` is actually the safest curve you can use so it should be the first curve in your list.
+- BoringSSL can use cipher groups : a group is defined by brackets and ciphers are separated by `|` like this : `[cipher1|cipher2|cipher3]`. Ciphers in a group are considered equivalent on the server-side and let the client decide which cipher is the best. This can be useful when using ChaCha20, because AES remains faster than ChaCha20 on AES-NI devices.
 
 #### Volumes
 - **/sites-enabled** : vhosts files (*.conf)
