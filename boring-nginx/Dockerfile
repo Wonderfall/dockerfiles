@@ -112,7 +112,7 @@ EXPOSE 8000 4430
 VOLUME /sites-enabled /www /conf.d /passwds /certs /var/log/nginx
 
 LABEL description="Secure nginx built from source." \
-      openssl="BoringSSL (date of the container)." \
+      openssl="BoringSSL" \
       nginx="nginx ${NGINX_VERSION}."
 
 CMD ["run.sh"]
