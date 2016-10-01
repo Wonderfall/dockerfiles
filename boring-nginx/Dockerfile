@@ -71,6 +71,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     --with-ld-opt="-Wl,-Bsymbolic-functions -Wl,-z,relro -L ../boringssl/.openssl/lib" \
     --with-http_ssl_module \
     --with-http_v2_module \
+    --with-http_spdy_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module \
     --with-file-aio \
@@ -111,7 +112,7 @@ EXPOSE 8000 4430
 
 VOLUME /sites-enabled /www /conf.d /passwds /certs /var/log/nginx
 
-LABEL description="Secure nginx built from source." \
+LABEL description="nginx built from source." \
       openssl="BoringSSL" \
       nginx="nginx ${NGINX_VERSION}."
 
