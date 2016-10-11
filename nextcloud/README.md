@@ -41,6 +41,14 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **APC_SHM_SIZE** : apc memory size *(default : 128M)*
 - **OPCACHE_MEM_SIZE** : opcache memory size in megabytes *(default : 128)*
 - **CRON_PERIOD** : time interval between two cron tasks *(default : 15m)*
+- **TZ** : The log timezone *(default : Europe/Berlin)*
+- **ADMIN_USER** : Username of the administrator user *(default : admin)*
+- **ADMIN_PASSWORD** : Password of the administrator user *(default : admin)*
+- **DB_TYPE** : Database type (sqlite3, mysql or pgsql) *(default : sqlite3)*
+- **DB_NAME** : Name of database *(default : none)*
+- **DB_USER** : Username for database *(default : none)*
+- **DB_PASSWORD** : Password for database user *(default : none)*
+- **DB_HOST** : Database host *(default : none)*
 
 #### Port
 - **8888**
@@ -59,7 +67,7 @@ Pull the image and create a container. `/mnt` can be anywhere on your host, this
 ````
 docker pull wonderfall/nextcloud && docker pull mariadb:10
 docker run -d --name db_nextcloud -v /mnt/nextcloud/db:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=supersecretpassword -e MYSQL_DATABASE=nextcloud -e MYSQL_USER=nextcloud -e MYSQL_PASSWORD=supersecretpassword mariadb:10
-docker run -d --name nextcloud --link db_nextcloud:db_nextcloud -e UID=1000 -e GID=1000 -v /mnt/nextcloud/data:/data -v /mnt/nextcloud/config:/config -v /mnt/nextcloud/apps:/apps2 wonderfall/nextcloud
+docker run -d --name nextcloud --link db_nextcloud:db_nextcloud -e UID=1000 -e GID=1000 -e DB_NAME=nextcloud -e DB_USER=nextcloud -e DB_PASSWORD=supersecretpassword -e DB_HOST=db_nextcloud -v /mnt/nextcloud/data:/data -v /mnt/nextcloud/config:/config -v /mnt/nextcloud/apps:/apps2 wonderfall/nextcloud
 ```
 
 **Below you can find a docker-compose file, which is very useful!**
@@ -113,34 +121,53 @@ If Nextcloud performed a full upgrade, your apps could be disabled. Enable them 
 
 #### Docker-compose
 
-I advise you to use [docker-compose](https://docs.docker.com/compose/), which is a great tool for managing containers. You can create a `docker-compose.yml` with the following content (which must be adapted to your needs) and then run everything with `docker-compose up -d`, that's it!
+I advise you to use [docker-compose](https://docs.docker.com/compose/), which is a great tool for managing containers. You can create a `docker-compose.yml` with the following content (which must be adapted to your needs) and then run `docker-compose up -d nextcloud-db`, wait some 15 seconds for the database to come up, then run everything with `docker-compose up -d`, that's it! On subsequent runs,  a single `docker-compose up -d` is sufficient!
 
 ```
-nextcloud:
-  image: wonderfall/nextcloud:10.0
-  links:
-    - db_nextcloud:db_nextcloud
-  environment:
-    - UID=1000
-    - GID=1000
-    - UPLOAD_MAX_SIZE=10G
-    - APC_SHM_SIZE=128M
-    - OPCACHE_MEM_SIZE=128
-    - CRON_PERIOD=15m
-  volumes:
-    - /mnt/nextcloud/data:/data
-    - /mnt/nextcloud/config:/config
-    - /mnt/nextcloud/apps:/apps2
+version: '2'
 
-db_nextcloud:
-  image: mariadb:10
-  volumes:
-    - /mnt/nextcloud/db:/var/lib/mysql
-  environment:
-    - MYSQL_ROOT_PASSWORD=supersecretpassword
-    - MYSQL_DATABASE=nextcloud
-    - MYSQL_USER=nextcloud
-    - MYSQL_PASSWORD=supersecretpassword
+volumes:
+  nextcloud-db-data:
+  nextcloud-data:
+  nextcloud-config:
+  nextcloud-apps:
+
+services:
+  nextcloud-db:
+    image: mariadb
+    volumes:
+      - nextcloud-db-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=foo5678
+
+  nextcloud:
+    image: wonderfall/nextcloud
+    environment:
+      - UID=1000
+      - GID=1000
+      - UPLOAD_MAX_SIZE=10G
+      - APC_SHM_SIZE=128M
+      - OPCACHE_MEM_SIZE=128
+      - CRON_PERIOD=15m
+      - TZ=Europe/Berlin
+      - ADMIN_USER=admin
+      - ADMIN_PASSWORD=admin
+      - DB_TYPE=mysql
+      - DB_NAME=nextcloud
+      - DB_USER=nextcloud
+      - DB_PASSWORD=foo5678
+      - DB_HOST=nextcloud-db
+    depends_on:
+      - nextcloud-db
+    volumes:
+      - nextcloud-data:/data
+      - nextcloud-config:/config
+      - nextcloud-apps:/apps2
+    ports:
+      - 8888:8888
 ```
 You can update everything with `docker-compose pull` followed by `docker-compose up -d`.
 

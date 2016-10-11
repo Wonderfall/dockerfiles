@@ -93,6 +93,7 @@ COPY php-fpm.conf /etc/php7/php-fpm.conf
 COPY opcache.ini /etc/php7/conf.d/00_opcache.ini
 COPY apcu.ini /etc/php7/conf.d/apcu.ini
 COPY run.sh /usr/local/bin/run.sh
+COPY setup.sh /usr/local/bin/setup.sh
 COPY occ /usr/local/bin/occ
 COPY s6.d /etc/s6.d
 
