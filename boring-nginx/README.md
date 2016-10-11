@@ -37,7 +37,7 @@ This is nginx statically linked against BoringSSL, with embedded Brotli support.
 #### Build-time variables
 - **NGINX_VERSION** : version of nginx
 - **GPG_NGINX** : fingerprint of signing key package
-- **
+- **BUILD_CORES** : number of cores used during compilation
 
 #### Environment variables
 - **GID** : nginx group id *(default : 991)*
