@@ -3,21 +3,22 @@
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/115px-Nginx_logo.svg.png)
 
 #### What is this?
-It is nginx statically linked against BoringSSL, with embedded Brotli support. Secured by default (no root processes, even the master one), it should be safe to use...
+This is nginx statically linked against BoringSSL, with embedded Brotli support.
 
 #### Features
 - Based on Alpine Linux.
 - nginx built against **BoringSSL**.
-- nginx : securely built using hardening gcc flags.
-- nginx : HTTP/2 (+NPN) support.
-- nginx : Brotli compression support (and configured).
-- nginx : no root master process.
-- nginx : AIO Threads support.
-- nginx : no unnessary modules (except fastcgi).
-- nginx : pcre jit enabled.
-- nginx : optimized configuration.
-- ngxpasswd : generates a htpasswd file easily.
-- ngxproxy : generates a *proxy vhost* after asking you a few questions.
+- Built using hardening gcc flags.
+- TTP/2 (+NPN) support.
+- Brotli compression support (and configured).
+- No root master process.
+- AIO Threads support.
+- No unnessary modules (except fastcgi).
+- PCRE-jit enabled.
+- Strong configurations included.
+- Anonymous webserver signature (headers-more).
+- ngxpasswd : generates a htpasswd file.
+- ngxproxy : generates a proxy virtual host file.
 
 #### Notes
 - It is required to change the `listen` directive to 8000/4430 instead of 80/443.
@@ -36,7 +37,7 @@ It is nginx statically linked against BoringSSL, with embedded Brotli support. S
 #### Build-time variables
 - **NGINX_VERSION** : version of nginx
 - **GPG_NGINX** : fingerprint of signing key package
-- **SIGNATURE** : HTTP signature of nginx, default is *secret*
+- **
 
 #### Environment variables
 - **GID** : nginx group id *(default : 991)*

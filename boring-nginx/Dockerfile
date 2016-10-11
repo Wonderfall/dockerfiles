@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV UID=991 GID=991
@@ -59,10 +59,6 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && if [ "${FINGERPRINT}" != "${GPG_NGINX}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
  && echo "All seems good, now unpacking ${NGINX_TARBALL}..." \
  && tar xzf ${NGINX_TARBALL} && cd nginx-${NGINX_VERSION} \
- && wget -q https://raw.githubusercontent.com/felixbuenemann/sslconfig/updated-nginx-1.9.15-spdy-patch/patches/nginx_1_9_15_http2_spdy.patch -O spdy.patch \
- && patch -p1 < spdy.patch \
- && wget -q https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch \
- && patch -p1 < nginx__dynamic_tls_records.patch \
  && patch -p1 < /tmp/boring.patch \
  && ./configure \
     --prefix=/etc/nginx \
@@ -71,7 +67,6 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     --with-ld-opt="-Wl,-Bsymbolic-functions -Wl,-z,relro -L ../boringssl/.openssl/lib" \
     --with-http_ssl_module \
     --with-http_v2_module \
-    --with-http_spdy_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module \
     --with-file-aio \
@@ -112,8 +107,8 @@ EXPOSE 8000 4430
 
 VOLUME /sites-enabled /www /conf.d /passwds /certs /var/log/nginx
 
-LABEL description="nginx built from source." \
+LABEL description="nginx built from source" \
       openssl="BoringSSL" \
-      nginx="nginx ${NGINX_VERSION}."
+      nginx="nginx ${NGINX_VERSION}"
 
 CMD ["run.sh"]
