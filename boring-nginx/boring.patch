@@ -1,6 +1,6 @@
-diff -Naur nginx-1.11.4/src/event/ngx_event_openssl.c nginx-1.11.4-patched/src/event/ngx_event_openssl.c
---- nginx-1.11.4/src/event/ngx_event_openssl.c	2016-09-16 00:49:53.176182112 +0200
-+++ nginx-1.11.4-patched/src/event/ngx_event_openssl.c	2016-09-16 00:47:27.636986453 +0200
+diff -Naur nginx-1.11.5/src/event/ngx_event_openssl.c nginx-1.11.5-patched/src/event/ngx_event_openssl.c
+--- nginx-1.11.5/src/event/ngx_event_openssl.c	2016-10-11 18:30:28.956383557 +0200
++++ nginx-1.11.5-patched/src/event/ngx_event_openssl.c	2016-10-11 18:34:41.226899170 +0200
 @@ -2016,7 +2016,9 @@
  
              /* handshake failures */
@@ -21,10 +21,10 @@ diff -Naur nginx-1.11.4/src/event/ngx_event_openssl.c nginx-1.11.4-patched/src/e
              || n == SSL_R_NO_COMPRESSION_SPECIFIED                   /*  187 */
              || n == SSL_R_NO_SHARED_CIPHER                           /*  193 */
              || n == SSL_R_RECORD_LENGTH_MISMATCH                     /*  213 */
-diff -Naur nginx-1.11.4/src/http/ngx_http_upstream.c nginx-1.11.4-patched/src/http/ngx_http_upstream.c
---- nginx-1.11.4/src/http/ngx_http_upstream.c	2016-09-16 00:50:04.068121614 +0200
-+++ nginx-1.11.4-patched/src/http/ngx_http_upstream.c	2016-09-16 00:47:50.916858344 +0200
-@@ -1694,7 +1694,7 @@
+diff -Naur nginx-1.11.5/src/http/ngx_http_upstream.c nginx-1.11.5-patched/src/http/ngx_http_upstream.c
+--- nginx-1.11.5/src/http/ngx_http_upstream.c	2016-10-11 18:31:13.368121756 +0200
++++ nginx-1.11.5-patched/src/http/ngx_http_upstream.c	2016-10-11 18:35:17.470686369 +0200
+@@ -1696,7 +1696,7 @@
      ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
                     "upstream SSL server name: \"%s\"", name.data);
  
