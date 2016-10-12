@@ -79,7 +79,6 @@ echo "Automatic configuration finished."
 #   users within the proper timeframe
 # * We need to set the logdateformat to something that will work correctly with fail2ban
 # Use PHP to read the settings file, modify it, and write out the new settings array.
-echo ${TZ:-UTC} >/etc/timezone
 
 TIMEZONE=$(cat /etc/timezone)
 CONFIG_TEMP=$(/bin/mktemp)

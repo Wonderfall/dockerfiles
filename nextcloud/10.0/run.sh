@@ -5,6 +5,8 @@ sed -i -e "s/<UPLOAD_MAX_SIZE>/$UPLOAD_MAX_SIZE/g" /etc/nginx/nginx.conf /etc/ph
        -e "s/<OPCACHE_MEM_SIZE>/$OPCACHE_MEM_SIZE/g" /etc/php7/conf.d/00_opcache.ini \
        -e "s/<CRON_PERIOD>/$CRON_PERIOD/g" /etc/s6.d/cron/run
 
+echo ${TZ:-UTC} >/etc/timezone
+
 # Put the configuration and apps into volumes
 ln -sf /config/config.php /nextcloud/config/config.php &>/dev/null
 ln -sf /apps2 /nextcloud &>/dev/null
