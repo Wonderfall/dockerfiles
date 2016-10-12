@@ -42,7 +42,7 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **APC_SHM_SIZE** : apc memory size *(default : 128M)*
 - **OPCACHE_MEM_SIZE** : opcache memory size in megabytes *(default : 128)*
 - **CRON_PERIOD** : time interval between two cron tasks *(default : 15m)*
-- **TZ** : The log timezone *(default : Europe/Berlin)*
+- **TZ** : The system/log timezone *(default : Etc/UTC)*
 - **ADMIN_USER** : Username of the administrator user *(default : admin)*
 - **ADMIN_PASSWORD** : Password of the administrator user *(default : admin)*
 - **DB_TYPE** : Database type (sqlite3, mysql or pgsql) *(default : sqlite3)*
