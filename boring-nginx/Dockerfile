@@ -33,7 +33,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     libgcc \
     libstdc++ \
     su-exec \
-    openssl \
+    libressl \
     bind-tools \
     tini@commuedge \
  && cd /tmp && git clone https://github.com/bagder/libbrotli --depth=1 && cd libbrotli \

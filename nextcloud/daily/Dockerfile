@@ -25,7 +25,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     ${BUILD_DEPS} \
     nginx \
     s6 \
-    openssl \
+    libressl \
     ca-certificates \
     libsmbclient \
     samba-client \
