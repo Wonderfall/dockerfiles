@@ -1,18 +1,23 @@
-FROM alpine:3.4
+FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
+ARG NEXTCLOUD_VERSION=10.0.1
 ARG GNU_LIBICONV_VERSION=1.14
+ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
 ENV UID=991 GID=991 \
     UPLOAD_MAX_SIZE=10G \
     APC_SHM_SIZE=128M \
     OPCACHE_MEM_SIZE=128 \
-    CRON_PERIOD=15m
+    CRON_PERIOD=15m \
+    TZ=Europe/Berlin \
+    DB_TYPE=sqlite3 \
+    ADMIN_USER=admin \
+    ADMIN_PASSWORD=admin
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && BUILD_DEPS=" \
-    gnupg \
     tar \
     build-base \
     autoconf \
@@ -71,13 +76,14 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && wget -q https://download.nextcloud.com/server/daily/latest.tar.bz2 \
  && tar xjf latest.tar.bz2 --strip 1 -C /nextcloud \
  && apk del ${BUILD_DEPS} php7-pear php7-dev \
- && rm -rf /var/cache/apk/* /tmp/*
+ && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
 COPY opcache.ini /etc/php7/conf.d/00_opcache.ini
 COPY apcu.ini /etc/php7/conf.d/apcu.ini
 COPY run.sh /usr/local/bin/run.sh
+COPY setup.sh /usr/local/bin/setup.sh
 COPY occ /usr/local/bin/occ
 COPY s6.d /etc/s6.d
 
@@ -88,6 +94,6 @@ VOLUME /data /config /apps2
 EXPOSE 8888
 
 LABEL description="A server software for creating file hosting services" \
-      nextcloud="Nextcloud daily build"
+      nextcloud="Nextcloud v${NEXTCLOUD_VERSION}"
 
 CMD ["run.sh"]
