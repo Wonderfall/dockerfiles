@@ -1,9 +1,7 @@
 FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG NEXTCLOUD_VERSION=10.0.1
 ARG GNU_LIBICONV_VERSION=1.14
-ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
 ENV UID=991 GID=991 \
     UPLOAD_MAX_SIZE=10G \
@@ -76,7 +74,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && wget -q https://download.nextcloud.com/server/daily/latest.tar.bz2 \
  && tar xjf latest.tar.bz2 --strip 1 -C /nextcloud \
  && apk del ${BUILD_DEPS} php7-pear php7-dev \
- && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
+ && rm -rf /var/cache/apk/* /tmp/*
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
@@ -94,6 +92,6 @@ VOLUME /data /config /apps2
 EXPOSE 8888
 
 LABEL description="A server software for creating file hosting services" \
-      nextcloud="Nextcloud v${NEXTCLOUD_VERSION}"
+      nextcloud="Nextcloud daily build"
 
 CMD ["run.sh"]
