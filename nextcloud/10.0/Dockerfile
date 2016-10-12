@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG NEXTCLOUD_VERSION=10.0.1
@@ -9,7 +9,11 @@ ENV UID=991 GID=991 \
     UPLOAD_MAX_SIZE=10G \
     APC_SHM_SIZE=128M \
     OPCACHE_MEM_SIZE=128 \
-    CRON_PERIOD=15m
+    CRON_PERIOD=15m \
+    TZ=Europe/Berlin \
+    DB_TYPE=sqlite3 \
+    ADMIN_USER=admin \
+    ADMIN_PASSWORD=admin
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
