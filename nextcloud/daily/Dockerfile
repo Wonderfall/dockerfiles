@@ -8,7 +8,7 @@ ENV UID=991 GID=991 \
     APC_SHM_SIZE=128M \
     OPCACHE_MEM_SIZE=128 \
     CRON_PERIOD=15m \
-    TZ=Europe/Berlin \
+    TZ=Etc/UTC \
     DB_TYPE=sqlite3 \
     ADMIN_USER=admin \
     ADMIN_PASSWORD=admin
@@ -30,6 +30,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     libsmbclient \
     samba-client \
     su-exec \
+    tzdata \
     php7@commuedge \
     php7-fpm@commuedge \
     php7-intl@commuedge \

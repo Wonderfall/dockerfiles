@@ -80,7 +80,6 @@ echo "Automatic configuration finished."
 # * We need to set the logdateformat to something that will work correctly with fail2ban
 # Use PHP to read the settings file, modify it, and write out the new settings array.
 
-TIMEZONE=$(cat /etc/timezone)
 CONFIG_TEMP=$(/bin/mktemp)
 php7 <<EOF > $CONFIG_TEMP && mv $CONFIG_TEMP $CONFIGFILE
 <?php
@@ -92,7 +91,7 @@ include("/config/config.php");
 //\$CONFIG['overwrite.cli.url'] = '/cloud';
 \$CONFIG['mail_from_address'] = 'administrator'; # just the local part, matches our master administrator address
 
-\$CONFIG['logtimezone'] = '$TIMEZONE';
+\$CONFIG['logtimezone'] = '$TZ';
 \$CONFIG['logdateformat'] = 'Y-m-d H:i:s';
 
 echo "<?php\n\\\$CONFIG = ";
