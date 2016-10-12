@@ -11,6 +11,7 @@
 #### Features
 - Based on Alpine Linux.
 - Bundled with nginx and PHP 7.
+- Automatic installation using environment variables.
 - Package integrity and authenticity checked during building process.
 - Data and apps persistence.
 - OPCache & APCu already configured.
@@ -67,46 +68,15 @@ Pull the image and create a container. `/mnt` can be anywhere on your host, this
 ````
 docker pull wonderfall/nextcloud && docker pull mariadb:10
 docker run -d --name db_nextcloud -v /mnt/nextcloud/db:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=supersecretpassword -e MYSQL_DATABASE=nextcloud -e MYSQL_USER=nextcloud -e MYSQL_PASSWORD=supersecretpassword mariadb:10
-docker run -d --name nextcloud --link db_nextcloud:db_nextcloud -e UID=1000 -e GID=1000 -e DB_NAME=nextcloud -e DB_USER=nextcloud -e DB_PASSWORD=supersecretpassword -e DB_HOST=db_nextcloud -v /mnt/nextcloud/data:/data -v /mnt/nextcloud/config:/config -v /mnt/nextcloud/apps:/apps2 wonderfall/nextcloud
+docker run -d --name nextcloud --link db_nextcloud:db_nextcloud -e UID=1000 -e GID=1000 -e DB_TYPE=mysql -e DB_NAME=nextcloud -e DB_USER=nextcloud -e DB_PASSWORD=supersecretpassword -e DB_HOST=db_nextcloud -v /mnt/nextcloud/data:/data -v /mnt/nextcloud/config:/config -v /mnt/nextcloud/apps:/apps2 wonderfall/nextcloud
 ```
 
 **Below you can find a docker-compose file, which is very useful!**
 
-Now you have to use a **reverse proxy** in order to access to your container through Internet, steps and details are available at the end of the README.md.
-
-Browse to Nextcloud setup page, then fill in the following fields :
-- **Data folder** : change `/nextcloud/data` to `/data` (should be `/data` by default).
-- **Database** :
-  - user : MYSQL_USER.
-  - password : MYSQL_PASSWORD.
-  - name : MYSQL_DATABASE.
-  - host : name of the mariadb container.
-- **Don't forget** : use strong passwords, choose another name for the admin account.
+Now you have to use a **reverse proxy** in order to access to your container through Internet, steps and details are available at the end of the README.md. And that's it! You already configured Nextcloud, so there's no setup page.
 
 #### Configure
 In the admin panel, you should switch from `AJAX cron` to `cron` (system cron).
-To **enable APCU**, add this line to your config.php :
-
-```
-  'memcache.local' => '\OC\Memcache\APCu',
-```
-
-Add the following lines to your `config.php` in order to enable apps persistence :
-
-```
-  "apps_paths" => array (
-      0 => array (
-              "path"     => "/nextcloud/apps",
-              "url"      => "/apps",
-              "writable" => false,
-      ),
-      1 => array (
-              "path"     => "/apps2",
-              "url"      => "/apps2",
-              "writable" => true,
-      ),
-  ),
-```
 
 #### Update
 Pull a newer image, then recreate the container :
