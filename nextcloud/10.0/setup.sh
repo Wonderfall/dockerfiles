@@ -14,6 +14,21 @@ cat > $CONFIGFILE <<EOF;
 \$CONFIG = array (
   'datadirectory' => '/data',
 
+  "apps_paths" => array (
+      0 => array (
+              "path"     => "/nextcloud/apps",
+              "url"      => "/apps",
+              "writable" => false,
+      ),
+      1 => array (
+              "path"     => "/apps2",
+              "url"      => "/apps2",
+              "writable" => true,
+      ),
+  ),
+
+  'memcache.local' => '\OC\Memcache\APCu',
+
   'instanceid' => '$instanceid',
 );
 ?>
