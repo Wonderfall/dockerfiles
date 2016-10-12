@@ -55,6 +55,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     php7-openssl@commuedge \
     php7-ldap@commuedge \
     php7-ftp@commuedge \
+    php7-pcntl@commuedge \
     php7-apcu@testing \
     php7-redis@testing \
     php7-pear@commuedge \
