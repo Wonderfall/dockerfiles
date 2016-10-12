@@ -8,7 +8,7 @@
 
 :warning: HTTP port has recently changed, it's now **8888**. You will have to modify your reverse proxy settings.
 
-#### Features
+### Features
 - Based on Alpine Linux.
 - Bundled with nginx and PHP 7.
 - Automatic installation using environment variables.
@@ -22,7 +22,7 @@
 - No root processes. Never.
 - Environment variables provided (see below).
 
-#### Tags
+### Tags
 - **latest** : latest stable version.
 - **10.0** : latest 10.0.x version (stable)
 - **9.0** : latest 9.0.x version. (old stable) (unmaintained by this project)
@@ -30,12 +30,12 @@
 
 Other tags than `daily` are built weekly. For security reasons, you should occasionally update the container, even if you have the latest version of Nextcloud.
 
-#### Build-time variables
+### Build-time variables
 - **NEXTCLOUD_VERSION** : version of nextcloud
 - **GNU_LIBICONV_VERSION** : version of GNU Libiconv
 - **GPG_nextcloud** : signing key fingerprint
 
-#### Environment variables
+### Environment variables
 - **UID** : nextcloud user id *(default : 991)*
 - **GID** : nextcloud group id *(default : 991)*
 - **UPLOAD_MAX_SIZE** : maximum upload size *(default : 10G)*
@@ -51,18 +51,18 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **DB_PASSWORD** : Password for database user *(default : none)*
 - **DB_HOST** : Database host *(default : none)*
 
-#### Port
+### Port
 - **8888** : HTTP Nextcloud port.
 
-#### Volumes
+### Volumes
 - **/data** : Nextcloud data.
 - **/config** : config.php location.
 - **/apps2** : Nextcloud downloaded apps.
 
-#### Database
+### Database
 Basically, you can use a database instance running on the host or any other machine. An easier solution is to use an external database container. I suggest you to use MariaDB, which is a reliable database server. You can use the official `mariadb` image available on Docker Hub to create a database container, which must be linked to the Nextcloud container. PostgreSQL can also be used as well.
 
-#### Setup
+### Setup
 Pull the image and create a container. `/mnt` can be anywhere on your host, this is just an example. Change MYSQL_ROOT_PASSWORD and MYSQL_PASSWORD values (mariadb). You may also want to change UID and GID (nextcloud).
 
 ````
@@ -75,10 +75,10 @@ docker run -d --name nextcloud --link db_nextcloud:db_nextcloud -e UID=1000 -e G
 
 Now you have to use a **reverse proxy** in order to access to your container through Internet, steps and details are available at the end of the README.md. And that's it! You already configured Nextcloud, so there's no setup page.
 
-#### Configure
+### Configure
 In the admin panel, you should switch from `AJAX cron` to `cron` (system cron).
 
-#### Update
+### Update
 Pull a newer image, then recreate the container :
 
 ```
@@ -89,11 +89,11 @@ docker run -d --name nextcloud --link db_nextcloud:db_nextcloud -e UID=1000 -e G
 
 If Nextcloud performed a full upgrade, your apps could be disabled. Enable them again.
 
-#### Docker-compose
+### Docker-compose
 
 I advise you to use [docker-compose](https://docs.docker.com/compose/), which is a great tool for managing containers. You can create a `docker-compose.yml` with the following content (which must be adapted to your needs) and then run `docker-compose up -d nextcloud-db`, wait some 15 seconds for the database to come up, then run everything with `docker-compose up -d`, that's it! On subsequent runs,  a single `docker-compose up -d` is sufficient!
 
-## Docker-compose file V2
+#### Docker-compose file V2
 ```
 version: '2'
 
@@ -141,7 +141,7 @@ services:
       - 8888:8888
 ```
 
-## Docker-compose file V1
+#### Docker-compose file V1
 ```
 nextcloud:
   image: wonderfall/nextcloud
@@ -180,7 +180,7 @@ nextcloud-db:
 
 You can update everything with `docker-compose pull` followed by `docker-compose up -d`.
 
-#### Reverse proxy
+### Reverse proxy
 If you're using nginx, there are two possibilites :
 
 - nginx is on the host : get the Nextcloud container IP address with `docker inspect nextcloud | grep IPAddress\" | head -n1 | grep -Eo "[0-9.]+" `. But whenever the container is restarted or recreated, its IP address can change.
