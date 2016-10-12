@@ -25,7 +25,7 @@
 #### Tags
 - **latest** : latest stable version.
 - **10.0** : latest 10.0.x version (stable)
-- **9.0** : latest 9.0.x version. (old stable)
+- **9.0** : latest 9.0.x version. (old stable) (unmaintained by this project)
 - **daily** : latest code (daily build).
 
 Other tags than `daily` are built weekly. For security reasons, you should occasionally update the container, even if you have the latest version of Nextcloud.
@@ -52,7 +52,7 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **DB_HOST** : Database host *(default : none)*
 
 #### Port
-- **8888**
+- **8888** : HTTP Nextcloud port.
 
 #### Volumes
 - **/data** : Nextcloud data.
@@ -93,6 +93,7 @@ If Nextcloud performed a full upgrade, your apps could be disabled. Enable them 
 
 I advise you to use [docker-compose](https://docs.docker.com/compose/), which is a great tool for managing containers. You can create a `docker-compose.yml` with the following content (which must be adapted to your needs) and then run `docker-compose up -d nextcloud-db`, wait some 15 seconds for the database to come up, then run everything with `docker-compose up -d`, that's it! On subsequent runs,  a single `docker-compose up -d` is sufficient!
 
+## Docker-compose file V2
 ```
 version: '2'
 
@@ -139,6 +140,44 @@ services:
     ports:
       - 8888:8888
 ```
+
+## Docker-compose file V1
+```
+nextcloud:
+  image: wonderfall/nextcloud
+  links:
+    - nextcloud-db:db_nextcloud-db
+  environment:
+    - UID=1000
+    - GID=1000
+    - UPLOAD_MAX_SIZE=10G
+    - APC_SHM_SIZE=128M
+    - OPCACHE_MEM_SIZE=128
+    - CRON_PERIOD=15m
+    - TZ=Europe/Berlin
+    - ADMIN_USER=admin
+    - ADMIN_PASSWORD=admin
+    - DB_TYPE=mysql
+    - DB_NAME=nextcloud
+    - DB_USER=nextcloud
+    - DB_PASSWORD=supersecretpassword
+    - DB_HOST=nextcloud-db
+  volumes:
+    - /mnt/nextcloud/data:/data
+    - /mnt/nextcloud/config:/config
+    - /mnt/nextcloud/apps:/apps2
+
+nextcloud-db:
+  image: mariadb:10
+  volumes:
+    - /mnt/nextcloud/db:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=supersecretpassword
+    - MYSQL_DATABASE=nextcloud
+    - MYSQL_USER=nextcloud
+    - MYSQL_PASSWORD=supersecretpassword
+```
+
 You can update everything with `docker-compose pull` followed by `docker-compose up -d`.
 
 #### Reverse proxy
