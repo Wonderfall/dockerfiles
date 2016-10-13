@@ -42,14 +42,16 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **APC_SHM_SIZE** : apc memory size *(default : 128M)*
 - **OPCACHE_MEM_SIZE** : opcache memory size in megabytes *(default : 128)*
 - **CRON_PERIOD** : time interval between two cron tasks *(default : 15m)*
-- **TZ** : The system/log timezone *(default : Etc/UTC)*
-- **ADMIN_USER** : Username of the administrator user *(default : admin)*
-- **ADMIN_PASSWORD** : Password of the administrator user *(default : admin)*
-- **DB_TYPE** : Database type (sqlite3, mysql or pgsql) *(default : sqlite3)*
-- **DB_NAME** : Name of database *(default : none)*
-- **DB_USER** : Username for database *(default : none)*
-- **DB_PASSWORD** : Password for database user *(default : none)*
-- **DB_HOST** : Database host *(default : none)*
+- **TZ** : the system/log timezone *(default : Etc/UTC)*
+- **ADMIN_USER** : username of the admin account *(default : admin)*
+- **ADMIN_PASSWORD** : password of the admin account *(default : admin)*
+- **DB_TYPE** : database type (sqlite3, mysql or pgsql) *(default : sqlite3)*
+- **DB_NAME** : name of database *(default : none)*
+- **DB_USER** : username for database *(default : none)*
+- **DB_PASSWORD** : password for database user *(default : none)*
+- **DB_HOST** : database host *(default : none)*
+
+Don't forget to use a **strong password** for the admin account!
 
 ### Port
 - **8888** : HTTP Nextcloud port.
@@ -63,12 +65,30 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 Basically, you can use a database instance running on the host or any other machine. An easier solution is to use an external database container. I suggest you to use MariaDB, which is a reliable database server. You can use the official `mariadb` image available on Docker Hub to create a database container, which must be linked to the Nextcloud container. PostgreSQL can also be used as well.
 
 ### Setup
-Pull the image and create a container. `/mnt` can be anywhere on your host, this is just an example. Change MYSQL_ROOT_PASSWORD and MYSQL_PASSWORD values (mariadb). You may also want to change UID and GID (nextcloud).
+Pull the image and create a container. `/mnt` can be anywhere on your host, this is just an example. Change `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD` values (mariadb). You may also want to change UID and GID (nextcloud).
 
 ````
-docker pull wonderfall/nextcloud && docker pull mariadb:10
-docker run -d --name db_nextcloud -v /mnt/nextcloud/db:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=supersecretpassword -e MYSQL_DATABASE=nextcloud -e MYSQL_USER=nextcloud -e MYSQL_PASSWORD=supersecretpassword mariadb:10
-docker run -d --name nextcloud --link db_nextcloud:db_nextcloud -e UID=1000 -e GID=1000 -e DB_TYPE=mysql -e DB_NAME=nextcloud -e DB_USER=nextcloud -e DB_PASSWORD=supersecretpassword -e DB_HOST=db_nextcloud -v /mnt/nextcloud/data:/data -v /mnt/nextcloud/config:/config -v /mnt/nextcloud/apps:/apps2 wonderfall/nextcloud
+docker pull wonderfall/nextcloud:10.0 && docker pull mariadb:10
+
+docker run -d --name db_nextcloud \
+       -v /mnt/nextcloud/db:/var/lib/mysql \
+       -e MYSQL_ROOT_PASSWORD=supersecretpassword \
+       -e MYSQL_DATABASE=nextcloud -e MYSQL_USER=nextcloud \
+       -e MYSQL_PASSWORD=supersecretpassword \
+       mariadb:10
+       
+docker run -d --name nextcloud \
+       --link db_nextcloud:db_nextcloud \
+       -e UID=1000 -e GID=1000 \
+       -e DB_TYPE=mysql \
+       -e DB_NAME=nextcloud \
+       -e DB_USER=nextcloud \
+       -e DB_PASSWORD=supersecretpassword \
+       -e DB_HOST=db_nextcloud \
+       -v /mnt/nextcloud/data:/data \
+       -v /mnt/nextcloud/config:/config \
+       -v /mnt/nextcloud/apps:/apps2 \
+       wonderfall/nextcloud:10.0
 ```
 
 **Below you can find a docker-compose file, which is very useful!**
@@ -79,18 +99,9 @@ Now you have to use a **reverse proxy** in order to access to your container thr
 In the admin panel, you should switch from `AJAX cron` to `cron` (system cron).
 
 ### Update
-Pull a newer image, then recreate the container :
-
-```
-docker pull wonderfall/nextcloud
-docker rm nextcloud
-docker run -d --name nextcloud --link db_nextcloud:db_nextcloud -e UID=1000 -e GID=1000 -v /mnt/nextcloud/data:/data -v /mnt/nextcloud/config:/config -v /mnt/nextcloud/apps:/apps2 wonderfall/nextcloud
-```
-
-If Nextcloud performed a full upgrade, your apps could be disabled. Enable them again.
+Pull a newer image, then recreate the container as you did before (*Setup* step). None of your data will be lost since you're using external volumes. If Nextcloud performed a full upgrade, your apps could be disabled. Enable them again.
 
 ### Docker-compose
-
 I advise you to use [docker-compose](https://docs.docker.com/compose/), which is a great tool for managing containers. You can create a `docker-compose.yml` with the following content (which must be adapted to your needs) and then run `docker-compose up -d nextcloud-db`, wait some 15 seconds for the database to come up, then run everything with `docker-compose up -d`, that's it! On subsequent runs,  a single `docker-compose up -d` is sufficient!
 
 #### Docker-compose file V2
@@ -137,8 +148,8 @@ services:
       - nextcloud-data:/data
       - nextcloud-config:/config
       - nextcloud-apps:/apps2
-    ports:
-      - 8888:8888
+#   ports:
+#     - 8888:8888
 ```
 
 #### Docker-compose file V1
@@ -181,10 +192,40 @@ nextcloud-db:
 You can update everything with `docker-compose pull` followed by `docker-compose up -d`.
 
 ### Reverse proxy
-If you're using nginx, there are two possibilites :
+Of course you can use your own solution to do so ! nginx, Haproxy, Caddy, h2o, there's plenty of choice and documentation about it on the Web.
 
-- nginx is on the host : get the Nextcloud container IP address with `docker inspect nextcloud | grep IPAddress\" | head -n1 | grep -Eo "[0-9.]+" `. But whenever the container is restarted or recreated, its IP address can change.
+Personally I'm using nginx, so if you're using nginx, there are two possibilites :
 
-- nginx is in a container, things are easier : https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration (example). If you don't get it : **nextcloud is linked to nginx** (like containers) so you can use `proxy_pass http://nextcloud:8888`. If you're interested, I provide a nginx image available on Docker Hub : `wonderfall/nginx`.
+- nginx is on the host : get the Nextcloud container IP address with `docker inspect nextcloud | grep IPAddress\" | head -n1 | grep -Eo "[0-9.]+" `. But whenever the container is restarted or recreated, its IP address can change. Or you can bind Nextcloud HTTP port (8888) to the host (so the reverse proxy can access with `http://localhost:8888` or whatever port you set), but in this case you should consider using a firewall since it's also listening to `http://0.0.0.0:8888`.
+
+- nginx is in a container, things are easier : you can link nextcloud container to an nginx container so you can use `proxy_pass http://nextcloud:8888`. If you're interested, I provide a nginx image available on Docker Hub : `wonderfall/boring-nginx`. An example of configuration would be :
+
+```
+server {
+  listen 8000;
+  server_name example.com;
+  return 301 https://$host$request_uri;
+}
+
+server {
+  listen 4430 ssl http2;
+  server_name example.com;
+
+  ssl_certificate /certs/example.com.crt;
+  ssl_certificate_key /certs/example.com.key;
+
+  include /etc/nginx/conf/ssl_params.conf;
+
+  client_max_body_size 10G; # change this value it according to $UPLOAD_MAX_SIZE
+
+  location / {
+    proxy_pass http://nextcloud:8888;
+    include /etc/nginx/conf/proxy_params;
+  }
+}
+```
+
 
 Headers are already sent by the container, including HSTS, so there's no need to add them again. **It is strongly recommended to use Nextcloud through an encrypted connection (HTTPS).** [Let's Encrypt](https://letsencrypt.org/) provides free SSL/TLS certificates (trustworthy!).
+
+
