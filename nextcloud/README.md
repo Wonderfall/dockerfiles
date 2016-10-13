@@ -65,7 +65,7 @@ Don't forget to use a **strong password** for the admin account!
 Basically, you can use a database instance running on the host or any other machine. An easier solution is to use an external database container. I suggest you to use MariaDB, which is a reliable database server. You can use the official `mariadb` image available on Docker Hub to create a database container, which must be linked to the Nextcloud container. PostgreSQL can also be used as well.
 
 ### Setup
-Pull the image and create a container. `/mnt` can be anywhere on your host, this is just an example. Change `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD` values (mariadb). You may also want to change UID and GID (nextcloud).
+Pull the image and create a container. `/mnt` can be anywhere on your host, this is just an example. Change `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD` values (mariadb). You may also want to change UID and GID for Nextcloud, as well as other variables (see *Environment Variables*).
 
 ````
 docker pull wonderfall/nextcloud:10.0 && docker pull mariadb:10
@@ -79,27 +79,34 @@ docker run -d --name db_nextcloud \
        
 docker run -d --name nextcloud \
        --link db_nextcloud:db_nextcloud \
+       -v /mnt/nextcloud/data:/data \
+       -v /mnt/nextcloud/config:/config \
+       -v /mnt/nextcloud/apps:/apps2 \
        -e UID=1000 -e GID=1000 \
+       -e UPLOAD_MAX_SIZE=10G \
+       -e APC_SHM_SIZE=128M \
+       -e OPCACHE_MEM_SIZE=128 \
+       -e CRON_PERIOD=15m \
+       -e TZ=Etc/UTC \
+       -e ADMIN_USER=mrrobot \
+       -e ADMIN_PASSWORD=supercomplicatedpassword \
        -e DB_TYPE=mysql \
        -e DB_NAME=nextcloud \
        -e DB_USER=nextcloud \
        -e DB_PASSWORD=supersecretpassword \
        -e DB_HOST=db_nextcloud \
-       -v /mnt/nextcloud/data:/data \
-       -v /mnt/nextcloud/config:/config \
-       -v /mnt/nextcloud/apps:/apps2 \
        wonderfall/nextcloud:10.0
 ```
 
 **Below you can find a docker-compose file, which is very useful!**
 
-Now you have to use a **reverse proxy** in order to access to your container through Internet, steps and details are available at the end of the README.md. And that's it! You already configured Nextcloud, so there's no setup page.
+Now you have to use a **reverse proxy** in order to access to your container through Internet, steps and details are available at the end of the README.md. And that's it! Since you already configured Nextcloud through setting environment variables, there's no setup page.
 
 ### Configure
 In the admin panel, you should switch from `AJAX cron` to `cron` (system cron).
 
 ### Update
-Pull a newer image, then recreate the container as you did before (*Setup* step). None of your data will be lost since you're using external volumes. If Nextcloud performed a full upgrade, your apps could be disabled. Enable them again.
+Pull a newer image, then recreate the container as you did before (*Setup* step). None of your data will be lost since you're using external volumes. If Nextcloud performed a full upgrade, your apps could be disabled, enable them again.
 
 ### Docker-compose
 I advise you to use [docker-compose](https://docs.docker.com/compose/), which is a great tool for managing containers. You can create a `docker-compose.yml` with the following content (which must be adapted to your needs) and then run `docker-compose up -d nextcloud-db`, wait some 15 seconds for the database to come up, then run everything with `docker-compose up -d`, that's it! On subsequent runs,  a single `docker-compose up -d` is sufficient!
@@ -157,7 +164,7 @@ services:
 nextcloud:
   image: wonderfall/nextcloud
   links:
-    - nextcloud-db:db_nextcloud-db
+    - nextcloud-db:nextcloud-db
   environment:
     - UID=1000
     - GID=1000
@@ -192,7 +199,7 @@ nextcloud-db:
 You can update everything with `docker-compose pull` followed by `docker-compose up -d`.
 
 ### Reverse proxy
-Of course you can use your own solution to do so ! nginx, Haproxy, Caddy, h2o, there's plenty of choice and documentation about it on the Web.
+Of course you can use your own solution to do so! nginx, Haproxy, Caddy, h2o, there's plenty of choices and documentation about it on the Web.
 
 Personally I'm using nginx, so if you're using nginx, there are two possibilites :
 
@@ -227,5 +234,3 @@ server {
 
 
 Headers are already sent by the container, including HSTS, so there's no need to add them again. **It is strongly recommended to use Nextcloud through an encrypted connection (HTTPS).** [Let's Encrypt](https://letsencrypt.org/) provides free SSL/TLS certificates (trustworthy!).
-
-
