@@ -4,9 +4,13 @@
 
 ![](https://s32.postimg.org/69nev7aol/Nextcloud_logo.png)
 
-:warning: [It has been reported](https://github.com/Wonderfall/dockerfiles/issues/37) that his image might not work well with old versions of aufs. Please update aufs to 4.x or later, or use overlay/btrfs as a replacement.
-
-:warning: HTTP port has recently changed, it's now **8888**. You will have to modify your reverse proxy settings.
+### Notes
+- [It has been reported](https://github.com/Wonderfall/dockerfiles/issues/37) that his image might not work well with old versions of aufs. Please update aufs to 4.x or later, or use overlay/btrfs as a replacement.
+- HTTP port has recently changed, it's now **8888**. You will have to modify your reverse proxy settings.
+- An ARM version is provided, but the setup may differ :
+  - `mariadb` docker image is not compatible with ARM. You can stick with sqlite3 or find an alternative (unofficial image, mariadb on the host).
+  - `wonderfall/boring-nginx` is not compatible too. Find another image or use nginx or any other solution on the host.
+  - At the moment only `armhf` is supported (Raspberry Pi 1/2, Scaleway C1), I need testers for `arm64` (Raspberry Pi 3, Pine64...).
 
 ### Features
 - Based on Alpine Linux.
@@ -21,12 +25,20 @@
 - GNU Libiconv for php iconv extension (avoiding errors with some apps).
 - No root processes. Never.
 - Environment variables provided (see below).
+- x86_64 and armhf are supported.
 
 ### Tags
+#### x86_64
 - **latest** : latest stable version.
 - **10.0** : latest 10.0.x version (stable)
 - **9.0** : latest 9.0.x version. (old stable) (unmaintained by this project)
 - **daily** : latest code (daily build).
+
+#### armhf
+- **latest-armhf** : latest stable version.
+- **10.0-armhf** : latest 10.0.x version (stable)
+- **9.0-armhf** : latest 9.0.x version. (old stable) (unmaintained by this project)
+- **daily-armhf** : latest code (daily build).
 
 Other tags than `daily` are built weekly. For security reasons, you should occasionally update the container, even if you have the latest version of Nextcloud.
 
