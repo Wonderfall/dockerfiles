@@ -17,7 +17,6 @@
 - GNU Libiconv for php iconv extension (avoiding errors with some apps).
 - No root processes. Never.
 - Environment variables provided (see below).
-- x86_64 and armhf are supported.
 
 ### Notes
 - [It has been reported](https://github.com/Wonderfall/dockerfiles/issues/37) that his image might not work well with old versions of aufs. Please update aufs to 4.x or later, or use overlay/btrfs as a replacement.
