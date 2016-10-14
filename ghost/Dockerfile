@@ -1,7 +1,7 @@
 FROM mhart/alpine-node-auto:6
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG GHOST_VERSION=0.11.1
+ARG GHOST_VERSION=0.11.2
 
 ENV GHOST_NODE_VERSION_CHECK=false \
     GID=991 \
