@@ -108,7 +108,7 @@ This image is available for `armhf` (Raspberry Pi 1 & 2, Scaleway C1, ...). Alth
 ```
 git clone https://github.com/Wonderfall/dockerfiles.git
 cd dockerfiles/nextcloud/10.0-armhf
-docker build -t wonderfall/nextcloud
+docker build -t wonderfall/nextcloud .
 ```
 
 The building process can take some time.
