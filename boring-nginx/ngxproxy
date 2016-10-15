@@ -91,20 +91,62 @@ if [ "$HTTPS" == "y" ]; then
     if [ "$HEADERS" == "y" ]; then
         sed -i 's|#include /etc/nginx/conf/headers_params|include /etc/nginx/conf/headers_params|g' /tmp/$NAME.conf
     fi
+
+    while [[ "$HSTS" !=  "y" && "$HSTS" != "n" ]]; do
+        read -p "Enable HSTS header ? [y/n]: " HSTS
+    done
+
+    if [ "$HSTS" == "y" ]; then
+
+        read -p "Max-age in seconds (default is 31536000): " HSTS_MAX_AGE
+
+        if [ "$HSTS_MAX_AGE" == "" ]; then
+            HSTS_MAX_AGE="31536000"
+        elif ! [ "$HSTS_MAX_AGE" -eq "$HSTS_MAX_AGE" ] 2>/dev/null; then
+            echo "ERROR: an integer value was expected."
+            exit 1
+        fi
+
+        while [[ "$HSTS_SUBDOMAINS" !=  "y" && "$HSTS_SUBDOMAINS" != "n" ]]; do
+            read -p "Include subdomains ? [y/n]: " HSTS_SUBDOMAINS
+        done
+
+        if [ "$HSTS_SUBDOMAINS" == "y" ]; then
+            HSTS_SUBDOMAINS="includeSubDomains;"
+        else
+            HSTS_SUBDOMAINS=""
+        fi
+
+        while [[ "$HSTS_PRELOAD" !=  "y" && "$HSTS_PRELOAD" != "n" ]]; do
+            read -p "Enable preload list mechanism ? [y/n]: " HSTS_PRELOAD
+        done
+
+        if [ "$HSTS_PRELOAD" == "y" ]; then
+            HSTS_PRELOAD="preload"
+        else
+            HSTS_PRELOAD=""
+        fi
+
+        sed -i \
+            -e 's/#add_header/add_header/g' \
+            -e "s/<HSTS_MAX_AGE>/$HSTS_MAX_AGE/g" \
+            -e "s/<HSTS_SUBDOMAINS>/$HSTS_SUBDOMAINS/g" \
+            -e "s/<HSTS_PRELOAD>/$HSTS_PRELOAD/g" /tmp/$NAME.conf
+    fi
 else
     cp -f /etc/nginx/conf/vhost_http.conf /tmp/${NAME}.conf
 fi
 
 while [ "$MAX_BODY_SIZE" == "" ]; do
-    read -p "Max body size in MB (integer/n): " MAX_BODY_SIZE
+    read -p "Max body size in MB (integer/null): " MAX_BODY_SIZE
 done
 
-if ! [ "$MAX_BODY_SIZE" -eq "$MAX_BODY_SIZE" ] 2>/dev/null && [ "$MAX_BODY_SIZE" != "n" ]; then
+if ! [ "$MAX_BODY_SIZE" -eq "$MAX_BODY_SIZE" ] 2>/dev/null && [ "$MAX_BODY_SIZE" != "null" ]; then
     echo "ERROR: Incorrect value."
     exit 1
 fi
 
-if [ "$MAX_BODY_SIZE" != "n" ]; then
+if [ "$MAX_BODY_SIZE" != "null" ]; then
     sed -i "s|#client_max_body_size <MAX_BODY_SIZE>|client_max_body_size $MAX_BODY_SIZE|g" /tmp/$NAME.conf
 fi
 
