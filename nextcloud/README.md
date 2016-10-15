@@ -19,7 +19,7 @@
 - Environment variables provided (see below).
 
 ### Notes
-- [It has been reported](https://github.com/Wonderfall/dockerfiles/issues/37) that his image might not work well with old versions of aufs. Please update aufs to 4.x or later, or use overlay/btrfs as a replacement.
+- [It has been reported](https://github.com/Wonderfall/dockerfiles/issues/37) that this image might not work well with old versions of aufs. Please update aufs to 4.x or later, or use overlay/btrfs as a replacement.
 - HTTP port has recently changed, it's now **8888**. You will have to modify your reverse proxy settings.
 
 ### Tags
@@ -101,6 +101,17 @@ docker run -d --name nextcloud \
 **Below you can find a docker-compose file, which is very useful!**
 
 Now you have to use a **reverse proxy** in order to access to your container through Internet, steps and details are available at the end of the README.md. And that's it! Since you already configured Nextcloud through setting environment variables, there's no setup page.
+
+### ARM-based devices
+This image is available for `armhf` (Raspberry Pi 1 & 2, Scaleway C1, ...). Although Docker does support ARM-based devices, Docker Hub only builds for x86_64. That's why you will have to build this image yourself! Don't panic, this is easy.
+
+```
+git clone https://github.com/Wonderfall/dockerfiles.git
+cd dockerfiles/nextcloud/10.0-armhf
+docker build -t wonderfall/nextcloud
+```
+
+The building process can take some time.
 
 ### Configure
 In the admin panel, you should switch from `AJAX cron` to `cron` (system cron).
@@ -205,7 +216,7 @@ Personally I'm using nginx, so if you're using nginx, there are two possibilites
 
 - nginx is on the host : get the Nextcloud container IP address with `docker inspect nextcloud | grep IPAddress\" | head -n1 | grep -Eo "[0-9.]+" `. But whenever the container is restarted or recreated, its IP address can change. Or you can bind Nextcloud HTTP port (8888) to the host (so the reverse proxy can access with `http://localhost:8888` or whatever port you set), but in this case you should consider using a firewall since it's also listening to `http://0.0.0.0:8888`.
 
-- nginx is in a container, things are easier : you can link nextcloud container to an nginx container so you can use `proxy_pass http://nextcloud:8888`. If you're interested, I provide a nginx image available on Docker Hub : `wonderfall/boring-nginx`. An example of configuration would be :
+- nginx is in a container, things are easier : you can link nextcloud container to an nginx container so you can use `proxy_pass http://nextcloud:8888`. If you're interested, I provide a nginx image available on Docker Hub : `wonderfall/boring-nginx`, and it comes with a script called `ngxproxy`, which does all the magic after asking you a few questions. Otherwise, an example of configuration would be :
 
 ```
 server {
