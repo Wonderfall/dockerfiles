@@ -10,7 +10,7 @@
 - Automatic installation using environment variables.
 - Package integrity and authenticity checked during building process.
 - Data and apps persistence.
-- OPCache & APCu already configured.
+- OPCache, APCu, Redis (file locking) installed and configured.
 - system cron task running.
 - MySQL, PostgreSQL (server not built-in) and sqlite3 support.
 - Redis, FTP, SMB, LDAP support.
@@ -60,6 +60,7 @@ Don't forget to use a **strong password** for the admin account!
 - **/data** : Nextcloud data.
 - **/config** : config.php location.
 - **/apps2** : Nextcloud downloaded apps.
+- **/var/lib/redis** : Redis dumpfile location.
 
 ### Database
 Basically, you can use a database instance running on the host or any other machine. An easier solution is to use an external database container. I suggest you to use MariaDB, which is a reliable database server. You can use the official `mariadb` image available on Docker Hub to create a database container, which must be linked to the Nextcloud container. PostgreSQL can also be used as well.
