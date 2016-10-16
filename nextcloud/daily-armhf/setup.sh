@@ -29,6 +29,13 @@ cat > $CONFIGFILE <<EOF;
 
   'memcache.local' => '\OC\Memcache\APCu',
 
+  'memcache.locking' => '\OC\Memcache\Redis',
+   'redis' => array(
+        'host' => '/tmp/redis.sock',
+        'port' => 0,
+        'timeout' => 0.0,
+         ),
+
   'instanceid' => '$instanceid',
 );
 ?>
@@ -85,10 +92,7 @@ php7 <<EOF > $CONFIG_TEMP && mv $CONFIG_TEMP $CONFIGFILE
 <?php
 include("/config/config.php");
 
-\$CONFIG['trusted_domains'] = array('$VIRTUAL_HOST');
-
 //\$CONFIG['memcache.local'] = '\\OC\\Memcache\\Memcached';
-//\$CONFIG['overwrite.cli.url'] = '/cloud';
 \$CONFIG['mail_from_address'] = 'administrator'; # just the local part, matches our master administrator address
 
 \$CONFIG['logtimezone'] = '$TZ';

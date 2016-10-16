@@ -7,8 +7,9 @@ ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
 ENV UID=991 GID=991 \
     UPLOAD_MAX_SIZE=10G \
-    APC_SHM_SIZE=64M \
-    OPCACHE_MEM_SIZE=64 \
+    APC_SHM_SIZE=128M \
+    OPCACHE_MEM_SIZE=128 \
+    REDIS_MAX_MEMORY=64mb \
     CRON_PERIOD=15m \
     TZ=Etc/UTC \
     DB_TYPE=sqlite3 \
@@ -34,6 +35,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     samba-client \
     su-exec \
     tzdata \
+    redis \
     php7@commuedge \
     php7-fpm@commuedge \
     php7-intl@commuedge \
@@ -98,6 +100,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7/php-fpm.conf
 COPY opcache.ini /etc/php7/conf.d/00_opcache.ini
 COPY apcu.ini /etc/php7/conf.d/apcu.ini
+COPY redis.conf /etc/redis.conf
 COPY run.sh /usr/local/bin/run.sh
 COPY setup.sh /usr/local/bin/setup.sh
 COPY occ /usr/local/bin/occ
@@ -105,7 +108,7 @@ COPY s6.d /etc/s6.d
 
 RUN chmod +x /usr/local/bin/* /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
 
-VOLUME /data /config /apps2
+VOLUME /data /config /apps2 /var/lib/redis
 
 EXPOSE 8888
 

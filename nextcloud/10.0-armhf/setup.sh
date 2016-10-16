@@ -29,6 +29,13 @@ cat > $CONFIGFILE <<EOF;
 
   'memcache.local' => '\OC\Memcache\APCu',
 
+  'memcache.locking' => '\OC\Memcache\Redis',
+   'redis' => array(
+        'host' => '/tmp/redis.sock',
+        'port' => 0,
+        'timeout' => 0.0,
+         ),
+
   'instanceid' => '$instanceid',
 );
 ?>
