@@ -5,12 +5,12 @@
 ![](https://s32.postimg.org/69nev7aol/Nextcloud_logo.png)
 
 ### Features
-- Based on Alpine Linux.
+- Based on Alpine Linux Edge.
 - Bundled with nginx and PHP 7.
 - Automatic installation using environment variables.
 - Package integrity and authenticity checked during building process.
 - Data and apps persistence.
-- OPCache, APCu, Redis (file locking) installed and configured.
+- OPCache (opcocde), APCu (local), Redis (file locking) installed and configured.
 - system cron task running.
 - MySQL, PostgreSQL (server not built-in) and sqlite3 support.
 - Redis, FTP, SMB, LDAP support.
@@ -21,6 +21,16 @@
 ### Notes
 - [It has been reported](https://github.com/Wonderfall/dockerfiles/issues/37) that this image might not work well with old versions of aufs. Please update aufs to 4.x or later, or use overlay/btrfs as a replacement.
 - HTTP port has recently changed, it's now **8888**. You will have to modify your reverse proxy settings.
+- A Redis sever is now running, so you may want to configure it for file locking cache if your config.php was not generated recently. [For best performance it is recommended by Nextcloud documentation](https://docs.nextcloud.com/server/10/admin_manual/configuration_server/caching_configuration.html#additional-notes-for-redis-vs-apcu-on-memory-caching). Add the following lines to your `config.php` :
+
+```
+  'memcache.locking' => '\OC\Memcache\Redis',
+   'redis' => array(
+        'host' => '/tmp/redis.sock',
+        'port' => 0,
+        'timeout' => 0.0,
+         ),
+```
 
 ### Tags
 - **latest** : latest stable version.
@@ -41,6 +51,7 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **UPLOAD_MAX_SIZE** : maximum upload size *(default : 10G)*
 - **APC_SHM_SIZE** : apc memory size *(default : 128M)*
 - **OPCACHE_MEM_SIZE** : opcache memory size in megabytes *(default : 128)*
+- **REDIS_MAX_MEMORY** : memory limit for Redis *(default : 64mb)*
 - **CRON_PERIOD** : time interval between two cron tasks *(default : 15m)*
 - **TZ** : the system/log timezone *(default : Etc/UTC)*
 - **ADMIN_USER** : username of the admin account *(default : admin)*
@@ -87,6 +98,7 @@ docker run -d --name nextcloud \
        -e UPLOAD_MAX_SIZE=10G \
        -e APC_SHM_SIZE=128M \
        -e OPCACHE_MEM_SIZE=128 \
+       -e REDIS_MAX_MEMORY=64mb \
        -e CRON_PERIOD=15m \
        -e TZ=Etc/UTC \
        -e ADMIN_USER=mrrobot \
@@ -152,6 +164,7 @@ services:
       - UPLOAD_MAX_SIZE=10G
       - APC_SHM_SIZE=128M
       - OPCACHE_MEM_SIZE=128
+      - REDIS_MAX_MEMORY=64mb
       - CRON_PERIOD=15m
       - TZ=Europe/Berlin
       - ADMIN_USER=admin
@@ -183,6 +196,7 @@ nextcloud:
     - UPLOAD_MAX_SIZE=10G
     - APC_SHM_SIZE=128M
     - OPCACHE_MEM_SIZE=128
+    - REDIS_MAX_MEMORY=64mb
     - CRON_PERIOD=15m
     - TZ=Europe/Berlin
     - ADMIN_USER=admin
