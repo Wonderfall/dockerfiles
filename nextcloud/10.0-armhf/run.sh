@@ -30,10 +30,4 @@ else
     fi
 fi
 
-for dir in /nextcloud /data /config /apps2 /etc/nginx /etc/php7 /var/log /var/lib/nginx /var/lib/redis /tmp /etc/s6.d; do
-  if $(find $dir ! -user $UID -o ! -group $GID|egrep '.' -q); then
-    chown -R $UID:$GID $dir
-  fi
-done
-
 exec su-exec $UID:$GID /bin/s6-svscan /etc/s6.d
