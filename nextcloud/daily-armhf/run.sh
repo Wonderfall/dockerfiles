@@ -10,7 +10,11 @@ sed -i -e "s/<UPLOAD_MAX_SIZE>/$UPLOAD_MAX_SIZE/g" /etc/nginx/nginx.conf /etc/ph
 ln -sf /config/config.php /nextcloud/config/config.php &>/dev/null
 ln -sf /apps2 /nextcloud &>/dev/null
 
-chown -R $UID:$GID /nextcloud /data /config /apps2 /etc/nginx /etc/php7 /var/log /var/lib/nginx /var/lib/redis /tmp /etc/s6.d
+for dir in /nextcloud /data /config /apps2 /etc/nginx /etc/php7 /var/log /var/lib/nginx /var/lib/redis /tmp /etc/s6.d; do
+  if $(find $dir ! -user $UID -o ! -group $GID|egrep '.' -q); then
+    chown -R $UID:$GID $dir
+  fi
+done
 
 if [ ! -f /config/config.php ]; then
     # New installation, run the setup
@@ -25,7 +29,5 @@ else
         echo "...which seemed to work."
     fi
 fi
-
-chown -R $UID:$GID /nextcloud /data /config /apps2 /etc/nginx /etc/php7 /var/log /var/lib/nginx /tmp /etc/s6.d
 
 exec su-exec $UID:$GID /bin/s6-svscan /etc/s6.d
