@@ -1,7 +1,7 @@
 FROM alpine:3.4
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
-ARG VERSION=2.16.5
+ARG VERSION=2.17.0
 
 ARG GPG_matthieu="814E 346F A01A 20DB B04B  6807 B5DB D592 5590 A237"
 
