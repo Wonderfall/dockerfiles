@@ -10,16 +10,24 @@ sed -i -e "s/<UPLOAD_MAX_SIZE>/$UPLOAD_MAX_SIZE/g" /etc/nginx/nginx.conf /etc/ph
 ln -sf /config/config.php /nextcloud/config/config.php &>/dev/null
 ln -sf /apps2 /nextcloud &>/dev/null
 
-for dir in /nextcloud /data /config /apps2 /etc/nginx /etc/php7 /var/log /var/lib/nginx /var/lib/redis /tmp /etc/s6.d; do
+for dir in /nextcloud /data /config /config_default /apps2 /etc/nginx /etc/php7 /var/log /var/lib/nginx /var/lib/redis /tmp /etc/s6.d; do
   if $(find $dir ! -user $UID -o ! -group $GID|egrep '.' -q); then
     chown -R $UID:$GID $dir
   fi
 done
 
 if [ ! -f /config/config.php ]; then
-    # New installation, run the setup
-    /usr/local/bin/setup.sh
-else
+    if [ -f /config_default/config.php ]; then
+        # Default config for nfs installations
+        cp /config_default/config.php /config/
+        # After copy, it must reset perms
+        chown -R $UID:$GID /config/
+    else
+        # New installation, run the setup
+        /usr/local/bin/setup.sh
+    fi
+fi
+if [ -f /config/config.php ]; then
     occ upgrade
     if [ \( $? -ne 0 \) -a \( $? -ne 3 \) ]; then
         echo "Trying ownCloud upgrade again to work around ownCloud upgrade bug..."
