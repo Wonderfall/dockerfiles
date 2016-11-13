@@ -24,7 +24,8 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     build-base \
     autoconf \
     automake \
-    libtool" \
+    libtool \
+    samba-dev" \
  && apk -U add \
     ${BUILD_DEPS} \
     nginx \
@@ -67,18 +68,20 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     php7-redis@testing \
     php7-pear@commuedge \
     php7-dev@commuedge \
- && mkdir /nextcloud && cd /tmp \
- && wget -q http://ftp.gnu.org/pub/gnu/libiconv/libiconv-${GNU_LIBICONV_VERSION}.tar.gz \
+ && sed -i "$ s|\-n||g" /usr/bin/pecl && pecl install smbclient \
+ && cd /tmp && wget -q http://ftp.gnu.org/pub/gnu/libiconv/libiconv-${GNU_LIBICONV_VERSION}.tar.gz \
  && tar xzf libiconv-${GNU_LIBICONV_VERSION}.tar.gz && cd libiconv-${GNU_LIBICONV_VERSION} \
  && ./configure --prefix=/usr/local \
  && wget -q https://raw.githubusercontent.com/mxe/mxe/7e231efd245996b886b501dad780761205ecf376/src/libiconv-1-fixes.patch \
  && patch -p1 -u < libiconv-1-fixes.patch \
  && make && make install && libtool --finish /usr/local/lib && cd /tmp \
- && wget -q http://is1.php.net/get/php-7.0.12.tar.gz/from/this/mirror -O php7.tar.gz \
- && tar xzf php7.tar.gz && cd /tmp/php-7.0.12/ext/iconv && phpize7 \
+ && wget -q http://is1.php.net/get/php-7.0.13.tar.gz/from/this/mirror -O php7.tar.gz \
+ && tar xzf php7.tar.gz && cd /tmp/php-7.0.13/ext/iconv && phpize7 \
  && ./configure --with-iconv=/usr/local --with-php-config=/usr/bin/php-config7 \
  && make && cp modules/iconv.so /usr/lib/php7/modules && cd /tmp \
  && echo "extension=iconv.so" > /etc/php7/conf.d/00_iconv.ini \
+ && echo "extension=smbclient.so" > /etc/php7/conf.d/00_smbclient.ini \
+ && mkdir /nextcloud \
  && NEXTCLOUD_TARBALL="nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" \
  && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL} \
  && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL}.sha256 \
