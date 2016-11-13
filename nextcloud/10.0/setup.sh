@@ -104,7 +104,7 @@ echo ";";
 ?>
 EOF
 
-chown -R $UID:$GID /config
+chown -R $UID:$GID /config /data
 # Enable/disable apps. Note that this must be done after the ownCloud setup.
 # The firstrunwizard gave Josh all sorts of problems, so disabling that.
 # user_external is what allows ownCloud to use IMAP for login. The contacts
