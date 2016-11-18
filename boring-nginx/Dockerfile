@@ -7,8 +7,6 @@ ARG NGINX_VERSION=1.11.6
 ARG GPG_NGINX="B0F4 2533 73F8 F6F5 10D4  2178 520A 9993 A1C0 52F8"
 ARG BUILD_CORES
 
-COPY boring.patch /tmp/boring.patch
-
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && BUILD_DEPS=" \
@@ -59,7 +57,6 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && if [ "${FINGERPRINT}" != "${GPG_NGINX}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
  && echo "All seems good, now unpacking ${NGINX_TARBALL}..." \
  && tar xzf ${NGINX_TARBALL} && cd nginx-${NGINX_VERSION} \
- && patch -p1 < /tmp/boring.patch \
  && ./configure \
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
