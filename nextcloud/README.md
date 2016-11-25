@@ -34,6 +34,7 @@
 
 ### Tags
 - **latest** : latest stable version.
+- **11.0** : latest 11.0.x version (**still in beta**)
 - **10.0** : latest 10.0.x version (stable)
 - **9.0** : latest 9.0.x version. (old stable) (unmaintained by this project)
 - **daily** : latest code (daily build).
