@@ -1,7 +1,7 @@
 FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG NEXTCLOUD_VERSION=11.0.0RC2
+ARG NEXTCLOUD_VERSION=11.0.0
 ARG GNU_LIBICONV_VERSION=1.14
 ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
@@ -83,9 +83,9 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && echo "extension=smbclient.so" > /etc/php7/conf.d/00_smbclient.ini \
  && mkdir /nextcloud \
  && NEXTCLOUD_TARBALL="nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" \
- && wget -q https://download.nextcloud.com/server/prereleases/${NEXTCLOUD_TARBALL} \
- && wget -q https://download.nextcloud.com/server/prereleases/${NEXTCLOUD_TARBALL}.sha256 \
- && wget -q https://download.nextcloud.com/server/prereleases/${NEXTCLOUD_TARBALL}.asc \
+ && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL} \
+ && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL}.sha256 \
+ && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL}.asc \
  && wget -q https://nextcloud.com/nextcloud.asc \
  && echo "Verifying both integrity and authenticity of ${NEXTCLOUD_TARBALL}..." \
  && CHECKSUM_STATE=$(echo -n $(sha256sum -c ${NEXTCLOUD_TARBALL}.sha256) | tail -c 2) \
