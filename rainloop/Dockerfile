@@ -6,11 +6,14 @@ ARG GPG_rainloop="3B79 7ECE 694F 3B7B 70F3  11A4 ED7C 49D9 87DA 4591"
 ENV UID=991 GID=991
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+ && echo "@mainedge  https://nl.alpinelinux.org/alpine/edge/main"      >> /etc/apk/repositories \
  && apk -U add \
     gnupg \
     nginx \
     s6 \
     su-exec \
+    libressl2.4-libssl@mainedge \
+    libressl2.4-libcrypto@mainedge \
     php7-fpm@commuedge \
     php7-curl@commuedge \
     php7-iconv@commuedge \
