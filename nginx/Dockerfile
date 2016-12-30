@@ -3,7 +3,7 @@ MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV UID=991 GID=991
 
-ARG NGINX_VERSION=1.11.4
+ARG NGINX_VERSION=1.11.8
 ARG LIBRESSL_VERSION=2.5.0
 ARG GPG_LIBRESSL="A1EB 079B 8D3E B92B 4EBD  3139 663A F51B D5E4 D8D5"
 ARG GPG_NGINX="B0F4 2533 73F8 F6F5 10D4  2178 520A 9993 A1C0 52F8"
@@ -40,6 +40,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && cd /tmp \
  && git clone https://github.com/google/ngx_brotli --depth=1 \
  && git clone https://github.com/openresty/headers-more-nginx-module --depth=1 \
+ && cp -R /tmp/libbrotli/brotli /tmp/ngx_brotli/deps \
  && LIBRESSL_TARBALL="libressl-${LIBRESSL_VERSION}.tar.gz" \
  && wget -q http://ftp.openbsd.org/pub/OpenBSD/LibreSSL/${LIBRESSL_TARBALL} \
  && echo "Verifying ${LIBRESSL_TARBALL} using GPG..." \
@@ -64,9 +65,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && if [ "${FINGERPRINT}" != "${GPG_NGINX}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
  && echo "All seems good, now unpacking ${NGINX_TARBALL}..." \
  && tar xzf ${NGINX_TARBALL} && cd nginx-${NGINX_VERSION} \
- && wget -q https://raw.githubusercontent.com/felixbuenemann/sslconfig/updated-nginx-1.9.15-spdy-patch/patches/nginx_1_9_15_http2_spdy.patch -O spdy.patch \
- && patch -p1 < spdy.patch \
- && wget -q https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch \
+ && wget -q https://raw.githubusercontent.com/cloudflare/sslconfig/acc5f83b5fdf2ee28ad7f6b6530f4152f2883601/patches/nginx__1.11.5_dynamic_tls_records.patch -O nginx__dynamic_tls_records.patch \
  && patch -p1 < nginx__dynamic_tls_records.patch \
  && ./configure \
     --prefix=/etc/nginx \
@@ -76,12 +75,12 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     --with-openssl=/tmp/libressl-${LIBRESSL_VERSION} \
     --with-http_ssl_module \
     --with-http_v2_module \
-    --with-http_spdy_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module \
     --with-file-aio \
     --with-threads \
     --with-pcre-jit \
+    --with-ipv6 \
     --without-http_ssi_module \
     --without-http_scgi_module \
     --without-http_uwsgi_module \
