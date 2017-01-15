@@ -1,4 +1,4 @@
-From c3f389dade719b7b34825d62404a88cc0d618631 Mon Sep 17 00:00:00 2001
+From 36e2f3cf8e8a2f41b7ec1d7040d589974bfad93e Mon Sep 17 00:00:00 2001
 From: Steven Valdez <svaldez@google.com>
 Date: Thu, 13 Oct 2016 14:33:35 -0400
 Subject: [PATCH] Enabling TLS 1.3 (DRAFT).
@@ -7,23 +7,23 @@ Change-Id: I2e4f0db3b8630f990911c8e104f60c048bb7450d
 ---
 
 diff --git a/ssl/s3_lib.c b/ssl/s3_lib.c
-index 9cc0d9d..d4db949 100644
+index 3b14411..802ed2f 100644
 --- a/ssl/s3_lib.c
 +++ b/ssl/s3_lib.c
-@@ -189,7 +189,7 @@
+@@ -187,7 +187,7 @@
     * TODO(davidben): Move this field into |s3|, have it store the normalized
     * protocol version, and implement this pre-negotiation quirk in |SSL_version|
     * at the API boundary rather than in internal state. */
 -  ssl->version = TLS1_2_VERSION;
 +  ssl->version = TLS1_3_VERSION;
    return 1;
- err:
-   return 0;
+ }
+ 
 diff --git a/ssl/ssl_lib.c b/ssl/ssl_lib.c
-index d8270f3..57343a4 100644
+index 89d6f15..9c5afae 100644
 --- a/ssl/ssl_lib.c
 +++ b/ssl/ssl_lib.c
-@@ -965,10 +965,6 @@
+@@ -999,10 +999,6 @@
                             uint16_t version) {
    if (version == 0) {
      *out = method->max_version;
@@ -35,10 +35,10 @@ index d8270f3..57343a4 100644
    }
  
 diff --git a/ssl/ssl_test.cc b/ssl/ssl_test.cc
-index 5eede01..d847030 100644
+index b74e51e..e8d1847 100644
 --- a/ssl/ssl_test.cc
 +++ b/ssl/ssl_test.cc
-@@ -2410,7 +2410,7 @@
+@@ -2541,7 +2541,7 @@
    }
  
    if (ctx->min_version != SSL3_VERSION ||
@@ -47,7 +47,7 @@ index 5eede01..d847030 100644
      fprintf(stderr, "Default TLS versions were incorrect (%04x and %04x).\n",
              ctx->min_version, ctx->max_version);
      return false;
-@@ -2574,8 +2574,7 @@
+@@ -2778,8 +2778,7 @@
        !TestBadSSL_SESSIONEncoding(kBadSessionExtraField) ||
        !TestBadSSL_SESSIONEncoding(kBadSessionVersion) ||
        !TestBadSSL_SESSIONEncoding(kBadSessionTrailingData) ||
