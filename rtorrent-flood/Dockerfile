@@ -3,7 +3,7 @@ MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG RTORRENT_VER=0.9.6
 ARG LIBTORRENT_VER=0.13.6
-ARG FILEBOT_VER=4.7.2
+ARG FILEBOT_VER=4.7.7
 ARG BUILD_CORES
 
 ENV UID=991 GID=991 \
@@ -20,6 +20,7 @@ RUN echo "@community https://nl.alpinelinux.org/alpine/v3.4/community" >> /etc/a
     autoconf \
     wget \
     tar \
+    xz \
     subversion \
     cppunit-dev \
     openssl-dev \
@@ -44,14 +45,14 @@ RUN echo "@community https://nl.alpinelinux.org/alpine/v3.4/community" >> /etc/a
  && git clone https://github.com/mirror/xmlrpc-c.git \
  && git clone https://github.com/Rudde/mktorrent.git \
  && cd /tmp/mktorrent && make -j ${NB_CORES} && make install \
- && cd /tmp/xmlrpc-c/advanced && ./configure && make -j ${NB_CORES} && make install \
+ && cd /tmp/xmlrpc-c/stable && ./configure && make -j ${NB_CORES} && make install \
  && cd /tmp/libtorrent && ./autogen.sh && ./configure && make -j ${NB_CORES} && make install \
  && cd /tmp/rtorrent && ./autogen.sh && ./configure --with-xmlrpc-c && make -j ${NB_CORES} && make install \
  && strip -s /usr/local/bin/rtorrent \
  && strip -s /usr/local/bin/mktorrent \
- && mkdir /filebot \
- && wget -q http://downloads.sourceforge.net/project/filebot/filebot/FileBot_${FILEBOT_VER}/FileBot_${FILEBOT_VER}-portable.zip -P /tmp \
- && unzip -q /tmp/FileBot_${FILEBOT_VER}-portable.zip -d /filebot \
+ && mkdir /filebot && cd /filebot \
+ && wget -q http://sourceforge.mirrorservice.org/f/fi/filebot/filebot/FileBot_${FILEBOT_VER}/FileBot_${FILEBOT_VER}-portable.tar.xz \
+ && tar xJf FileBot_${FILEBOT_VER}-portable.tar.xz && rm FileBot_${FILEBOT_VER}-portable.tar.xz \
  && cd /usr && git clone https://github.com/jfurrow/flood && cd flood \
  && npm install \
  && apk del ${BUILD_DEPS} \

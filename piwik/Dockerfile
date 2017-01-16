@@ -1,7 +1,7 @@
 FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
-ARG VERSION=2.17.1
+ARG VERSION=3.0.1
 
 ARG GPG_matthieu="814E 346F A01A 20DB B04B  6807 B5DB D592 5590 A237"
 
@@ -14,7 +14,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     build-base \
     autoconf \
     geoip-dev \
-    openssl \
+    libressl \
     ca-certificates \
     gnupg" \
  && apk -U add \

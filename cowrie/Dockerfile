@@ -1,7 +1,7 @@
-FROM alpine:3.4
+FROM alpine:3.5
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG MPFR_VERSION=3.1.4
+ARG MPFR_VERSION=3.1.5
 ARG MPC_VERSION=1.0.3
 
 ARG GPG_MPFR="07F3 DBBE CC1A 3960 5078  094D 980C 1976 98C3 739D"
@@ -20,17 +20,17 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     build-base \
     libtool \
     libffi-dev \
-    openssl-dev \
+    libressl-dev \
     python-dev \
     gmp-dev \
-    py-pip \
+    py2-pip \
     tar \
     gnupg" \
  && apk -U add \
     ${BUILD_DEPS} \
     libffi \
     gmp \
-    openssl \
+    libressl \
     python \
     py-setuptools \
     openssh-client \

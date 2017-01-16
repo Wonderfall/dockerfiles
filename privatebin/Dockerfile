@@ -1,10 +1,10 @@
-FROM alpine:3.4
+FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV GID=991 UID=991
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
- && BUILD_DEPS="tar openssl ca-certificates" \
+ && BUILD_DEPS="tar libressl ca-certificates" \
  && apk -U add \
     $BUILD_DEPS \
     nginx \

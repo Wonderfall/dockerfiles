@@ -1,7 +1,7 @@
 FROM mhart/alpine-node-auto:6
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG GHOST_VERSION=0.11.3
+ARG GHOST_VERSION=0.11.4
 
 ENV GHOST_NODE_VERSION_CHECK=false \
     GID=991 \
@@ -34,8 +34,8 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     grep \
     tini@commuedge \
     su-exec \
- && wget -q https://ghost.org/zip/ghost-${GHOST_VERSION}.zip -P /tmp \
- && unzip -q /tmp/ghost-${GHOST_VERSION}.zip -d /ghost \
+ && wget -q https://github.com/TryGhost/Ghost/releases/download/${GHOST_VERSION}/Ghost-${GHOST_VERSION}.zip -P /tmp \
+ && unzip -q /tmp/Ghost-${GHOST_VERSION}.zip -d /ghost \
  && cd /ghost \
  && npm install --production \
  && mv content/themes/casper casper \

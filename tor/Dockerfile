@@ -1,10 +1,10 @@
-FROM alpine:3.4
+FROM alpine:3.5
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG TOR_VERSION=0.2.8.9
+ARG TOR_VERSION=0.2.9.8
 ARG ARM_VERSION=1.4.5.0
 
-ARG GPG_Mathewson="B35B F85B F194 89D0 4E28  C33C 2119 4EBB 1657 33EA"
+ARG GPG_Mathewson="2133 BC60 0AB1 33E1 D826  D173 FE43 009C 4607 B1FB"
 ARG GPG_Johnson="6827 8CC5 DD2D 1E85 C4E4  5AD9 0445 B7AB 9ABB EEC6"
 
 ENV TERM=xterm \
@@ -13,7 +13,8 @@ ENV TERM=xterm \
 RUN echo "@community https://nl.alpinelinux.org/alpine/v3.4/community" >> /etc/apk/repositories \
  && BUILD_DEPS=" \
     libevent-dev \
-    openssl-dev \
+    libressl-dev \
+    zlib-dev \
     build-base \
     gnupg \
     ca-certificates" \
@@ -23,13 +24,14 @@ RUN echo "@community https://nl.alpinelinux.org/alpine/v3.4/community" >> /etc/a
     tini@community \
     python \
     libevent \
-    openssl \
+    libressl \
+    zlib \
  && cd /tmp \
  && TOR_TARBALL="tor-${TOR_VERSION}.tar.gz" \
  && wget -q https://www.torproject.org/dist/${TOR_TARBALL} \
  && echo "Verifying ${TOR_TARBALL} using GPG..." \
  && wget -q https://www.torproject.org/dist/${TOR_TARBALL}.asc \
- && gpg --keyserver keys.gnupg.net --recv-keys 0x165733EA \
+ && gpg --keyserver pool.sks-keyservers.net --recv-keys 0xFE43009C4607B1FB \
  && FINGERPRINT="$(LANG=C gpg --verify ${TOR_TARBALL}.asc ${TOR_TARBALL} 2>&1 \
   | sed -n "s#Primary key fingerprint: \(.*\)#\1#p")" \
  && if [ -z "${FINGERPRINT}" ]; then echo "Warning! Invalid GPG signature!" && exit 1; fi \

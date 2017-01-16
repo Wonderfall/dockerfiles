@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:3.5
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG VERSION=6.0

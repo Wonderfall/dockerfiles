@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG LYCHEE_VERSION=3.1.5
@@ -10,7 +10,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && BUILD_DEPS=" \
     imagemagick-dev \
     tar \
-    openssl \
+    libressl \
     ca-certificates \
     build-base \
     autoconf \
