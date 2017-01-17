@@ -10,7 +10,7 @@ sed -i -e "s/<UPLOAD_MAX_SIZE>/$UPLOAD_MAX_SIZE/g" /etc/nginx/nginx.conf /etc/ph
 ln -sf /config/config.php /nextcloud/config/config.php &>/dev/null
 ln -sf /apps2 /nextcloud &>/dev/null
 
-for dir in /nextcloud /data /config /apps2 /etc/nginx /etc/php7 /var/log /var/lib/nginx /var/lib/redis /tmp /etc/s6.d; do
+for dir in /nextcloud/config /data /config /apps2 /etc/nginx /etc/php7 /var/log /var/lib/nginx /var/lib/redis /etc/s6.d; do
   if $(find $dir ! -user $UID -o ! -group $GID|egrep '.' -q); then
     chown -R $UID:$GID $dir
   fi
