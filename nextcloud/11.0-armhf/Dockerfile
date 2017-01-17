@@ -1,15 +1,15 @@
 FROM orax/alpine-armhf:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
-ARG NEXTCLOUD_VERSION=11.0.0RC2
+ARG NEXTCLOUD_VERSION=11.0.1
 ARG GNU_LIBICONV_VERSION=1.14
 ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
 ENV UID=991 GID=991 \
     UPLOAD_MAX_SIZE=10G \
-    APC_SHM_SIZE=128M \
-    OPCACHE_MEM_SIZE=128 \
-    REDIS_MAX_MEMORY=64mb \
+    APC_SHM_SIZE=64M \
+    OPCACHE_MEM_SIZE=64 \
+    REDIS_MAX_MEMORY=32mb \
     CRON_PERIOD=15m \
     TZ=Etc/UTC \
     DB_TYPE=sqlite3 \
@@ -83,9 +83,9 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && echo "extension=smbclient.so" > /etc/php7/conf.d/00_smbclient.ini \
  && mkdir /nextcloud \
  && NEXTCLOUD_TARBALL="nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" \
- && wget -q https://download.nextcloud.com/server/prereleases/${NEXTCLOUD_TARBALL} \
- && wget -q https://download.nextcloud.com/server/prereleases/${NEXTCLOUD_TARBALL}.sha256 \
- && wget -q https://download.nextcloud.com/server/prereleases/${NEXTCLOUD_TARBALL}.asc \
+ && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL} \
+ && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL}.sha256 \
+ && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL}.asc \
  && wget -q https://nextcloud.com/nextcloud.asc \
  && echo "Verifying both integrity and authenticity of ${NEXTCLOUD_TARBALL}..." \
  && CHECKSUM_STATE=$(echo -n $(sha256sum -c ${NEXTCLOUD_TARBALL}.sha256) | tail -c 2) \
