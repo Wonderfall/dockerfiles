@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:edge
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV BASE_URL=False IMAGE_PROXY=False \
@@ -8,7 +8,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && BUILD_DEPS=" \
     build-base \
     python-dev \
-    py-pip \
+    py2-pip \
     libffi-dev \
     libxslt-dev \
     libxml2-dev \
