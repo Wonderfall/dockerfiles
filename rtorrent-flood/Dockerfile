@@ -11,8 +11,7 @@ ENV UID=991 GID=991 \
     FLOOD_SECRET=supersecret \
     PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 
-RUN echo "@community https://nl.alpinelinux.org/alpine/v3.5/community" >> /etc/apk/repositories \
- && NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
+RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && BUILD_DEPS=" \
     build-base \
     git \
@@ -32,6 +31,8 @@ RUN echo "@community https://nl.alpinelinux.org/alpine/v3.5/community" >> /etc/a
     ${BUILD_DEPS} \
     ca-certificates \
     curl \
+    ncurses \
+    libressl \
     gzip \
     zip \
     unrar \
@@ -39,7 +40,7 @@ RUN echo "@community https://nl.alpinelinux.org/alpine/v3.5/community" >> /etc/a
     su-exec \
     python \
     nodejs \
-    openjdk8-jre@community \
+ && apk add -X http://dl-cdn.alpinelinux.org/alpine/v3.4/community -U openjdk8-jre==8.111.14-r0 openjdk8-jre-base==8.111.14-r0 openjdk8-jre-lib==8.111.14-r0 \
  && cd /tmp && mkdir libtorrent rtorrent \
  && cd libtorrent && wget -qO- https://github.com/rakshasa/libtorrent/archive/${LIBTORRENT_VER}.tar.gz | tar xz --strip 1 \
  && cd ../rtorrent && wget -qO- https://github.com/rakshasa/rtorrent/archive/${RTORRENT_VER}.tar.gz | tar xz --strip 1 \
