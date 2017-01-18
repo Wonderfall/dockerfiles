@@ -23,6 +23,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     s6 \
     su-exec \
     geoip \
+    tzdata \
     php7-fpm@commuedge \
     php7-gd@commuedge \
     php7-curl@commuedge \
