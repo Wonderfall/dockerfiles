@@ -16,4 +16,4 @@ It provides basic privacy by mixing your queries with searches on other platform
 - **BASE_URL** : http://domain.tld *(default : False)*
 
 #### Ports
-- **80** [(reverse proxy!)](https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration)
+- **8888** [(reverse proxy!)](https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration)
