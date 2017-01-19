@@ -1,5 +1,4 @@
 FROM alpine:3.5
-MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG MPFR_VERSION=3.1.5
 ARG MPC_VERSION=1.0.3
@@ -82,5 +81,7 @@ RUN chmod +x /usr/local/bin/run.sh
 VOLUME /cowrie/log /cowrie/dl /cowrie/custom
 
 EXPOSE 2222
+
+LABEL maintainer="Wonderfall <wonderfall@targaryen.house>"
 
 CMD ["run.sh"]

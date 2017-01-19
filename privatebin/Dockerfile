@@ -1,5 +1,4 @@
 FROM alpine:edge
-MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV GID=991 UID=991
 
@@ -31,5 +30,7 @@ RUN chmod +x /usr/local/bin/run.sh /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
 VOLUME /zerobin/data
 
 EXPOSE 8888
+
+LABEL maintainer="Wonderfall <wonderfall@targaryen.house>"
 
 CMD ["run.sh"]

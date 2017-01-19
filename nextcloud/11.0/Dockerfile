@@ -1,5 +1,4 @@
 FROM alpine:edge
-MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG NEXTCLOUD_VERSION=11.0.1
 ARG GNU_LIBICONV_VERSION=1.14
@@ -117,6 +116,7 @@ VOLUME /data /config /apps2 /var/lib/redis
 EXPOSE 8888
 
 LABEL description="A server software for creating file hosting services" \
-      nextcloud="Nextcloud v${NEXTCLOUD_VERSION}"
+      nextcloud="Nextcloud v${NEXTCLOUD_VERSION}" \
+      maintainer="Wonderfall <wonderfall@targaryen.house>"
 
 CMD ["run.sh"]

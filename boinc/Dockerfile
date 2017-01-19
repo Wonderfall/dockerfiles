@@ -1,5 +1,4 @@
 FROM alpine:3.4
-MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG BUILD_CORES
 
@@ -38,5 +37,7 @@ COPY run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
 
 VOLUME /boinc
+
+LABEL maintainer="Wonderfall <wonderfall@targaryen.house>"
 
 ENTRYPOINT ["run.sh"]

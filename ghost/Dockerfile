@@ -1,5 +1,4 @@
 FROM mhart/alpine-node-auto:6
-MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG GHOST_VERSION=0.11.4
 
@@ -61,6 +60,7 @@ RUN chmod +x /usr/local/bin/run.sh
 EXPOSE 2368
 
 LABEL description="Ghost CMS ready for production" \
-      ghost="Ghost v$VERSION"
+      ghost="Ghost v$VERSION" \
+      maintainer="Wonderfall <wonderfall@targaryen.house>"
 
 CMD ["run.sh"]

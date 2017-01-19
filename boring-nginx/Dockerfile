@@ -1,5 +1,4 @@
 FROM alpine:edge
-MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV UID=991 GID=991
 
@@ -110,6 +109,7 @@ VOLUME /sites-enabled /www /conf.d /passwds /certs /var/log/nginx
 
 LABEL description="nginx built from source" \
       openssl="BoringSSL" \
-      nginx="nginx ${NGINX_VERSION}"
+      nginx="nginx ${NGINX_VERSION}" \
+      maintainer="Wonderfall <wonderfall@targaryen.house>"
 
 CMD ["run.sh"]

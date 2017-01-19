@@ -1,5 +1,4 @@
 FROM alpine:3.5
-MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG VERSION=6.0
 
@@ -26,6 +25,7 @@ EXPOSE 4040 4050
 VOLUME /data /musics /playlists /podcasts
 
 LABEL description "Open source media streamer" \
-      subsonic "Subsonic v$VERSION"
+      subsonic "Subsonic v$VERSION" \
+      maintainer="Wonderfall <wonderfall@targaryen.house>"
 
 CMD ["run.sh"]

@@ -1,5 +1,4 @@
 FROM alpine:3.5
-MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG ISSO_VER=0.10.5
 
@@ -34,5 +33,7 @@ RUN chmod +x /usr/local/bin/run.sh
 EXPOSE 8080
 
 VOLUME /db /config
+
+LABEL maintainer="Wonderfall <wonderfall@targaryen.house>"
 
 CMD ["run.sh"]

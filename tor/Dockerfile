@@ -1,5 +1,4 @@
 FROM alpine:3.5
-MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG TOR_VERSION=0.2.9.8
 ARG ARM_VERSION=1.4.5.0
@@ -61,5 +60,9 @@ RUN chmod +x /usr/local/bin/run.sh
 VOLUME /tor/config /tor/data
 
 EXPOSE 9001 9030
+
+LABEL tor="Tor $TOR_VERSION" \
+      arm="Arm $ARM_VERSION" \
+      maintainer="Wonderfall <wonderfall@targaryen.house>"
 
 ENTRYPOINT ["run.sh"]

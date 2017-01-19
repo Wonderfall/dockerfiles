@@ -1,5 +1,4 @@
 FROM alpine:3.5
-MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ARG RTORRENT_VER=0.9.6
 ARG LIBTORRENT_VER=0.13.6
@@ -89,6 +88,7 @@ EXPOSE 3000 49184 49184/udp
 LABEL description="BitTorrent client with WebUI front-end" \
       rtorrent="rTorrent BiTorrent client v$RTORRENT_VER" \
       libtorrent="libtorrent v$LIBTORRENT_VER" \
-      filebot="Filebot v$FILEBOT_VER"
+      filebot="Filebot v$FILEBOT_VER" \
+      maintainer="Wonderfall <wonderfall@targaryen.house>"
 
 CMD ["run.sh"]

@@ -1,5 +1,4 @@
 FROM alpine:edge
-MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV BASE_URL=False IMAGE_PROXY=False \
     UID=991 GID=991
@@ -35,5 +34,7 @@ COPY run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
 
 EXPOSE 8888
+
+LABEL maintainer="Wonderfall <wonderfall@targaryen.house>"
 
 CMD ["run.sh"]

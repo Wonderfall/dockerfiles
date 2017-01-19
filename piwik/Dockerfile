@@ -1,5 +1,4 @@
 FROM alpine:edge
-MAINTAINER Wonderfall <wonderfall@mondedie.fr>
 
 ARG VERSION=3.0.1
 
@@ -77,6 +76,7 @@ VOLUME /config
 EXPOSE 8888
 
 LABEL description "Open web analytics platform" \
-      piwik "Piwik v${VERSION}"
+      piwik "Piwik v${VERSION}" \
+      maintainer="Wonderfall <wonderfall@targaryen.house>"
 
 CMD ["run.sh"]
