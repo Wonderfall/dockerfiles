@@ -112,7 +112,7 @@ COPY s6.d /etc/s6.d
 
 RUN chmod +x /usr/local/bin/* /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
 
-VOLUME /data /config /apps2 /var/lib/redis
+VOLUME /data /config /config_default /apps2 /var/lib/redis
 
 EXPOSE 8888
 
