@@ -81,7 +81,7 @@ COPY rtorrent.rc /home/torrent/.rtorrent.rc
 
 RUN chmod +x /usr/bin/* /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
 
-VOLUME /data /usr/flood/server/db
+VOLUME /data /flood-db
 
 EXPOSE 3000 49184 49184/udp
 
