@@ -32,10 +32,15 @@
          ),
 ```
 
+### Why choose this image over the official?
+I wanted to make this official, and I was granted an access to the repository. But many people were opposed since my image doesn't respect Docker philosophy "one process per container". Honestly I don't give a shit, but I let them do their thing. Be aware I'm not a developper or anything else related, I maintain this image because I need it. Contributions are welcome!
+
+Why this over the official? I've already answered : this is an all-in-one container, so you can avoid complexity. Only the database is not included since the choice should be yours. Environment variables can be provided for a fast & simple setup. I also care about security : NO root processes (golden rule of my images), and the use of PGP verification whenever it's possible. So which one is better? Of course it's up to you, perhaps you'll prefer the official for its modularity, perhaps you'll prefer mine for its simplicity.
+
 ### Tags
 - **latest** : latest stable version. (11.0)
 - **11.0** : latest 11.0.x version (stable)
-- **10.0** : latest 10.0.x version (old stable)
+- **10.0** : latest 10.0.x version (old stable) (unmaintained)
 - **9.0** : latest 9.0.x version. (old stable) (unmaintained)
 - **daily** : latest code (daily build).
 
