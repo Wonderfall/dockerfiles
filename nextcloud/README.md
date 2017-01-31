@@ -59,6 +59,7 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **OPCACHE_MEM_SIZE** : opcache memory size in megabytes *(default : 128)*
 - **REDIS_MAX_MEMORY** : memory limit for Redis *(default : 64mb)*
 - **CRON_PERIOD** : time interval between two cron tasks *(default : 15m)*
+- **CRON_MEMORY_LIMIT** : memory limit for PHP when executing cronjobs *(default : 1024m)*
 - **TZ** : the system/log timezone *(default : Etc/UTC)*
 - **ADMIN_USER** : username of the admin account *(default : admin)*
 - **ADMIN_PASSWORD** : password of the admin account *(default : admin)*
