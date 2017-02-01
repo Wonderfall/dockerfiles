@@ -21,8 +21,8 @@ RUN echo "@community https://nl.alpinelinux.org/alpine/v3.4/community" >> /etc/a
     tini@community \
  && pip install --no-cache cffi \
  && pip install --no-cache misaka==1.0.2 \
- && wget -q https://github.com/posativ/isso/releases/download/$ISSO_VER/isso-$ISSO_VER.tar.gz -P /tmp \
- && pip install /tmp/isso-$ISSO_VER.tar.gz \
+ && wget -q https://github.com/posativ/isso/archive/$ISSO_VER.tar.gz -P /tmp \
+ && pip install /tmp/$ISSO_VER.tar.gz \
  && apk del ${BUILD_DEPS} \
  && rm -rf /var/cache/apk/* /tmp/*
 
