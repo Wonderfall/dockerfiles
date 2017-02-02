@@ -21,7 +21,7 @@ RUN echo "@community https://nl.alpinelinux.org/alpine/v3.4/community" >> /etc/a
     tini@community \
  && pip install --no-cache cffi \
  && pip install --no-cache misaka==1.0.2 \
- && pip install --no-cache "isso==$ISSO_VER}" \
+ && pip install --no-cache "isso==${ISSO_VER}" \
  && apk del ${BUILD_DEPS} \
  && rm -rf /var/cache/apk/* /tmp/*
 
