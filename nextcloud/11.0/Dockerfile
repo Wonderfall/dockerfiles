@@ -1,7 +1,7 @@
 FROM alpine:edge
 
 ARG NEXTCLOUD_VERSION=11.0.1
-ARG GNU_LIBICONV_VERSION=1.14
+ARG GNU_LIBICONV_VERSION=1.15
 ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
 ENV UID=991 GID=991 \
@@ -70,8 +70,6 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk
  && cd /tmp && wget -q http://ftp.gnu.org/pub/gnu/libiconv/libiconv-${GNU_LIBICONV_VERSION}.tar.gz \
  && tar xzf libiconv-${GNU_LIBICONV_VERSION}.tar.gz && cd libiconv-${GNU_LIBICONV_VERSION} \
  && ./configure --prefix=/usr/local \
- && wget -q https://raw.githubusercontent.com/mxe/mxe/7e231efd245996b886b501dad780761205ecf376/src/libiconv-1-fixes.patch \
- && patch -p1 -u < libiconv-1-fixes.patch \
  && make && make install && libtool --finish /usr/local/lib && cd /tmp \
  && wget -q http://is1.php.net/get/php-7.1.1.tar.gz/from/this/mirror -O php7.1.tar.gz \
  && tar xzf php7.1.tar.gz && cd /tmp/php-7.1.1/ext/iconv && phpize7.1 \
