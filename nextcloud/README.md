@@ -4,38 +4,21 @@
 
 ![](https://s32.postimg.org/69nev7aol/Nextcloud_logo.png)
 
+**This image was made for my own use and I have no intention to make this official. Support won't be regular so if there's an update, or a fix, you can open a pull request. Any contribution is welcome, but please be aware I'm very busy currently. Before opening an issue, please check if there's already one related. Also please use Github instead of Docker Hub, otherwise I won't see your comments. Thanks."
+
 ### Features
 - Based on Alpine Linux Edge.
-- Bundled with nginx and PHP 7.
+- Bundled with nginx and PHP 7.1.
 - Automatic installation using environment variables.
 - Package integrity and authenticity checked during building process.
 - Data and apps persistence.
-- OPCache (opcocde), APCu (local), Redis (file locking) installed and configured.
+- OPCache (opcocde), APCu (local) installed and configured.
 - system cron task running.
 - MySQL, PostgreSQL (server not built-in) and sqlite3 support.
-- Redis, FTP, SMB, LDAP support.
+- FTP, SMB, LDAP support.
 - GNU Libiconv for php iconv extension (avoiding errors with some apps).
 - No root processes. Never.
 - Environment variables provided (see below).
-
-### Notes
-- [It has been reported](https://github.com/Wonderfall/dockerfiles/issues/37) that this image might not work well with old versions of aufs. Please update aufs to 4.x or later, or use overlay/btrfs as a replacement.
-- HTTP port has recently changed, it's now **8888**. You will have to modify your reverse proxy settings.
-- A Redis sever is now running, so you may want to configure it for file locking cache if your config.php was not generated recently. [For best performance it is recommended by Nextcloud documentation](https://docs.nextcloud.com/server/10/admin_manual/configuration_server/caching_configuration.html#additional-notes-for-redis-vs-apcu-on-memory-caching). Add the following lines to your `config.php` :
-
-```
-  'memcache.locking' => '\OC\Memcache\Redis',
-   'redis' => array(
-        'host' => '/tmp/redis.sock',
-        'port' => 0,
-        'timeout' => 0.0,
-         ),
-```
-
-### Why choose this image over the official?
-I wanted to make this official, and I was granted an access to the repository. But many people were opposed since my image doesn't respect Docker philosophy "one process per container". Honestly I don't give a shit, but I let them do their thing. Be aware I'm not a developper or anything else related, I maintain this image because I need it. Contributions are welcome!
-
-Why this over the official? I've already answered : this is an all-in-one container, so you can avoid complexity. Only the database is not included since the choice should be yours. Environment variables can be provided for a fast & simple setup. I also care about security : NO root processes (golden rule of my images), and the use of PGP verification whenever it's possible. So which one is better? Of course it's up to you, perhaps you'll prefer the official for its modularity, perhaps you'll prefer mine for its simplicity.
 
 ### Tags
 - **latest** : latest stable version. (11.0)
@@ -57,7 +40,6 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **UPLOAD_MAX_SIZE** : maximum upload size *(default : 10G)*
 - **APC_SHM_SIZE** : apc memory size *(default : 128M)*
 - **OPCACHE_MEM_SIZE** : opcache memory size in megabytes *(default : 128)*
-- **REDIS_MAX_MEMORY** : memory limit for Redis *(default : 64mb)*
 - **CRON_PERIOD** : time interval between two cron tasks *(default : 15m)*
 - **CRON_MEMORY_LIMIT** : memory limit for PHP when executing cronjobs *(default : 1024m)*
 - **TZ** : the system/log timezone *(default : Etc/UTC)*
@@ -78,7 +60,6 @@ Don't forget to use a **strong password** for the admin account!
 - **/data** : Nextcloud data.
 - **/config** : config.php location.
 - **/apps2** : Nextcloud downloaded apps.
-- **/var/lib/redis** : Redis dumpfile location.
 
 ### Database
 Basically, you can use a database instance running on the host or any other machine. An easier solution is to use an external database container. I suggest you to use MariaDB, which is a reliable database server. You can use the official `mariadb` image available on Docker Hub to create a database container, which must be linked to the Nextcloud container. PostgreSQL can also be used as well.
@@ -105,7 +86,6 @@ docker run -d --name nextcloud \
        -e UPLOAD_MAX_SIZE=10G \
        -e APC_SHM_SIZE=128M \
        -e OPCACHE_MEM_SIZE=128 \
-       -e REDIS_MAX_MEMORY=64mb \
        -e CRON_PERIOD=15m \
        -e TZ=Etc/UTC \
        -e ADMIN_USER=mrrobot \
@@ -123,15 +103,7 @@ docker run -d --name nextcloud \
 Now you have to use a **reverse proxy** in order to access to your container through Internet, steps and details are available at the end of the README.md. And that's it! Since you already configured Nextcloud through setting environment variables, there's no setup page.
 
 ### ARM-based devices
-This image is available for `armhf` (Raspberry Pi 1 & 2, Scaleway C1, ...). Although Docker does support ARM-based devices, Docker Hub only builds for x86_64. That's why you will have to build this image yourself! Don't panic, this is easy.
-
-```
-git clone https://github.com/Wonderfall/dockerfiles.git
-cd dockerfiles/nextcloud/10.0-armhf
-docker build -t wonderfall/nextcloud .
-```
-
-The building process can take some time.
+You will have to build yourself using an Alpine-ARM image, like `orax/alpine-armhf:edge`.
 
 ### Configure
 In the admin panel, you should switch from `AJAX cron` to `cron` (system cron).
@@ -171,7 +143,6 @@ services:
       - UPLOAD_MAX_SIZE=10G
       - APC_SHM_SIZE=128M
       - OPCACHE_MEM_SIZE=128
-      - REDIS_MAX_MEMORY=64mb
       - CRON_PERIOD=15m
       - TZ=Europe/Berlin
       - ADMIN_USER=admin
@@ -203,7 +174,6 @@ nextcloud:
     - UPLOAD_MAX_SIZE=10G
     - APC_SHM_SIZE=128M
     - OPCACHE_MEM_SIZE=128
-    - REDIS_MAX_MEMORY=64mb
     - CRON_PERIOD=15m
     - TZ=Europe/Berlin
     - ADMIN_USER=admin
