@@ -10,6 +10,7 @@ ENV UID=991 GID=991 \
     OPCACHE_MEM_SIZE=128 \
     REDIS_MAX_MEMORY=64mb \
     CRON_PERIOD=15m \
+    CRON_MEMORY_LIMIT=1g \
     TZ=Etc/UTC \
     DB_TYPE=sqlite3 \
     ADMIN_USER=admin \
