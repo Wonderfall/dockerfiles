@@ -67,7 +67,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk
     php7.1-pear@testing \
     php7.1-dev@testing \
  && pecl install redis \
- && "echo extension=redis.so > /etc/php7.1/conf.d/redis.ini" \
+ && echo extension=redis.so > /etc/php7.1/conf.d/redis.ini \
  && sed -i "$ s|\-n||g" /usr/bin/pecl && pecl install smbclient apcu \
  && cd /tmp && wget -q http://ftp.gnu.org/pub/gnu/libiconv/libiconv-${GNU_LIBICONV_VERSION}.tar.gz \
  && tar xzf libiconv-${GNU_LIBICONV_VERSION}.tar.gz && cd libiconv-${GNU_LIBICONV_VERSION} \
