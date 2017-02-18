@@ -76,7 +76,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk
  && make && cp modules/iconv.so /usr/lib/php7.1/modules && cd /tmp \
  && echo "extension=iconv.so" > /etc/php7.1/conf.d/00_iconv.ini \
  && echo "extension=smbclient.so" > /etc/php7.1/conf.d/00_smbclient.ini \
- && echo "extension=redis.so" > /etc/php7.1/conf.d/00_redis.ini  \
+ && echo "extension=redis.so" > /etc/php7.1/conf.d/redis.ini  \
  && mkdir /nextcloud \
  && wget -q https://download.nextcloud.com/server/daily/latest.tar.bz2 \
  && tar xjf latest.tar.bz2 --strip 1 -C /nextcloud \
