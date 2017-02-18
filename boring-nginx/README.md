@@ -7,7 +7,7 @@ This is nginx statically linked against BoringSSL, with embedded Brotli support.
 
 #### Features
 - Based on Alpine Linux.
-- nginx built against **BoringSSL**.
+- nginx built against **BoringSSL** with AVX2 instructions.
 - Built using hardening gcc flags.
 - TTP/2 (+NPN) support.
 - Brotli compression support (and configured).
