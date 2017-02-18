@@ -15,7 +15,7 @@
 - OPCache (opcocde), APCu (local) installed and configured.
 - system cron task running.
 - MySQL, PostgreSQL (server not built-in) and sqlite3 support.
-- FTP, SMB, LDAP support.
+- Redis, FTP, SMB, LDAP support.
 - GNU Libiconv for php iconv extension (avoiding errors with some apps).
 - No root processes. Never.
 - Environment variables provided (see below).
@@ -114,60 +114,16 @@ Pull a newer image, then recreate the container as you did before (*Setup* step)
 ### Docker-compose
 I advise you to use [docker-compose](https://docs.docker.com/compose/), which is a great tool for managing containers. You can create a `docker-compose.yml` with the following content (which must be adapted to your needs) and then run `docker-compose up -d nextcloud-db`, wait some 15 seconds for the database to come up, then run everything with `docker-compose up -d`, that's it! On subsequent runs,  a single `docker-compose up -d` is sufficient!
 
-#### Docker-compose file V2
-```
-version: '2'
+#### Docker-compose file
+Don't copy/paste without thinking! It is a model so you can see how to do it correctly.
 
-volumes:
-  nextcloud-db-data:
-  nextcloud-data:
-  nextcloud-config:
-  nextcloud-apps:
-
-services:
-  nextcloud-db:
-    image: mariadb
-    volumes:
-      - nextcloud-db-data:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=1234
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
-      - MYSQL_PASSWORD=foo5678
-
-  nextcloud:
-    image: wonderfall/nextcloud
-    environment:
-      - UID=1000
-      - GID=1000
-      - UPLOAD_MAX_SIZE=10G
-      - APC_SHM_SIZE=128M
-      - OPCACHE_MEM_SIZE=128
-      - CRON_PERIOD=15m
-      - TZ=Europe/Berlin
-      - ADMIN_USER=admin
-      - ADMIN_PASSWORD=admin
-      - DB_TYPE=mysql
-      - DB_NAME=nextcloud
-      - DB_USER=nextcloud
-      - DB_PASSWORD=foo5678
-      - DB_HOST=nextcloud-db
-    depends_on:
-      - nextcloud-db
-    volumes:
-      - nextcloud-data:/data
-      - nextcloud-config:/config
-      - nextcloud-apps:/apps2
-#   ports:
-#     - 8888:8888
-```
-
-#### Docker-compose file V1
 ```
 nextcloud:
   image: wonderfall/nextcloud
   links:
-    - nextcloud-db:nextcloud-db
+    - nextcloud-db:nextcloud-db   # If using MySQL
+    - solr:solr                   # If using Nextant
+    - redis:redis                 # If using Redis
   environment:
     - UID=1000
     - GID=1000
@@ -188,6 +144,7 @@ nextcloud:
     - /mnt/nextcloud/config:/config
     - /mnt/nextcloud/apps:/apps2
 
+# If using MySQL
 nextcloud-db:
   image: mariadb:10
   volumes:
@@ -197,9 +154,43 @@ nextcloud-db:
     - MYSQL_DATABASE=nextcloud
     - MYSQL_USER=nextcloud
     - MYSQL_PASSWORD=supersecretpassword
+    
+# If using Nextant
+solr:
+  image: solr:6-alpine
+  container_name: solr
+  volumes:
+    - /mnt/docker/solr:/opt/solr/server/solr/mycores
+  entrypoint:
+    - docker-entrypoint.sh
+    - solr-precreate
+    - nextant
+
+# If using Redis
+redis:
+  image: redis:alpine
+  container_name: redis
+  volumes:
+    - /mnt/docker/redis:/data
 ```
 
 You can update everything with `docker-compose pull` followed by `docker-compose up -d`.
+
+### How to configure Redis
+Redis can be used for distributed and file locking cache, alongside with APCu (local cache), thus making Nextcloud even more faster. As PHP redis extension is already included, all you have to is to deploy a redis server (you can do as above with docker-compose) and bind it to nextcloud in your config.php file :
+
+```
+'memcache.distributed' => '\OC\Memcache\Redis',
+'memcache.locking' => '\OC\Memcache\Redis',
+'memcache.local' => '\OC\Memcache\APCu',
+'redis' => array(
+   'host' => 'redis',
+   'port' => 6379,
+   ),
+```
+
+### How to configure Nextant
+You will have to deploy a Solr server, I've shown an example above with docker-compose. Once Nextant app is installed, go to "additional settings" in your admin pannel and use http://solr:8983/solr as "Adress of your Solr Servlet". There you go. You may however experience the same issue as mine : https://github.com/nextcloud/server/pull/3160 (let's hope there'll be at least a backport...).
 
 ### Reverse proxy
 Of course you can use your own solution to do so! nginx, Haproxy, Caddy, h2o, there's plenty of choices and documentation about it on the Web.
