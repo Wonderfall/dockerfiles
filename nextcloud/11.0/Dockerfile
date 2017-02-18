@@ -67,7 +67,6 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk
     php7.1-pear@testing \
     php7.1-dev@testing \
  && sed -i "$ s|\-n||g" /usr/bin/pecl && pecl install smbclient apcu redis \
- && echo extension=redis.so > /etc/php7.1/conf.d/redis.ini \
  && cd /tmp && wget -q http://ftp.gnu.org/pub/gnu/libiconv/libiconv-${GNU_LIBICONV_VERSION}.tar.gz \
  && tar xzf libiconv-${GNU_LIBICONV_VERSION}.tar.gz && cd libiconv-${GNU_LIBICONV_VERSION} \
  && ./configure --prefix=/usr/local \
@@ -78,6 +77,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk
  && make && cp modules/iconv.so /usr/lib/php7.1/modules && cd /tmp \
  && echo "extension=iconv.so" > /etc/php7.1/conf.d/00_iconv.ini \
  && echo "extension=smbclient.so" > /etc/php7.1/conf.d/00_smbclient.ini \
+ && echo "extension=redis.so" > /etc/php7.1/conf.d/redis.ini \
  && mkdir /nextcloud \
  && NEXTCLOUD_TARBALL="nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" \
  && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL} \
