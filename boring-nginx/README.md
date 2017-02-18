@@ -9,6 +9,7 @@ This is nginx statically linked against BoringSSL, with embedded Brotli support.
 - Based on Alpine Linux.
 - nginx built against **BoringSSL** with SSE/SHA, and AVX2 SIMD-instructions.
 - Built using hardening gcc flags.
+- Dynamic TLS records patch (cloudflare).
 - TTP/2 (+NPN) support.
 - Brotli compression support (and configured).
 - No root master process.
