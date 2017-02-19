@@ -6,6 +6,8 @@ ARG NGINX_VERSION=1.11.10
 ARG GPG_NGINX="B0F4 2533 73F8 F6F5 10D4  2178 520A 9993 A1C0 52F8"
 ARG BUILD_CORES
 
+COPY tls1_3.patch /tmp/tls1_3.patch
+
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && BUILD_DEPS=" \
@@ -48,6 +50,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && sed -i 's@\$shaext[ ]*=[ ]*0;@\$shaext = 1;@' crypto/*/asm/*.pl \
  && sed -i 's@\$avx[ ]*=[ ]*[0|1];@\$avx = 2;@' crypto/*/asm/*.pl \
  && sed -i 's@\$addx[ ]*=[ ]*0;@\$addx = 1;@' crypto/*/asm/*.pl \
+ && patch -p1 < /tmp/tls1_3.patch \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. \
  && make -j ${NB_CORES} && cd .. \
  && mkdir -p .openssl/lib/ && cd .openssl && ln -s ../include && cd .. \
