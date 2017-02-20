@@ -97,6 +97,7 @@ echo ";";
 ?>
 EOF
 
+mkdir /data/session
 chown -R $UID:$GID /config /data
 # Enable/disable apps. Note that this must be done after the ownCloud setup.
 # The firstrunwizard gave Josh all sorts of problems, so disabling that.
