@@ -1,4 +1,4 @@
-FROM mhart/alpine-node-auto:6
+FROM alpine:edge
 
 ARG GHOST_VERSION=0.11.4
 
@@ -27,12 +27,13 @@ VOLUME /ghost/content
 
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && apk -U add \
-    openssl \
+    libressl \
     ca-certificates \
     bash \
     grep \
     tini@commuedge \
     su-exec \
+    nodejs \
  && wget -q https://github.com/TryGhost/Ghost/releases/download/${GHOST_VERSION}/Ghost-${GHOST_VERSION}.zip -P /tmp \
  && unzip -q /tmp/Ghost-${GHOST_VERSION}.zip -d /ghost \
  && cd /ghost \

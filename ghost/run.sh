@@ -54,5 +54,7 @@ if [ "$SYNTAX_HIGHLIGHTING" == "True" ] && [ ! -f /ghost/content/themes/casper/a
            /ghost/content/themes/casper/default.hbs
 fi
 
-chown -R $UID:$GID /ghost && cd /ghost
+cd /ghost
+mv core fix && mv fix core && mv node_modules fix && mv fix node_modules # fix strange bug
+chown -R $UID:$GID /ghost
 exec su-exec $UID:$GID /sbin/tini -- npm start --production
