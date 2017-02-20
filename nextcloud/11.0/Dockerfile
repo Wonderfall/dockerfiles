@@ -99,6 +99,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY php-fpm.conf /etc/php7.1/php-fpm.conf
+COPY php.ini /etc/php7.1/php.ini
 COPY opcache.ini /etc/php7.1/conf.d/00_opcache.ini
 COPY apcu.ini /etc/php7.1/conf.d/apcu.ini
 COPY run.sh /usr/local/bin/run.sh
