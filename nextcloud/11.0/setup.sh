@@ -67,7 +67,7 @@ echo "Starting automatic configuration..."
 # Execute ownCloud's setup step, which creates the ownCloud database.
 # It also wipes it if it exists. And it updates config.php with database
 # settings and deletes the autoconfig.php file.
-(cd /nextcloud; php7.1 index.php)
+(cd /nextcloud; php7.1 index.php &>/dev/null)
 echo "Automatic configuration finished."
 
 # Update config.php.
@@ -97,9 +97,12 @@ echo ";";
 ?>
 EOF
 
+sed -i "s/localhost/$DOMAIN/g" /config/config.php
 chown -R $UID:$GID /config /data
 # Enable/disable apps. Note that this must be done after the ownCloud setup.
 # The firstrunwizard gave Josh all sorts of problems, so disabling that.
 # user_external is what allows ownCloud to use IMAP for login. The contacts
 # and calendar apps are the extensions we really care about here.
-occ app:disable firstrunwizard
+if [[ ! -z "$ADMIN_USER"  ]]; then
+  occ app:disable firstrunwizard
+fi
