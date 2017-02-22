@@ -7,7 +7,6 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && BUILD_DEPS=" \
     build-base \
     python-dev \
-    py2-pip \
     libffi-dev \
     libxslt-dev \
     libxml2-dev \
@@ -22,6 +21,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     libxslt \
     openssl \
     tini@commuedge \
+    py2-pip \
  && pip install --no-cache -r https://raw.githubusercontent.com/asciimoo/searx/master/requirements.txt \
  && mkdir /usr/local/searx && cd /usr/local/searx \
  && wget -qO- https://github.com/asciimoo/searx/archive/master.tar.gz | tar xz --strip 1 \
