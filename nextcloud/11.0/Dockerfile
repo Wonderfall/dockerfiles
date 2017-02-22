@@ -78,7 +78,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk
  && echo "extension=iconv.so" > /etc/php7.1/conf.d/00_iconv.ini \
  && echo "extension=smbclient.so" > /etc/php7.1/conf.d/00_smbclient.ini \
  && echo "extension=redis.so" > /etc/php7.1/conf.d/redis.ini \
- && sed -i 's|;session.save_path = "/tmp"|session.save_path = "/data/session"|g'
+ && sed -i 's|;session.save_path = "/tmp"|session.save_path = "/data/session"|g' \
  && mkdir /nextcloud \
  && NEXTCLOUD_TARBALL="nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" \
  && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL} \
