@@ -14,8 +14,7 @@ ENV UID=991 GID=991 \
     DB_TYPE=sqlite3 \
     DOMAIN=localhost
 
-RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
- && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && BUILD_DEPS=" \
     gnupg \
     tar \
