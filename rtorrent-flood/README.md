@@ -17,9 +17,10 @@
 - **BUILD_CORES** : number of cores used during build
 
 #### Environment variables
-- **UID** : user id
-- **GID** : group id
-- **FLOOD_SECRET** : flood secret key
+- **UID** : user id (default : 991)
+- **GID** : group id (defaut : 991)
+- **FLOOD_SECRET** : flood secret key (defaut : mysupersecretkey) (CHANGE IT)
+- **CONTEXT_PATH** : context path (base_URI) (default : /)
 - **PKG_CONFIG_PATH** : `/usr/local/lib/pkgconfig` (don't touch)
 
 #### Ports

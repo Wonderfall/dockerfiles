@@ -1,4 +1,5 @@
 const CONFIG = {
+  baseURI: '<CONTEXT_PATH>',
   dbCleanInterval: 1000 * 60 * 60,
   dbPath: '/flood-db/',
   floodServerPort: 3000,

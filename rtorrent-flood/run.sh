@@ -9,6 +9,8 @@ mkdir -p /data/Media/Animes
 mkdir -p /data/Media/Music
 
 sed -i -e "s/<FLOOD_SECRET>/$FLOOD_SECRET/g" /usr/flood/config.js
+sed -i -e "s/<CONTEXT_PATH>/$CONTEXT_PATH/g" /usr/flood/config.js
+
 rm -f /data/.session/rtorrent.lock
 mv /usr/flood /usr/fix && mv /usr/fix /usr/flood # fix strange bug
 chown -R $UID:$GID /data /home/torrent /tmp /filebot /usr/flood /flood-db /etc/s6.d

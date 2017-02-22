@@ -8,6 +8,7 @@ ARG BUILD_CORES
 
 ENV UID=991 GID=991 \
     FLOOD_SECRET=supersecret \
+    CONTEXT_PATH=/ \
     PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 
 RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
