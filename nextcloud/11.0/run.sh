@@ -12,6 +12,16 @@ ln -sf /apps2 /nextcloud &>/dev/null
 
 mv nextcloud fix && mv fix nextcloud # fix strange bug
 
+# Purge and then recreate the nextcloud user, using the UID and GID passed in via the environment.
+# This makes running the occ command for maintenance easier.
+
+echo "Purging existing 'nextcloud' account and group."
+delgroup nextcloud
+deluser nextcloud
+echo "Adding 'nextcloud' account and group."
+addgroup -S -g $GID nextcloud
+adduser -h /nextcloud -s /bin/false -S -u $UID nextcloud
+
 echo "Updating permissions..."
 for dir in /nextcloud /data /config /apps2 /etc/nginx /etc/php7.1 /var/log /var/lib/nginx /tmp /etc/s6.d; do
   if $(find $dir ! -user $UID -o ! -group $GID|egrep '.' -q); then
