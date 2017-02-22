@@ -12,6 +12,11 @@ ln -sf /apps2 /nextcloud &>/dev/null
 
 mv nextcloud fix && mv fix nextcloud # fix strange bug
 
+# Create folder for php sessions if not exists
+if [ ! -d /data/session ]; then
+  mkdir -p /data/session;
+fi
+
 echo "Updating permissions..."
 for dir in /nextcloud /data /config /apps2 /etc/nginx /etc/php7.1 /var/log /var/lib/nginx /tmp /etc/s6.d; do
   if $(find $dir ! -user $UID -o ! -group $GID|egrep '.' -q); then
