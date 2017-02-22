@@ -43,8 +43,9 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **CRON_PERIOD** : time interval between two cron tasks *(default : 15m)*
 - **CRON_MEMORY_LIMIT** : memory limit for PHP when executing cronjobs *(default : 1024m)*
 - **TZ** : the system/log timezone *(default : Etc/UTC)*
-- **ADMIN_USER** : username of the admin account *(default : admin)*
-- **ADMIN_PASSWORD** : password of the admin account *(default : admin)*
+- **ADMIN_USER** : username of the admin account *(default : none, web configuration)*
+- **ADMIN_PASSWORD** : password of the admin account *(default : none, web configuration)*
+- **LOCALHOST** : domain to use during the setup *(default : localhost)*
 - **DB_TYPE** : database type (sqlite3, mysql or pgsql) *(default : sqlite3)*
 - **DB_NAME** : name of database *(default : none)*
 - **DB_USER** : username for database *(default : none)*
@@ -90,6 +91,7 @@ docker run -d --name nextcloud \
        -e TZ=Etc/UTC \
        -e ADMIN_USER=mrrobot \
        -e ADMIN_PASSWORD=supercomplicatedpassword \
+       -e DOMAIN=cloud.example.com
        -e DB_TYPE=mysql \
        -e DB_NAME=nextcloud \
        -e DB_USER=nextcloud \
@@ -97,6 +99,8 @@ docker run -d --name nextcloud \
        -e DB_HOST=db_nextcloud \
        wonderfall/nextcloud:10.0
 ```
+
+You are **not obliged** to use `ADMIN_USER` and `ADMIN_PASSWORD`. If these variables are not provided, you'll be able to configure your admin acccount from your browser.
 
 **Below you can find a docker-compose file, which is very useful!**
 
@@ -132,8 +136,9 @@ nextcloud:
     - OPCACHE_MEM_SIZE=128
     - CRON_PERIOD=15m
     - TZ=Europe/Berlin
-    - ADMIN_USER=admin
-    - ADMIN_PASSWORD=admin
+    - ADMIN_USER=admin            # Don't set to configure through browser
+    - ADMIN_PASSWORD=admin        # Don't set to configure through browser
+    - DOMAIN=localhost
     - DB_TYPE=mysql
     - DB_NAME=nextcloud
     - DB_USER=nextcloud

@@ -12,8 +12,7 @@ ENV UID=991 GID=991 \
     CRON_MEMORY_LIMIT=1g \
     TZ=Etc/UTC \
     DB_TYPE=sqlite3 \
-    ADMIN_USER=admin \
-    ADMIN_PASSWORD=admin
+    DOMAIN=localhost
 
 RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
