@@ -1,2 +1,0 @@
-#!/bin/sh
-su-exec $UID:$GID php7.1 /nextcloud/occ $@
