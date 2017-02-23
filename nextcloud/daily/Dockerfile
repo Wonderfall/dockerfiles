@@ -78,8 +78,10 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
  && sed -i 's|;session.save_path = "/tmp"|session.save_path = "/data/session"|g' /etc/php7.1/php.ini \
  && mkdir /nextcloud \
  && wget -q https://download.nextcloud.com/server/daily/latest.tar.bz2 \
- && wget -q https://download.nextcloud.com/server/daily/latest.tar.bz2.sha256 \
- && CHECKSUM_STATE=$(echo -n $(sha256sum -c latest.tar.bz2.sha256 latest.tar.bz2) | tail -c 2) \
+ && echo "Verifying checksum of latest.tar.bz2..." \
+ && wget -q https://download.nextcloud.com/server/daily/latest.tar.bz2.sha512 \
+ && echo "$(cat latest.tar.bz2.sha512 | awk '{print $1;}')  latest.tar.bz2" > latest.tar.bz2.sha512 \
+ && CHECKSUM_STATE=$(echo -n $(sha512sum -c latest.tar.bz2.sha512) | tail -c 2) \
  && if [ "${CHECKSUM_STATE}" != "OK" ]; then echo "Warning! Checksum does not match!" && exit 1; fi \
  && tar xjf latest.tar.bz2 --strip 1 -C /nextcloud \
  && apk del ${BUILD_DEPS} php7.1-pear php7.1-dev \

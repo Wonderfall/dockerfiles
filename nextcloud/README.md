@@ -10,7 +10,7 @@
 - Based on Alpine Linux Edge.
 - Bundled with nginx and PHP 7.1.
 - Automatic installation using environment variables.
-- Package integrity and authenticity checked during building process.
+- Package integrity (SHA512) and authenticity (PGP) checked during building process.
 - Data and apps persistence.
 - OPCache (opcocde), APCu (local) installed and configured.
 - system cron task running.
@@ -196,6 +196,9 @@ Redis can be used for distributed and file locking cache, alongside with APCu (l
 
 ### How to configure Nextant
 You will have to deploy a Solr server, I've shown an example above with docker-compose. Once Nextant app is installed, go to "additional settings" in your admin pannel and use http://solr:8983/solr as "Adress of your Solr Servlet". There you go. You may however experience the same issue as mine : https://github.com/nextcloud/server/pull/3160 (let's hope there'll be at least a backport...).
+
+### Tip : how to use occ command
+There is a script for that, so you shouldn't bother to log into the container, set the right permissions, and so on. Use `docker exec -ti nexcloud occ command`.
 
 ### Reverse proxy
 Of course you can use your own solution to do so! nginx, Haproxy, Caddy, h2o, there's plenty of choices and documentation about it on the Web.
