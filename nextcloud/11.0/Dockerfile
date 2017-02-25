@@ -21,6 +21,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
     build-base \
     autoconf \
     automake \
+    pcre-dev \
     libtool \
     samba-dev" \
  && apk -U upgrade && apk add \
