@@ -1,6 +1,6 @@
 FROM alpine:edge
 
-ARG NEXTCLOUD_VERSION=11.0.1
+ARG NEXTCLOUD_VERSION=11.0.2
 ARG GNU_LIBICONV_VERSION=1.15
 ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
@@ -40,6 +40,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
     php7.1-mbstring@testing \
     php7.1-curl@testing \
     php7.1-gd@testing \
+    php7.1-fileinfo@testing \
     php7.1-mcrypt@testing \
     php7.1-opcache@testing \
     php7.1-json@testing \

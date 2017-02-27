@@ -39,6 +39,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
     php7.1-mbstring@testing \
     php7.1-curl@testing \
     php7.1-gd@testing \
+    php7.1-fileinfo@testing \
     php7.1-mcrypt@testing \
     php7.1-opcache@testing \
     php7.1-json@testing \
