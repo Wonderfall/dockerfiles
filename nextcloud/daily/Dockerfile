@@ -68,8 +68,8 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
  && tar xzf libiconv-${GNU_LIBICONV_VERSION}.tar.gz && cd libiconv-${GNU_LIBICONV_VERSION} \
  && ./configure --prefix=/usr/local \
  && make && make install && libtool --finish /usr/local/lib && cd /tmp \
- && wget -q http://is1.php.net/get/php-7.1.1.tar.gz/from/this/mirror -O php7.1.tar.gz \
- && tar xzf php7.1.tar.gz && cd /tmp/php-7.1.1/ext/iconv && phpize7.1 \
+ && wget -q http://is1.php.net/get/php-7.1.2.tar.gz/from/this/mirror -O php7.1.tar.gz \
+ && tar xzf php7.1.tar.gz && cd /tmp/php-7.1.2/ext/iconv && phpize7.1 \
  && ./configure --with-iconv=/usr/local --with-php-config=/usr/bin/php-config7.1 \
  && make && cp modules/iconv.so /usr/lib/php7.1/modules \
  && cd /tmp/php-7.1.2/ext/fileinfo && phpize7.1 \
