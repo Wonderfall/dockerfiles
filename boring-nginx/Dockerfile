@@ -3,8 +3,32 @@ FROM alpine:edge
 ENV UID=991 GID=991
 
 ARG NGINX_VERSION=1.11.10
+ARG NPS_VERSION=1.12.34.2
 ARG GPG_NGINX="B0F4 2533 73F8 F6F5 10D4  2178 520A 9993 A1C0 52F8"
 ARG BUILD_CORES
+
+ARG NGINX_MODULES=" \
+    --with-http_ssl_module \
+    --with-http_v2_module \
+    --with-http_gzip_static_module \
+    --with-http_stub_status_module \
+    --with-file-aio \
+    --with-threads \
+    --with-pcre-jit \
+    --without-http_ssi_module \
+    --without-http_scgi_module \
+    --without-http_uwsgi_module \
+    --without-http_geo_module \
+    --without-http_autoindex_module \
+    --without-http_map_module \
+    --without-http_split_clients_module \
+    --without-http_memcached_module \
+    --without-http_empty_gif_module \
+    --without-http_browser_module"
+
+ARG NGINX_3RD_PARTY_MODULES=" \
+    --add-module=/tmp/headers-more-nginx-module \
+    --add-module=/tmp/ngx_brotli"
 
 COPY tls1_3.patch /tmp/tls1_3.patch
 
@@ -35,14 +59,13 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     libressl \
     bind-tools \
     tini@commuedge \
- && cd /tmp && git clone https://github.com/bagder/libbrotli --depth=1 && cd libbrotli \
- && ./autogen.sh && ./configure && make -j ${NB_CORES} && make install \
- && cd /tmp \
- && git clone https://github.com/google/ngx_brotli --depth=1 \
- && git clone https://github.com/openresty/headers-more-nginx-module --depth=1 \
+ && cd /tmp && git clone https://github.com/bagder/libbrotli --depth=1 \
+ && cd libbrotli && ./autogen.sh && ./configure && make -j ${NB_CORES} && make install \
+ && cd /tmp && git clone https://github.com/google/ngx_brotli --depth=1 \
+ && cd ngx_brotli && git submodule update --init \
+ && cd /tmp && git clone https://github.com/openresty/headers-more-nginx-module --depth=1 \
  && git clone https://boringssl.googlesource.com/boringssl --depth=1 \
- && cd /tmp/ngx_brotli && git submodule update --init \
- && cd /tmp/boringssl \
+ && cd boringssl \
  && sed -n 's/\$avx = 0/\$avx = 2/p' crypto/*/asm/*.pl \
  && sed -n 's/\$addx = 0/\$addx = 1/p' crypto/*/asm/*.pl \
  && sed -n 's/\$avx = 1/\$avx = 2/p' crypto/*/asm/*.pl \
@@ -74,27 +97,10 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     --sbin-path=/usr/sbin/nginx \
     --with-cc-opt="-O3 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -Wno-deprecated-declarations -I ../boringssl/.openssl/include/" \
     --with-ld-opt="-Wl,-Bsymbolic-functions -Wl,-z,relro -L ../boringssl/.openssl/lib" \
-    --with-http_ssl_module \
-    --with-http_v2_module \
-    --with-http_gzip_static_module \
-    --with-http_stub_status_module \
-    --with-file-aio \
-    --with-threads \
-    --with-pcre-jit \
-    --without-http_ssi_module \
-    --without-http_scgi_module \
-    --without-http_uwsgi_module \
-    --without-http_geo_module \
-    --without-http_autoindex_module \
-    --without-http_map_module \
-    --without-http_split_clients_module \
-    --without-http_memcached_module \
-    --without-http_empty_gif_module \
-    --without-http_browser_module \
     --http-log-path=/var/log/nginx/access.log \
     --error-log-path=/var/log/nginx/error.log \
-    --add-module=/tmp/headers-more-nginx-module \
-    --add-module=/tmp/ngx_brotli \
+    ${NGINX_MODULES} \
+    ${NGINX_3RD_PARTY_MODULES} \
  && make -j ${NB_CORES} && make install && make clean \
  && strip -s /usr/sbin/nginx \
  && apk del ${BUILD_DEPS} \
