@@ -1,7 +1,6 @@
 FROM alpine:edge
 
-ARG VERSION=3.0.1
-
+ARG VERSION=3.0.2
 ARG GPG_matthieu="814E 346F A01A 20DB B04B  6807 B5DB D592 5590 A237"
 
 ENV UID=991 GID=991
@@ -16,7 +15,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     libressl \
     ca-certificates \
     gnupg" \
- && apk -U add \
+ && apk -U upgrade && apk add \
     ${BUILD_DEPS} \
     nginx \
     s6 \
@@ -38,8 +37,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     php7-pdo_mysql@commuedge \
     php7-dev@commuedge \
     php7-pear@commuedge \
- && cd /tmp && git clone https://github.com/Zakay/geoip && cd geoip \
- && phpize7 && ./configure --with-php-config=/usr/bin/php-config7 && make && make install \
+ && sed -i "$ s|\-n||g" /usr/bin/pecl && pecl install geoip-1.1.1 \
  && echo 'extension=geoip.so' >> /etc/php7/conf.d/00_geoip.ini \
  && echo 'geoip.custom_directory=/piwik/misc' >> /etc/php7/php.ini \
  && mkdir /piwik && cd /tmp \
@@ -58,9 +56,6 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && wget -q https://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz -P /piwik/misc \
  && gzip -d /piwik/misc/GeoLiteCity.dat.gz \
  && mv /piwik/misc/GeoLiteCity.dat /piwik/misc/GeoIPCity.dat \
- && cd /piwik/libs/MaxMindGeoIP && rm geoip.inc \
- && wget -q https://raw.githubusercontent.com/cerlestes/piwik/cerlestes-patch-1/libs/MaxMindGeoIP/geoip.inc \
- && chmod +x geoip.inc \
  && apk del ${BUILD_DEPS} php7-dev php7-pear \
  && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
 
