@@ -29,8 +29,6 @@ ARG NGINX_3RD_PARTY_MODULES=" \
     --add-module=/tmp/headers-more-nginx-module \
     --add-module=/tmp/ngx_brotli"
 
-COPY tls1_3.patch /tmp/tls1_3.patch
-
 RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
  && NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && BUILD_DEPS=" \
@@ -65,14 +63,12 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && cd /tmp && git clone https://github.com/openresty/headers-more-nginx-module --depth=1 \
  && git clone https://boringssl.googlesource.com/boringssl --depth=1 \
  && cd boringssl \
- && sed -n 's/\$avx = 0/\$avx = 2/p' crypto/*/asm/*.pl \
- && sed -n 's/\$addx = 0/\$addx = 1/p' crypto/*/asm/*.pl \
- && sed -n 's/\$avx = 1/\$avx = 2/p' crypto/*/asm/*.pl \
- && sed -n 's/\$shaext=0/\$shaext=1/p' crypto/*/asm/*.pl \
+ && sed -i 's@out \([>=]\) TLS1_2_VERSION@out \1 TLS1_3_VERSION@' ssl/ssl_lib.c \
+ && sed -i 's@ssl->version[ ]*=[ ]*TLS1_2_VERSION@ssl->version = TLS1_3_VERSION@' ssl/s3_lib.c \
+ && sed -i 's@(SSL3_VERSION, TLS1_2_VERSION@(SSL3_VERSION, TLS1_3_VERSION@' ssl/ssl_test.cc \
  && sed -i 's@\$shaext[ ]*=[ ]*0;@\$shaext = 1;@' crypto/*/asm/*.pl \
  && sed -i 's@\$avx[ ]*=[ ]*[0|1];@\$avx = 2;@' crypto/*/asm/*.pl \
  && sed -i 's@\$addx[ ]*=[ ]*0;@\$addx = 1;@' crypto/*/asm/*.pl \
- && patch -p1 < /tmp/tls1_3.patch \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. \
  && make -j ${NB_CORES} && cd .. \
  && mkdir -p .openssl/lib/ && cd .openssl && ln -s ../include && cd .. \
