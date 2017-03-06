@@ -1,8 +1,8 @@
 ## wonderfall/nextcloud
 
 [![](https://images.microbadger.com/badges/version/wonderfall/nextcloud.svg)](http://microbadger.com/images/wonderfall/nextcloud "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/wonderfall/nextcloud.svg)](http://microbadger.com/images/wonderfall/nextcloud "Get your own image badge on microbadger.com")
-
-![](https://s32.postimg.org/69nev7aol/Nextcloud_logo.png)
+[![](https://images.microbadger.com/badges/version/wonderfall/nextcloud:daily.svg)](https://microbadger.com/images/wonderfall/nextcloud:daily "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/wonderfall/nextcloud:daily.svg)](https://microbadger.com/images/wonderfall/nextcloud:daily "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/version/wonderfall/nextcloud:11.0.svg)](https://microbadger.com/images/wonderfall/nextcloud:11.0 "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/wonderfall/nextcloud:11.0.svg)]
 
 **This image was made for my own use and I have no intention to make this official. Support won't be regular so if there's an update, or a fix, you can open a pull request. Any contribution is welcome, but please be aware I'm very busy currently. Before opening an issue, please check if there's already one related. Also please use Github instead of Docker Hub, otherwise I won't see your comments. Thanks.**
 
@@ -91,7 +91,7 @@ docker run -d --name nextcloud \
        -e TZ=Etc/UTC \
        -e ADMIN_USER=mrrobot \
        -e ADMIN_PASSWORD=supercomplicatedpassword \
-       -e DOMAIN=cloud.example.com
+       -e DOMAIN=cloud.example.com \
        -e DB_TYPE=mysql \
        -e DB_NAME=nextcloud \
        -e DB_USER=nextcloud \
