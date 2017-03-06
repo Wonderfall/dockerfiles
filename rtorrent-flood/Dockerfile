@@ -1,8 +1,8 @@
-FROM alpine:3.5
+FROM alpine:edge
 
 ARG RTORRENT_VER=0.9.6
 ARG LIBTORRENT_VER=0.13.6
-ARG MEDIAINFO_VER=0.7.92.1
+ARG MEDIAINFO_VER=0.7.93
 ARG FILEBOT_VER=4.7.8
 ARG BUILD_CORES
 
@@ -21,13 +21,13 @@ RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
     wget \
     tar \
     xz \
-    subversion \
+    zlib-dev \
     cppunit-dev \
     libressl-dev \
     ncurses-dev \
     curl-dev \
     binutils" \
- && apk -U add \
+ && apk -U upgrade && apk add \
     ${BUILD_DEPS} \
     ca-certificates \
     curl \
@@ -35,6 +35,7 @@ RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
     libressl \
     gzip \
     zip \
+    zlib \
     unrar \
     s6 \
     su-exec \
@@ -65,7 +66,7 @@ RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && strip -s /usr/local/bin/mktorrent \
  && strip -s /usr/local/bin/mediainfo \
  && mkdir /filebot && cd /filebot \
- && wget -q http://sourceforge.mirrorservice.org/f/fi/filebot/filebot/FileBot_${FILEBOT_VER}/FileBot_${FILEBOT_VER}-portable.tar.xz \
+ && wget -q https://netcologne.dl.sourceforge.net/project/filebot/filebot/FileBot_${FILEBOT_VER}/FileBot_${FILEBOT_VER}-portable.tar.xz \
  && tar xJf FileBot_${FILEBOT_VER}-portable.tar.xz && rm FileBot_${FILEBOT_VER}-portable.tar.xz \
  && cd /usr && git clone https://github.com/jfurrow/flood && cd flood \
  && npm install --production \
