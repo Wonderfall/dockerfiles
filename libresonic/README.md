@@ -1,12 +1,12 @@
-## wonderfall/subsonic
+## wonderfall/libresonic
 
-![](https://i.goopics.net/lr.png)
+![](https://i.goopics.net/LD38.png)
 
-#### What is Subsonic?
-Subsonic is an open-source web-based media streamer and jukebox. Supports MP3, OGG, AAC and other streamable audio and video formats. Indeed, this build comes with **transcoding abilities**.
+#### What is Libresonic?
+Libresonic is an open-source web-based media streamer and jukebox. Supports MP3, OGG, AAC and other streamable audio and video formats. Indeed, this build comes with **transcoding abilities**. More info here : https://libresonic.github.io/
 
 #### Build-time variables
-- **VERSION** : version of subsonic
+- **VERSION** : version of libresonic
 
 #### Environment variables
 - **GID** : subsonic group id.
