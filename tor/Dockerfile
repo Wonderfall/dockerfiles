@@ -1,6 +1,6 @@
-FROM alpine:3.5
+FROM alpine:edge
 
-ARG TOR_VERSION=0.2.9.8
+ARG TOR_VERSION=0.2.9.10
 ARG ARM_VERSION=1.4.5.0
 
 ARG GPG_Mathewson="2133 BC60 0AB1 33E1 D826  D173 FE43 009C 4607 B1FB"
@@ -17,7 +17,7 @@ RUN echo "@community https://nl.alpinelinux.org/alpine/v3.4/community" >> /etc/a
     build-base \
     gnupg \
     ca-certificates" \
- && apk -U add \
+ && apk -U upgrade && apk add \
     ${BUILD_DEPS} \
     su-exec \
     tini@community \
