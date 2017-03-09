@@ -71,7 +71,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
  && wget -q http://is1.php.net/get/php-7.1.2.tar.gz/from/this/mirror -O php7.1.tar.gz \
  && tar xzf php7.1.tar.gz && cd /tmp/php-7.1.2/ext/iconv && phpize7.1 \
  && ./configure --with-iconv=/usr/local --with-php-config=/usr/bin/php-config7.1 \
- && make && cp modules/iconv.so /usr/lib/php7.1/modules && cd /tmp \
+ && make && cp modules/iconv.so /usr/lib/php7.1 && cd /tmp \
  && echo "extension=iconv.so" > /etc/php7.1/conf.d/00_iconv.ini \
  && echo "extension=smbclient.so" > /etc/php7.1/conf.d/00_smbclient.ini \
  && echo "extension=redis.so" > /etc/php7.1/conf.d/redis.ini \
