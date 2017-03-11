@@ -7,10 +7,6 @@
 
 [![](https://images.microbadger.com/badges/version/wonderfall/nextcloud:11.0.svg)](https://microbadger.com/images/wonderfall/nextcloud:11.0 "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/wonderfall/nextcloud:11.0.svg)](https://microbadger.com/images/wonderfall/nextcloud:11.0 "Get your own image badge on microbadger.com")
 
-[![](https://images.microbadger.com/badges/version/wonderfall/nextcloud:10.0.svg)](https://microbadger.com/images/wonderfall/nextcloud:10.0 "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/wonderfall/nextcloud:10.0.svg)](https://microbadger.com/images/wonderfall/nextcloud:10.0 "Get your own image badge on microbadger.com")
-
-[![](https://images.microbadger.com/badges/version/wonderfall/nextcloud:9.0.svg)](https://microbadger.com/images/wonderfall/nextcloud:9.0 "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/wonderfall/nextcloud:9.0.svg)](https://microbadger.com/images/wonderfall/nextcloud:9.0 "Get your own image badge on microbadger.com")
-
 ![](https://s32.postimg.org/69nev7aol/Nextcloud_logo.png)
 
 **This image was made for my own use and I have no intention to make this official. Support won't be regular so if there's an update, or a fix, you can open a pull request. Any contribution is welcome, but please be aware I'm very busy currently. Before opening an issue, please check if there's already one related. Also please use Github instead of Docker Hub, otherwise I won't see your comments. Thanks.**
@@ -54,7 +50,7 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **TZ** : the system/log timezone *(default : Etc/UTC)*
 - **ADMIN_USER** : username of the admin account *(default : none, web configuration)*
 - **ADMIN_PASSWORD** : password of the admin account *(default : none, web configuration)*
-- **LOCALHOST** : domain to use during the setup *(default : localhost)*
+- **DOMAIN** : domain to use during the setup *(default : localhost)*
 - **DB_TYPE** : database type (sqlite3, mysql or pgsql) *(default : sqlite3)*
 - **DB_NAME** : name of database *(default : none)*
 - **DB_USER** : username for database *(default : none)*
