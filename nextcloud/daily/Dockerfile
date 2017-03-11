@@ -58,6 +58,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
     php7.1-posix@testing \
     php7.1-openssl@testing \
     php7.1-ldap@testing \
+    php7.1-imap@testing \
     php7.1-ftp@testing \
     php7.1-pcntl@testing \
     php7.1-exif@testing \
