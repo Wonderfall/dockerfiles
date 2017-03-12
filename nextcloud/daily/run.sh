@@ -10,8 +10,6 @@ sed -i -e "s/<UPLOAD_MAX_SIZE>/$UPLOAD_MAX_SIZE/g" /etc/nginx/nginx.conf /etc/ph
 ln -sf /config/config.php /nextcloud/config/config.php &>/dev/null
 ln -sf /apps2 /nextcloud &>/dev/null
 
-mv nextcloud fix && mv fix nextcloud # fix strange bug
-
 # Create folder for php sessions if not exists
 if [ ! -d /data/session ]; then
   mkdir -p /data/session;

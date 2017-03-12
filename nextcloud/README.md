@@ -20,7 +20,7 @@
 - OPCache (opcocde), APCu (local) installed and configured.
 - system cron task running.
 - MySQL, PostgreSQL (server not built-in) and sqlite3 support.
-- Redis, FTP, SMB, LDAP support.
+- Redis, FTP, SMB, LDAP, IMAP support.
 - GNU Libiconv for php iconv extension (avoiding errors with some apps).
 - No root processes. Never.
 - Environment variables provided (see below).
@@ -66,6 +66,7 @@ Don't forget to use a **strong password** for the admin account!
 - **/data** : Nextcloud data.
 - **/config** : config.php location.
 - **/apps2** : Nextcloud downloaded apps.
+- **/nextcloud/themes** : Nextcloud themes location.
 
 ### Database
 Basically, you can use a database instance running on the host or any other machine. An easier solution is to use an external database container. I suggest you to use MariaDB, which is a reliable database server. You can use the official `mariadb` image available on Docker Hub to create a database container, which must be linked to the Nextcloud container. PostgreSQL can also be used as well.
@@ -88,6 +89,7 @@ docker run -d --name nextcloud \
        -v /mnt/nextcloud/data:/data \
        -v /mnt/nextcloud/config:/config \
        -v /mnt/nextcloud/apps:/apps2 \
+       -v /mnt/nextcloud/themes:/nextcloud/themes \
        -e UID=1000 -e GID=1000 \
        -e UPLOAD_MAX_SIZE=10G \
        -e APC_SHM_SIZE=128M \
@@ -153,6 +155,7 @@ nextcloud:
     - /mnt/nextcloud/data:/data
     - /mnt/nextcloud/config:/config
     - /mnt/nextcloud/apps:/apps2
+    - /mnt/nextcloud/themes:/nextcloud/themes
 
 # If using MySQL
 nextcloud-db:
