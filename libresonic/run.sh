@@ -14,7 +14,6 @@ java -Xmx256m \
   -Dlibresonic.home=/data \
   -Dlibresonic.host=0.0.0.0 \
   -Dlibresonic.port=4040 \
-  -Dlibresonic.httpsPort=$HTTPSPORT \
   -Dlibresonic.contextPath=/ \
   -Dlibresonic.defaultMusicFolder=/musics \
   -Dlibresonic.defaultPodcastFolder=/podcasts \

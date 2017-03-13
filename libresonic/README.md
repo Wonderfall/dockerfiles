@@ -19,9 +19,24 @@ Libresonic is an open-source web-based media streamer and jukebox. Supports MP3,
 
 #### Port
 - 4040
-- $HTTS_PORT (example : 4050)
 
 #### Reverse proxy
 https://github.com/Wonderfall/dockerfiles/tree/master/reverse
 
 https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration
+
+Libresonic does not support SSL/TLS by itself. If you want to use Libresonic through https, this is what I'm using :
+
+```
+  location / {
+    proxy_pass http://libresonic:4040;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Server $host;
+    proxy_set_header X-Real-IP         $remote_addr;
+    proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header Host              $http_host;
+    proxy_max_temp_file_size           0;
+    proxy_redirect                     http:// https://;
+  }
+```

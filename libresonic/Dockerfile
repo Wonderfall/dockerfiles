@@ -2,8 +2,7 @@ FROM alpine:edge
 
 ARG VERSION=6.2.beta1
 
-ENV UID=991 GID=991 \
-    HTTPSPORT=0
+ENV UID=991 GID=991
 
 WORKDIR /libresonic
 
@@ -22,7 +21,7 @@ COPY run.sh /usr/local/bin/run.sh
 
 RUN chmod +x /usr/local/bin/run.sh
 
-EXPOSE 4040 4050
+EXPOSE 4040
 
 VOLUME /data /musics /playlists /podcasts
 
