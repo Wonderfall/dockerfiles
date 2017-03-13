@@ -34,6 +34,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     tini@commuedge \
     su-exec \
     nodejs \
+    nodejs-npm \
  && wget -q https://github.com/TryGhost/Ghost/releases/download/${GHOST_VERSION}/Ghost-${GHOST_VERSION}.zip -P /tmp \
  && unzip -q /tmp/Ghost-${GHOST_VERSION}.zip -d /ghost \
  && cd /ghost \
@@ -42,7 +43,6 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && mv config.example.js config.js \
  && sed -i 's/127.0.0.1/0.0.0.0/g' config.js \
  && npm cache clean \
- && apk del ca-certificates openssl \
  && rm -rf /tmp/* /var/cache/apk/*
 
 COPY run.sh /usr/local/bin/run.sh

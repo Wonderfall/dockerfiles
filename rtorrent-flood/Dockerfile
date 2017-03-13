@@ -41,6 +41,7 @@ RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
     su-exec \
     python \
     nodejs \
+    nodejs-npm \
  && apk add -X http://dl-cdn.alpinelinux.org/alpine/v3.4/community -U openjdk8-jre==8.111.14-r0 openjdk8-jre-base==8.111.14-r0 openjdk8-jre-lib==8.111.14-r0 \
  && cd /tmp && mkdir libtorrent rtorrent \
  && cd libtorrent && wget -qO- https://github.com/rakshasa/libtorrent/archive/${LIBTORRENT_VER}.tar.gz | tar xz --strip 1 \
