@@ -67,7 +67,7 @@ echo "Starting automatic configuration..."
 # Execute ownCloud's setup step, which creates the ownCloud database.
 # It also wipes it if it exists. And it updates config.php with database
 # settings and deletes the autoconfig.php file.
-(cd /nextcloud; php7.1 index.php &>/dev/null)
+(cd /nextcloud; php7 index.php &>/dev/null)
 echo "Automatic configuration finished."
 
 # Update config.php.
@@ -81,7 +81,7 @@ echo "Automatic configuration finished."
 # Use PHP to read the settings file, modify it, and write out the new settings array.
 
 CONFIG_TEMP=$(/bin/mktemp)
-php7.1 <<EOF > $CONFIG_TEMP && mv $CONFIG_TEMP $CONFIGFILE
+php7 <<EOF > $CONFIG_TEMP && mv $CONFIG_TEMP $CONFIGFILE
 <?php
 include("/config/config.php");
 
