@@ -15,7 +15,6 @@ ENV UID=991 GID=991 \
     DOMAIN=localhost
 
 RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
- && echo "@stable https://nl.alpinelinux.org/alpine/latest-stable/main" >> /etc/apk/repositories \
  && BUILD_DEPS=" \
     gnupg \
     tar \
@@ -27,7 +26,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
     samba-dev" \
  && apk -U upgrade && apk add \
     ${BUILD_DEPS} \
-    nginx@stable \
+    nginx \
     s6 \
     libressl \
     ca-certificates \
