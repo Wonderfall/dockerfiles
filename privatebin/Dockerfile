@@ -9,11 +9,11 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
     nginx \
     s6 \
     su-exec \
-    php7.1-fpm@testing \
-    php7.1-gd@testing \
-    php7.1-mcrypt@testing \
-    php7.1-json@testing \
-    php7.1-zlib@testing \
+    php7-fpm@testing \
+    php7-gd@testing \
+    php7-mcrypt@testing \
+    php7-json@testing \
+    php7-zlib@testing \
  && mkdir zerobin && cd zerobin \
  && wget -qO- https://github.com/PrivateBin/PrivateBin/archive/master.tar.gz | tar xz --strip 1 \
  && mv cfg/conf.ini.sample cfg/conf.ini \
@@ -21,7 +21,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
  && rm -f /var/cache/apk/*
 
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY php-fpm.conf /etc/php7.1/php-fpm.conf
+COPY php-fpm.conf /etc/php7/php-fpm.conf
 COPY run.sh /usr/local/bin/run.sh
 COPY s6.d /etc/s6.d
 
