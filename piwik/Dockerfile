@@ -34,6 +34,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
     php7-dom@testing \
     php7-openssl@testing \
     php7-mysqli@testing \
+    php7-mysqlnd@testing \
     php7-pdo_mysql@testing \
     php7-dev@testing \
     php7-pear@testing \
