@@ -35,3 +35,6 @@
 #### Volumes
 - **/data** : your downloaded torrents, session files, symlinks...
 - **/flood-db** : Flood databases.
+
+#### Optional
+- To customize rtorrent settings, provide your own `.rtorrent.rc` file and mount to **/home/torrent/.rtorrent.rc** in the container.
