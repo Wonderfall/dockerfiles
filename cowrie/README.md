@@ -1,4 +1,4 @@
-## wonderfall/cowrie
+x## wonderfall/cowrie
 
 #### What is this?
 Cowrie is a medium interaction SSH honeypot designed to log brute force attacks and the shell interaction performed by the attacker. Cowrie is based on Kippo.
@@ -10,15 +10,18 @@ Cowrie is a medium interaction SSH honeypot designed to log brute force attacks 
 - **SHA_** : fingerprints of tarballs
 
 #### Environment variables
-- **HOSTNAME** : the hostname displayed in the honeypot. 
-- **DL_LIMIT** : the maximum size (in bytes!) of a stored downloaded file (0 = no limit). 
-- **FACING_IP** : your IP (you have to set it manually because cowrie fails to detect it when running in Docker). 
-- **JSON_LOG** : disables json logging if set to False.
+- **UID** *(default : 991)*
+- **GID** *(default : 991)*
+
+#### How to configure
+You should provide your own configuration file from this base : https://raw.githubusercontent.com/micheloosterhof/cowrie/master/cowrie.cfg.dist
+You can mount this single file to your Docker container.
 
 #### Volumes
 - **/cowrie/dl** : where downloads are stored.
 - **/cowrie/log** : cowrie and tty sessions logs.
-- **/cowrie/custom** : feel free to customize cowrie structure.
+- **/cowrie/cowrie.cfg** : cowrie configuration file. **Provide yours!**
+- **/custom** : customize cowrie structure with your own files
 
 #### Docker compose (example)
 ```
@@ -27,13 +30,11 @@ cowrie:
   ports:
     - "2222:2222"
   volumes:
-    - /mnt/cowrie/dl:/dl
-    - /mnt/cowrie/log:/log
+    - /mnt/cowrie/dl:/cowrie/dl
+    - /mnt/cowrie/log:/cowrie/log
+    - /mnt/cowrie/custom:/custom
+    - /mnt/cowrie/cowrie.cfg:/cowrie/cowrie.cfg
   environment:
-    - HOSTNAME=foobar
-    - DL_LIMIT=2048
-    - FACING_IP=9.9.9.9
-    - JSON_LOG=False
     - GID=1000
     - UID=1000
 ```

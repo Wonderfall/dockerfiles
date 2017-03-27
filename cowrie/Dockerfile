@@ -7,12 +7,7 @@ ARG GPG_MPFR="07F3 DBBE CC1A 3960 5078  094D 980C 1976 98C3 739D"
 ARG GPG_MPC="AD17 A21E F8AE D8F1 CC02  DBD9 F7D5 C9BF 765C 61E3"
 ARG SHA1_MPC="b8be66396c726fdc36ebb0f692ed8a8cca3bcc66"
 
-ENV UID=1000 \
-    GID=1000 \
-    HOSTNAME=svr04 \
-    DL_LIMIT=10485760 \
-    FACING_IP=9.9.9.9 \
-    JSON_LOG=False
+ENV UID=991 GID=991
 
 RUN BUILD_DEPS=" \
     build-base \
@@ -70,7 +65,7 @@ COPY run.sh /usr/local/bin/run.sh
 
 RUN chmod +x /usr/local/bin/run.sh
 
-VOLUME /cowrie/log /cowrie/dl /cowrie/custom
+VOLUME /cowrie/log /cowrie/dl /custom
 
 EXPOSE 2222
 
