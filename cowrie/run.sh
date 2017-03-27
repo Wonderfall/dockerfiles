@@ -15,4 +15,7 @@ mkdir -p /cowrie/log/tty
 cp -R /cowrie/custom/* /cowrie
 chown -R $UID:$GID /cowrie
 
+COWRIEDIR=$(dirname $0)
+export PYTHONPATH=${PYTHONPATH}:${COWRIEDIR}
+
 exec su-exec $UID:$GID /sbin/tini -- twistd -n -l /cowrie/log/cowrie.log cowrie
