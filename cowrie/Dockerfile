@@ -16,6 +16,7 @@ RUN BUILD_DEPS=" \
     libressl-dev \
     python-dev \
     gmp-dev \
+    mariadb-dev \
     py2-pip \
     tar \
     gnupg" \
@@ -27,6 +28,7 @@ RUN BUILD_DEPS=" \
     python \
     py-setuptools \
     openssh-client \
+    mariadb-client-libs \
     tini \
     su-exec \
  && cd /tmp && wget -q http://www.mpfr.org/mpfr-current/mpfr-${MPFR_VERSION}.tar.gz \
@@ -57,6 +59,7 @@ RUN BUILD_DEPS=" \
  && mkdir /cowrie && cd /cowrie \
  && wget -qO- https://github.com/micheloosterhof/cowrie/archive/master.tar.gz | tar xz --strip 1 \
  && pip install --no-cache -r requirements.txt \
+ && pip install --no-cache mysql-python \
  && mv cowrie.cfg.dist cowrie.cfg \
  && apk del ${BUILD_DEPS} \
  && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg

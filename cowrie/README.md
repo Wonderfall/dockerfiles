@@ -1,4 +1,4 @@
-x## wonderfall/cowrie
+### wonderfall/cowrie
 
 #### What is this?
 Cowrie is a medium interaction SSH honeypot designed to log brute force attacks and the shell interaction performed by the attacker. Cowrie is based on Kippo.
@@ -27,6 +27,8 @@ You can mount this single file to your Docker container.
 ```
 cowrie:
   image: wonderfall/cowrie
+  links:                           ### MySQL output
+    - cowrie-db:cowrie-db          ### MySQL output
   ports:
     - "2222:2222"
   volumes:
@@ -37,5 +39,21 @@ cowrie:
   environment:
     - GID=1000
     - UID=1000
+
+### MySQL output
+# First, you'll have to initialise tables with a .sql file
+# wget https://github.com/micheloosterhof/cowrie/blob/master/doc/sql/mysql.sql -P /mnt/cowrie/schema.sql
+# It needs also to be configured in the cowrie.cfg file
+
+cowrie-db:
+  image: mariadb:10
+  volumes:
+    - /mnt/cowrie/db:/var/lib/mysql
+    - /mnt/cowrie/schema.sql:/docker-entrypoint-initdb.d
+  environment:
+    - MYSQL_ROOT_PASSWORD=supersecretpassword
+    - MYSQL_DATABASE=nextcloud
+    - MYSQL_USER=nextcloud
+    - MYSQL_PASSWORD=supersecretpassword
 ```
 
