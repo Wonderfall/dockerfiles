@@ -1,4 +1,6 @@
-### wonderfall/cowrie
+### wonderfall/kippo-graph
+
+![kippo-graph](https://github.com/ikoniaris/kippo-graph/blob/master/images/kippo-graph-img.png)
 
 #### What is this?
 Kippo-Graph is a full featured script to visualize statistics for a Kippo based SSH honeypot.
