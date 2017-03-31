@@ -75,7 +75,7 @@ Basically, you can use a database instance running on the host or any other mach
 ### Setup
 Pull the image and create a container. `/mnt` can be anywhere on your host, this is just an example. Change `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD` values (mariadb). You may also want to change UID and GID for Nextcloud, as well as other variables (see *Environment Variables*).
 
-````
+```
 docker pull wonderfall/nextcloud:10.0 && docker pull mariadb:10
 
 docker run -d --name db_nextcloud \
