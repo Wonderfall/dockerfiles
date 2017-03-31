@@ -42,18 +42,19 @@ cowrie:
 
 ### MySQL output
 # First, you'll have to initialise tables with a .sql file
-# wget https://github.com/micheloosterhof/cowrie/blob/master/doc/sql/mysql.sql -P /mnt/cowrie/schema.sql
+# mkdir -p /mnt/cowrie/sql
+# wget https://raw.githubusercontent.com/micheloosterhof/cowrie/master/doc/sql/mysql.sql -P /mnt/cowrie/sql/cowrie.sql
 # It needs also to be configured in the cowrie.cfg file
 
 cowrie-db:
   image: mariadb:10
   volumes:
     - /mnt/cowrie/db:/var/lib/mysql
-    - /mnt/cowrie/schema.sql:/docker-entrypoint-initdb.d
+    - /mnt/cowrie/sql:/docker-entrypoint-initdb.d
   environment:
     - MYSQL_ROOT_PASSWORD=supersecretpassword
-    - MYSQL_DATABASE=nextcloud
-    - MYSQL_USER=nextcloud
+    - MYSQL_DATABASE=cowrie
+    - MYSQL_USER=cowrie
     - MYSQL_PASSWORD=supersecretpassword
 ```
 
