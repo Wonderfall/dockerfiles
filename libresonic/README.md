@@ -1,6 +1,6 @@
 ## wonderfall/libresonic
 
-![](https://i.goopics.net/LD38.png)
+![](https://img.targaryen.house/wMkrBCxj/Fv8JINdd.png)
 
 #### What is Libresonic?
 Libresonic is an open-source web-based media streamer and jukebox. Supports MP3, OGG, AAC and other streamable audio and video formats. Indeed, this build comes with **transcoding abilities**. More info here : https://libresonic.github.io/
