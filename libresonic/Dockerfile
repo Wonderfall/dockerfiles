@@ -1,6 +1,6 @@
 FROM alpine:edge
 
-ARG VERSION=6.2.beta2
+ARG VERSION=6.2.beta3
 
 ENV UID=991 GID=991
 
