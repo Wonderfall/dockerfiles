@@ -1,3 +1,7 @@
+It is highly recommended to NOT expose the web GUI directly on the internet.
+Use a reverse proxy to communicate securely via HTTPS (e.g. nginx). 
+Remove this message to enable using this file.
+
 version: '2'
 services:
   plex:
