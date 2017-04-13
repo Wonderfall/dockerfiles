@@ -38,3 +38,9 @@
 
 #### Optional
 - To customize rtorrent settings, provide your own `.rtorrent.rc` file and mount to **/home/torrent/.rtorrent.rc** in the container.
+
+#### Troubleshooting
+- If magnet links won't even start downloading, try setting the following in your `.rtorrent.rc` config file: 
+```
+encryption = allow_incoming,try_outgoing,enable_retry
+```
