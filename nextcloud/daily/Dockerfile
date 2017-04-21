@@ -15,6 +15,7 @@ ENV UID=991 GID=991 \
     DOMAIN=localhost
 
 RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+ && echo "@edge https://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
  && BUILD_DEPS=" \
     gnupg \
     tar \
@@ -28,7 +29,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
     ${BUILD_DEPS} \
     nginx \
     s6 \
-    libressl \
+    libressl@edge \
     ca-certificates \
     libsmbclient \
     samba-client \
