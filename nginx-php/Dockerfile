@@ -2,8 +2,7 @@ FROM alpine:3.5
 
 ARG BUILD_CORES
 
-ARG NGINX_VER=1.11.13
-ARG NGINX_GPG="B0F4253373F8F6F510D42178520A9993A1C052F8"
+ARG NGINX_VER=1.13.0
 
 ARG NGINX_CONF=" \
     --prefix=/nginx \
@@ -24,14 +23,6 @@ ARG NGINX_CONF=" \
 ARG PHP_VER=7.1.4
 ARG PHP_MIRROR=http://ch1.php.net
 
-ARG PHP_GPG=" \
-    A917B1ECDA84AEC2B568FED6F50ABC807BD5DCD0 \
-    528995BFEDFBA7191D46839EF9BA0ADA31CBD89E \
-    1A4E8B7277C42E53DBA9C7B9BCAA30EA9C0D5763 \
-    6E4F6AB321FDC07F2C332E3AC2BF0BC433CFC8B3 \
-    0BD78B5F97500D450838F95DFE857D9A90D90EC1 \
-    0B96609E270F565C13292B24C13C70B87267B52D"
-
 ARG LIBICONV_VERSION=1.15
 
 ARG PHP_CONF=" \
@@ -44,11 +35,57 @@ ARG PHP_CONF=" \
     --with-curl \
     --with-libedit \
     --with-openssl \
-    --with-iconv \
-    --with-iconv-dir=/usr/local \
+    --with-iconv=/usr/local \
     --with-zlib"
 
-ENV PHP_MEMORY_LIMIT=512M \
+ARG PHP_EXT_LIST=" \
+    gd \
+    mysqli \
+    ctype \
+    dom \
+    json \
+    xml \
+    mbstring \
+    posix \
+    xmlwriter \
+    zip \
+    zlib \
+    sqlite3 \
+    pdo_sqlite \
+    pdo_pgsql \
+    pdo_mysql \
+    pcntl \
+    curl \
+    fileinfo \
+    bz2 \
+    intl \
+    mcrypt \
+    openssl \
+    ldap \
+    simplexml \
+    pgsql \
+    ftp \
+    exif \
+    gmp"
+
+ARG CUSTOM_BUILD_PKGS=" \
+    freetype-dev \
+    openldap-dev \
+    gmp-dev \
+    libmcrypt-dev \
+    icu-dev \
+    postgresql-dev"
+
+ARG CUSTOM_PKGS=" \
+    freetype \
+    openldap \
+    gmp \
+    libmcrypt \
+    libbz2 \
+    icu \
+    libpq"
+
+ENV MEMORY_LIMIT=512M \
     UPLOAD_MAX_SIZE=1G
 
 COPY rootfs /
@@ -57,23 +94,26 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
 
 ### Packages installation
  && BUILD_DEPS=" \
+    linux-headers \
+    libtool \
     build-base \
     pcre-dev \
     zlib-dev \
     wget \
     gnupg \
     autoconf \
-    g++ \
     gcc \
+    g++ \
     libc-dev \
     make \
     pkgconf \
-    url-dev \
+    curl-dev \
     libedit-dev \
-    ibxml2-dev \
+    libxml2-dev \
     libressl-dev \
     sqlite-dev \
-    ca-certificates" \
+    ca-certificates \
+   ${CUSTOM_BUILD_PKGS}" \
  && apk -U add \
     ${BUILD_DEPS} \
     s6 \
@@ -86,6 +126,7 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     zlib \
     s6 \
     su-exec \
+    ${CUSTOM_PKGS} \
 
 ### Source downloading
  && wget http://nginx.org/download/nginx-${NGINX_VER}.tar.gz -O /tmp/nginx-${NGINX_VER}.tar.gz \
@@ -93,10 +134,6 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && wget ${PHP_MIRROR}/get/php-${PHP_VER}.tar.gz/from/this/mirror -O /tmp/php-${PHP_VER}.tar.gz \
  && wget ${PHP_MIRROR}/get/php-${PHP_VER}.tar.gz.asc/from/this/mirror -O /tmp/php-${PHP_VER}.tar.gz.asc \
  && wget http://ftp.gnu.org/pub/gnu/libiconv/libiconv-${LIBICONV_VERSION}.tar.gz -O /tmp/libiconv-${LIBICONV_VERSION}.tar.gz \
- && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$NGINX_GPG" \
- && gpg --batch --verify /tmp/nginx-${NGINX_VER}.tar.gz.asc /tmp/nginx-${NGINX_VER}.tar.gz \
- && gpg --keyserver pgp.mit.edu --recv-keys "$PHP_GPG" \
- && gpg --batch --verify /tmp/php-${PHP_VER}.tar.gz.asc /tmp/php-${PHP_VER}.tar.gz \
  && mkdir -p /php/conf.d \
  && mkdir -p /usr/src \
  && tar xzf /tmp/nginx-${NGINX_VER}.tar.gz -C /usr/src \
@@ -105,12 +142,12 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
 
 ### nginx installation
  && cd /usr/src/nginx-${NGINX_VER} \
- && ./configure ${NGINX_CONF} \            
+ && ./configure --with-cc-opt="-O3 -fPIE -fstack-protector-strong" ${NGINX_CONF} \
  && make -j ${NB_CORES} \
  && make install \
 
 ### GNU Libiconv installation
- && cd /usr/src/ibiconv-${LIBICONV_VERSION} \
+ && cd /usr/src/libiconv-${LIBICONV_VERSION} \
  && ./configure --prefix=/usr/local \
  && make && make install && libtool --finish /usr/local/lib \
 
@@ -121,9 +158,11 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && make -j ${NB_CORES} \
  && make install \
 
-### Strip & clean
+### Strip, clean, install modules
  && { find /usr/local/bin /usr/local/sbin -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
  && make clean \
  && chmod u+x /usr/local/bin/* /etc/s6.d/*/* \
+ && docker-php-ext-install ${PHP_EXT_LIST} \
  && apk del ${BUILD_DEPS} \
- && rm -rf /tmp/* /var/cache/apk/* /usr/src/*
+ && rm -rf /tmp/* /var/cache/apk/* /usr/src/* \
+ && mkdir -p /nginx/logs /nginx/run /php/php-fpm.d /php/logs /php/run
