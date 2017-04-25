@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.5
 
 ARG VERSION=6.2.beta3
 
@@ -6,7 +6,7 @@ ENV UID=991 GID=991
 
 WORKDIR /libresonic
 
-RUN echo "@community https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@community https://nl.alpinelinux.org/alpine/v3.5/community" >> /etc/apk/repositories \
  && apk -U upgrade && apk add \
     ffmpeg \
     su-exec \

@@ -1,19 +1,19 @@
-FROM alpine:edge
+FROM alpine:3.5
 
 ENV GID=991 UID=991
 
-RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+RUN echo " https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && BUILD_DEPS="tar libressl ca-certificates" \
  && apk -U upgrade && apk add \
     $BUILD_DEPS \
     nginx \
     s6 \
     su-exec \
-    php7-fpm@testing \
-    php7-gd@testing \
-    php7-mcrypt@testing \
-    php7-json@testing \
-    php7-zlib@testing \
+    php7-fpm \
+    php7-gd \
+    php7-mcrypt \
+    php7-json \
+    php7-zlib \
  && mkdir zerobin && cd zerobin \
  && wget -qO- https://github.com/PrivateBin/PrivateBin/archive/master.tar.gz | tar xz --strip 1 \
  && mv cfg/conf.ini.sample cfg/conf.ini \

@@ -1,9 +1,10 @@
-FROM alpine:edge
+FROM alpine:3.5
 
 ARG RTORRENT_VER=0.9.6
 ARG LIBTORRENT_VER=0.13.6
 ARG MEDIAINFO_VER=0.7.94
 ARG FILEBOT_VER=4.7.9
+ARG FLOOD_VER=1.0.0
 ARG BUILD_CORES
 
 ENV UID=991 GID=991 \
@@ -42,7 +43,6 @@ RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
     su-exec \
     python \
     nodejs \
-    nodejs-npm \
  && apk add -X http://dl-cdn.alpinelinux.org/alpine/v3.4/community -U openjdk8-jre==8.111.14-r0 openjdk8-jre-base==8.111.14-r0 openjdk8-jre-lib==8.111.14-r0 \
  && cd /tmp && mkdir libtorrent rtorrent \
  && cd libtorrent && wget -qO- https://github.com/rakshasa/libtorrent/archive/${LIBTORRENT_VER}.tar.gz | tar xz --strip 1 \
@@ -70,7 +70,7 @@ RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && mkdir /filebot && cd /filebot \
  && wget -q https://netcologne.dl.sourceforge.net/project/filebot/filebot/FileBot_${FILEBOT_VER}/FileBot_${FILEBOT_VER}-portable.tar.xz \
  && tar xJf FileBot_${FILEBOT_VER}-portable.tar.xz && rm FileBot_${FILEBOT_VER}-portable.tar.xz \
- && cd /usr && git clone https://github.com/jfurrow/flood && cd flood \
+ && mkdir /usr/flood && cd /usr/flood && wget -qO- https://github.com/jfurrow/flood/archive/v${FLOOD_VER}.tar.gz | tar xz --strip 1 \
  && npm install --production \
  && apk del ${BUILD_DEPS} \
  && rm -rf /var/cache/apk/* /tmp/*

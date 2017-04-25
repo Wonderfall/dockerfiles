@@ -1,6 +1,6 @@
-FROM alpine:edge
+FROM alpine:3.5
 
-ARG GHOST_VERSION=0.11.7
+ARG GHOST_VERSION=0.11.8
 
 ENV GHOST_NODE_VERSION_CHECK=false \
     GID=991 \
@@ -34,7 +34,6 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     tini@commuedge \
     su-exec \
     nodejs \
-    nodejs-npm \
  && wget -q https://github.com/TryGhost/Ghost/releases/download/${GHOST_VERSION}/Ghost-${GHOST_VERSION}.zip -P /tmp \
  && unzip -q /tmp/Ghost-${GHOST_VERSION}.zip -d /ghost \
  && cd /ghost \

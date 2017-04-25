@@ -1,7 +1,7 @@
-FROM alpine:edge
+FROM alpine:3.5
 
 ARG GNU_LIBICONV_VERSION=1.15
-ARG PHP_SOURCES_VERSION=7.1.3
+ARG PHP_SOURCES_VERSION=7.0.18
 
 ENV UID=991 GID=991 \
     UPLOAD_MAX_SIZE=10G \
@@ -14,7 +14,7 @@ ENV UID=991 GID=991 \
     DB_TYPE=sqlite3 \
     DOMAIN=localhost
 
-RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+RUN echo " https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && BUILD_DEPS=" \
     gnupg \
     tar \
@@ -34,40 +34,40 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
     samba-client \
     su-exec \
     tzdata \
-    php7@testing \
-    php7-fpm@testing \
-    php7-intl@testing \
-    php7-mbstring@testing \
-    php7-curl@testing \
-    php7-gd@testing \
-    php7-fileinfo@testing \
-    php7-mcrypt@testing \
-    php7-opcache@testing \
-    php7-json@testing \
-    php7-session@testing \
-    php7-pdo@testing \
-    php7-dom@testing \
-    php7-ctype@testing \
-    php7-mysqlnd@testing \
-    php7-pdo_mysql@testing \
-    php7-pdo_pgsql@testing \
-    php7-pgsql@testing \
-    php7-pdo_sqlite@testing \
-    php7-sqlite3@testing \
-    php7-zlib@testing \
-    php7-zip@testing \
-    php7-xmlreader@testing \
-    php7-xml@testing \
-    php7-xmlwriter@testing \
-    php7-posix@testing \
-    php7-openssl@testing \
-    php7-ldap@testing \
-    php7-imap@testing \
-    php7-ftp@testing \
-    php7-pcntl@testing \
-    php7-exif@testing \
-    php7-pear@testing \
-    php7-dev@testing \
+    php7 \
+    php7-fpm \
+    php7-intl \
+    php7-mbstring \
+    php7-curl \
+    php7-gd \
+    php7-fileinfo \
+    php7-mcrypt \
+    php7-opcache \
+    php7-json \
+    php7-session \
+    php7-pdo \
+    php7-dom \
+    php7-ctype \
+    php7-mysqlnd \
+    php7-pdo_mysql \
+    php7-pdo_pgsql \
+    php7-pgsql \
+    php7-pdo_sqlite \
+    php7-sqlite3 \
+    php7-zlib \
+    php7-zip \
+    php7-xmlreader \
+    php7-xml \
+    php7-xmlwriter \
+    php7-posix \
+    php7-openssl \
+    php7-ldap \
+    php7-imap \
+    php7-ftp \
+    php7-pcntl \
+    php7-exif \
+    php7-pear \
+    php7-dev \
  && pecl install smbclient apcu redis \
  && cd /tmp && wget -q http://ftp.gnu.org/pub/gnu/libiconv/libiconv-${GNU_LIBICONV_VERSION}.tar.gz \
  && tar xzf libiconv-${GNU_LIBICONV_VERSION}.tar.gz && cd libiconv-${GNU_LIBICONV_VERSION} \
@@ -76,7 +76,7 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
  && wget -q http://is1.php.net/get/php-${PHP_SOURCES_VERSION}.tar.gz/from/this/mirror -O php7.tar.gz \
  && tar xzf php7.tar.gz && cd /tmp/php-${PHP_SOURCES_VERSION}/ext/iconv && phpize7 \
  && ./configure --with-iconv=/usr/local --with-php-config=/usr/bin/php-config7 \
- && make && cp modules/iconv.so /usr/lib/php7 && cd /tmp \
+ && make && cp modules/iconv.so /usr/lib/php7/modules && cd /tmp \
  && echo "extension=iconv.so" > /etc/php7/conf.d/00_iconv.ini \
  && echo "extension=smbclient.so" > /etc/php7/conf.d/00_smbclient.ini \
  && echo "extension=redis.so" > /etc/php7/conf.d/redis.ini \

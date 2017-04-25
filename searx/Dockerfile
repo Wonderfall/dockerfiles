@@ -1,9 +1,9 @@
-FROM alpine:edge
+FROM alpine:3.5
 
 ENV BASE_URL=False IMAGE_PROXY=False \
     UID=991 GID=991
 
-RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+RUN echo "@community https://nl.alpinelinux.org/alpine/v3.5/community" >> /etc/apk/repositories \
  && BUILD_DEPS=" \
     build-base \
     python-dev \
@@ -20,7 +20,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
     libxml2 \
     libxslt \
     openssl \
-    tini@commuedge \
+    tini@community \
     py2-pip \
  && pip install --no-cache -r https://raw.githubusercontent.com/asciimoo/searx/master/requirements.txt \
  && mkdir /usr/local/searx && cd /usr/local/searx \

@@ -1,12 +1,11 @@
-FROM alpine:edge
+FROM alpine:3.5
 
 ARG VERSION=3.0.3
 ARG GPG_matthieu="814E 346F A01A 20DB B04B  6807 B5DB D592 5590 A237"
 
 ENV UID=991 GID=991
 
-RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
- && BUILD_DEPS=" \
+RUN BUILD_DEPS=" \
     git \
     tar \
     build-base \
@@ -22,23 +21,23 @@ RUN echo "@testing https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/r
     su-exec \
     geoip \
     tzdata \
-    php7-fpm@testing \
-    php7-gd@testing \
-    php7-curl@testing \
-    php7-session@testing \
-    php7-json@testing \
-    php7-ctype@testing \
-    php7-mbstring@testing \
-    php7-iconv@testing \
-    php7-zlib@testing \
-    php7-dom@testing \
-    php7-openssl@testing \
-    php7-mysqli@testing \
-    php7-mysqlnd@testing \
-    php7-pdo@testing \
-    php7-pdo_mysql@testing \
-    php7-dev@testing \
-    php7-pear@testing \
+    php7-fpm \
+    php7-gd \
+    php7-curl \
+    php7-session \
+    php7-json \
+    php7-ctype \
+    php7-mbstring \
+    php7-iconv \
+    php7-zlib \
+    php7-dom \
+    php7-openssl \
+    php7-mysqli \
+    php7-mysqlnd \
+    php7-pdo \
+    php7-pdo_mysql \
+    php7-dev \
+    php7-pear \
  && sed -i "$ s|\-n||g" /usr/bin/pecl && pecl install geoip-1.1.1 \
  && echo 'extension=geoip.so' >> /etc/php7/conf.d/00_geoip.ini \
  && echo 'geoip.custom_directory=/piwik/misc' >> /etc/php7/php.ini \
