@@ -1,0 +1,4 @@
+#!/bin/sh
+mkdir -p /nginx/logs /nginx/run
+chown -R $UID:$GID /nginx
+sed -i 's/<UPLOAD_MAX_SIZE>/$UPLOAD_MAX_SIZE/g' /nginx/conf/nginx.conf

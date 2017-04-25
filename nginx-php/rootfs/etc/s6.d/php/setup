@@ -1,0 +1,8 @@
+#!/bin/sh
+mkdir -p /php/php-fpm.d /php/logs /php/run
+
+sed -i -e 's/<UPLOAD_MAX_SIZE>/$UPLOAD_MAX_SIZE' \
+       -e 's/<MEMORY_LIMIT>/$PHP_MEMORY_LIMIT' \
+       /usr/local/etc/php-fpm.conf
+
+chown -R $UID:GID /php /usr/local/etc/php-fpm.conf

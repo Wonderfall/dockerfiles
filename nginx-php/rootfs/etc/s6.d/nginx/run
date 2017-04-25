@@ -1,0 +1,6 @@
+#!/bin/sh
+if test -f ./setup; then
+    source ./setup
+fi
+
+exec nginx
