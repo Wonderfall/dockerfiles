@@ -183,4 +183,4 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && docker-php-ext-install ${PHP_EXT_LIST} \
  && apk del ${BUILD_DEPS} \
  && rm -rf /tmp/* /var/cache/apk/* /usr/src/* \
- && mkdir -p /nginx/logs /nginx/run /php/php-fpm.d /php/logs /php/run
+ && mkdir -p /nginx/logs /nginx/run /php/php-fpm.d /php/logs /php/run /php/session
