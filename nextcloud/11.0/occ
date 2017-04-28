@@ -1,2 +1,0 @@
-#!/bin/sh
-su-exec $UID:$GID php7 -d memory_limit=<MEMORY_LIMIT> -f /nextcloud/occ $@
