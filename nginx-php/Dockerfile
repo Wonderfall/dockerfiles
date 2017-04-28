@@ -3,6 +3,10 @@ FROM alpine:3.5
 ARG BUILD_CORES
 
 ARG NGINX_VER=1.13.0
+ARG PHP_VER=7.1.4
+ARG LIBICONV_VERSION=1.15
+
+ARG PHP_MIRROR=http://ch1.php.net
 
 ARG NGINX_CONF=" \
     --prefix=/nginx \
@@ -20,15 +24,20 @@ ARG NGINX_CONF=" \
     --without-http_empty_gif_module \
     --without-http_browser_module"
 
-ARG PHP_VER=7.1.4
-ARG PHP_MIRROR=http://ch1.php.net
-
-ARG LIBICONV_VERSION=1.15
-
 ARG PHP_CONF=" \
+    --prefix=/usr \
+    --libdir=/usr/lib/php \
+    --datadir=/usr/share/php \
+    --sysconfdir=/php/etc \
+    --localstatedir=/php/var \
+    --with-pear=/usr/share/php \
+    --with-config-file-scan-dir=/php/conf.d \
+    --with-config-file-path=/php \
+    --with-pic \
+    --disable-short-tags \
+    --without-readline \
+    --enable-bcmath=shared \
     --enable-fpm \
-    --with-config-file-path="/php" \
-    --with-config-file-scan-dir="/php/conf.d" \
     --disable-cgi \
     --enable-mysqlnd \
     --enable-mbstring \
@@ -36,10 +45,17 @@ ARG PHP_CONF=" \
     --with-libedit \
     --with-openssl \
     --with-iconv=/usr/local \
+    --with-gd \
+    --with-jpeg-dir \
+    --with-png-dir \
+    --with-webp-dir \
+    --with-xpm-dir=no \
+    --with-freetype-dir \
+    --enable-gd-native-ttf \
+    --disable-gd-jis-conv \
     --with-zlib"
 
 ARG PHP_EXT_LIST=" \
-    gd \
     mysqli \
     ctype \
     dom \
@@ -74,7 +90,16 @@ ARG CUSTOM_BUILD_PKGS=" \
     gmp-dev \
     libmcrypt-dev \
     icu-dev \
-    postgresql-dev"
+    postgresql-dev \
+    libpng-dev \
+    libwebp-dev \
+    gd-dev \
+    libjpeg-turbo-dev \
+    libxpm-dev \
+    libedit-dev \
+    libxml2-dev \
+    libressl-dev \
+    sqlite-dev"
 
 ARG CUSTOM_PKGS=" \
     freetype \
@@ -84,9 +109,6 @@ ARG CUSTOM_PKGS=" \
     libbz2 \
     icu \
     libpq"
-
-ENV MEMORY_LIMIT=512M \
-    UPLOAD_MAX_SIZE=1G
 
 COPY rootfs /
 
@@ -108,12 +130,8 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     make \
     pkgconf \
     curl-dev \
-    libedit-dev \
-    libxml2-dev \
-    libressl-dev \
-    sqlite-dev \
     ca-certificates \
-   ${CUSTOM_BUILD_PKGS}" \
+    ${CUSTOM_BUILD_PKGS}" \
  && apk -U add \
     ${BUILD_DEPS} \
     s6 \
@@ -122,10 +140,10 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     libedit \
     libxml2 \
     libressl \
+    libwebp \
+    gd \
     pcre \
     zlib \
-    s6 \
-    su-exec \
     ${CUSTOM_PKGS} \
 
 ### Source downloading
@@ -154,7 +172,7 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
 ### PHP installation
  && mv /usr/src/php-${PHP_VER} /usr/src/php \
  && cd /usr/src/php \
- && ./configure ${PHP_CONF} \
+ && ./configure CFLAGS="-O3 -fstack-protector-strong" ${PHP_CONF} \
  && make -j ${NB_CORES} \
  && make install \
 
