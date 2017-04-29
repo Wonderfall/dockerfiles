@@ -1,36 +1,30 @@
-FROM alpine:3.5
+FROM wonderfall/nginx-php
 
-ENV GID=991 UID=991
+ARG PRIVATEBIN_VER=1.1
+
+ENV GID=991 UID=991 \
+    UPLOAD_MAX_SIZE=10M \
+    MEMORY_LIMIT=128M
 
 RUN echo " https://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && BUILD_DEPS="tar libressl ca-certificates" \
- && apk -U upgrade && apk add \
-    $BUILD_DEPS \
-    nginx \
-    s6 \
-    su-exec \
-    php7-fpm \
-    php7-gd \
-    php7-mcrypt \
-    php7-json \
-    php7-zlib \
- && mkdir zerobin && cd zerobin \
- && wget -qO- https://github.com/PrivateBin/PrivateBin/archive/master.tar.gz | tar xz --strip 1 \
+ && apk -U upgrade && apk add $BUILD_DEPS \
+ && mkdir privatebin && cd privatebin \
+ && wget -qO- https://github.com/PrivateBin/PrivateBin/archive/${PRIVATEBIN_VER}.tar.gz | tar xz --strip 1 \
  && mv cfg/conf.ini.sample cfg/conf.ini \
  && apk del $BUILD_DEPS \
  && rm -f /var/cache/apk/*
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY php-fpm.conf /etc/php7/php-fpm.conf
-COPY run.sh /usr/local/bin/run.sh
-COPY s6.d /etc/s6.d
+COPY rootfs /
 
 RUN chmod +x /usr/local/bin/run.sh /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
 
-VOLUME /zerobin/data
+VOLUME /zerobin/data /php/session
 
 EXPOSE 8888
 
-LABEL maintainer="Wonderfall <wonderfall@targaryen.house>"
+LABEL maintainer="Wonderfall <wonderfall@targaryen.house>" \
+      description="A minimalist, open source online pastebin where the server has zero knowledge of pasted data" \
+      version="PrivateBin 1.1"
 
 CMD ["run.sh"]
