@@ -49,6 +49,7 @@ RUN BUILD_DEPS=" \
  && if [ "${FINGERPRINT}" != "${GPG_nextcloud}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
  && echo "All seems good, now unpacking ${NEXTCLOUD_TARBALL}..." \
  && tar xjf ${NEXTCLOUD_TARBALL} --strip 1 -C /nextcloud \
+ && update-ca-certificates \
  && apk del ${BUILD_DEPS} \
  && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
 

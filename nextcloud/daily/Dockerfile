@@ -38,6 +38,7 @@ RUN BUILD_DEPS=" \
  && CHECKSUM_STATE=$(echo -n $(sha512sum -c latest.tar.bz2.sha512) | tail -c 2) \
  && if [ "${CHECKSUM_STATE}" != "OK" ]; then echo "Warning! Checksum does not match!" && exit 1; fi \
  && tar xjf latest.tar.bz2 --strip 1 -C /nextcloud \
+ && update-ca-certificates \
  && apk del ${BUILD_DEPS} php7-pear php7-dev \
  && rm -rf /var/cache/apk/* /tmp/*
 
