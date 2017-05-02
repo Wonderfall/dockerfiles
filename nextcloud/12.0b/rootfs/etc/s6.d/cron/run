@@ -1,0 +1,6 @@
+#!/bin/sh
+
+while true; do
+  php -d memory_limit=<CRON_MEMORY_LIMIT> -f /nextcloud/cron.php
+  sleep <CRON_PERIOD>
+done
