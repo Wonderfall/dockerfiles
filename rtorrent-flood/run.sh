@@ -20,4 +20,4 @@ if [ ${RTORRENT_SCGI} -ne 0 ]; then
     sed -i -e 's|socket: true,|socket: false,|' -e 's|port: 5000,|port: '${RTORRENT_SCGI}',|' /usr/flood/config.js
 fi
 
-exec su-exec $GID:$UID /bin/s6-svscan /etc/s6.d
+exec su-exec $UID:$GID /bin/s6-svscan /etc/s6.d
