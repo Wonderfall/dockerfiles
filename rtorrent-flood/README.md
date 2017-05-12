@@ -24,6 +24,9 @@
 - **RTORRENT_SCGI** : SCGI port (default : 0 for use local socket)
 - **PKG_CONFIG_PATH** : `/usr/local/lib/pkgconfig` (don't touch)
 
+### Note
+Run this container with tty mode enabled. In your `docker-compose.yml`, add `tty: true`. If you don't do this, [rtorrent will use 100% of CPU](https://github.com/Wonderfall/dockerfiles/issues/156).
+
 #### Ports
 - **49184** (bind it).
 - **3000** [(reverse proxy!)](https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration)
