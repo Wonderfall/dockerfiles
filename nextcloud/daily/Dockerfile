@@ -1,4 +1,4 @@
-FROM wonderfall/nginx-php
+FROM wonderfall/nginx-php:7.1
 
 ENV UID=991 GID=991 \
     UPLOAD_MAX_SIZE=10G \
