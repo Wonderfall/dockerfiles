@@ -53,7 +53,6 @@ RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && cd /tmp \
  && git clone https://github.com/mirror/xmlrpc-c.git \
  && git clone https://github.com/Rudde/mktorrent.git \
- && git clone https://github.com/acoustid/chromaprint.git \
  && cd /tmp/mktorrent && make -j ${NB_CORES} && make install \
  && cd /tmp/xmlrpc-c/stable && ./configure && make -j ${NB_CORES} && make install \
  && cd /tmp/libtorrent && ./autogen.sh && ./configure && make -j ${NB_CORES} && make install \
