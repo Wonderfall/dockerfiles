@@ -1,6 +1,6 @@
-FROM wonderfall/nginx-php
+FROM wonderfall/nginx-php:7.1
 
-ARG VERSION=3.0.3
+ARG VERSION=3.0.4
 ARG GPG_matthieu="814E 346F A01A 20DB B04B  6807 B5DB D592 5590 A237"
 
 ENV UID=991 GID=991 \
