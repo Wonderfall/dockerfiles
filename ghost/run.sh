@@ -2,7 +2,7 @@
 cd /ghost/content
 mkdir apps data images themes
 
-sed -i "s|my-ghost-blog.com|$DOMAIN|g" /ghost/config.js
+sed -i "s|http://my-ghost-blog.com|https://$DOMAIN|g" /ghost/config.js
 
 if [ "$SSL" == "True" ] && ! grep -q 'urlSSL' /ghost/config.js; then
     sed -i "/url/a \ \ \ \ \ \ \ \ urlSSL: 'https://$DOMAIN'," /ghost/config.js
