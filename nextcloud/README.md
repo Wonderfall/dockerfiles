@@ -26,9 +26,9 @@
 - Environment variables provided (see below).
 
 ### Tags
-- **latest** : latest stable version. (11.0)
-- **12.0** : latest 12.0.x version (**beta**, please report any bug!)
-- **11.0** : latest 11.0.x version (stable)
+- **latest** : latest stable version. (12.0)
+- **12.0** : latest 12.0.x version (stable)
+- **11.0** : latest 11.0.x version (old stable)
 - **10.0** : latest 10.0.x version (old stable) (unmaintained)
 - **9.0** : latest 9.0.x version. (old stable) (unmaintained)
 - **daily** : latest code (daily build).

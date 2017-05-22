@@ -1,6 +1,6 @@
 FROM wonderfall/nginx-php:7.1
 
-ARG NEXTCLOUD_VERSION=12.0.0beta3
+ARG NEXTCLOUD_VERSION=12.0.0
 ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
 ENV UID=991 GID=991 \
@@ -35,9 +35,9 @@ RUN BUILD_DEPS=" \
  && mkdir /nextcloud \
  && cd /tmp \
  && NEXTCLOUD_TARBALL="nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" \
- && wget -q https://download.nextcloud.com/server/prereleases/${NEXTCLOUD_TARBALL} \
- && wget -q https://download.nextcloud.com/server/prereleases/${NEXTCLOUD_TARBALL}.sha512 \
- && wget -q https://download.nextcloud.com/server/prereleases/${NEXTCLOUD_TARBALL}.asc \
+ && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL} \
+ && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL}.sha512 \
+ && wget -q https://download.nextcloud.com/server/releases/${NEXTCLOUD_TARBALL}.asc \
  && wget -q https://nextcloud.com/nextcloud.asc \
  && echo "Verifying both integrity and authenticity of ${NEXTCLOUD_TARBALL}..." \
  && CHECKSUM_STATE=$(echo -n $(sha512sum -c ${NEXTCLOUD_TARBALL}.sha512) | tail -c 2) \
