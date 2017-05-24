@@ -2,8 +2,8 @@ FROM alpine:3.5
 
 ARG RTORRENT_VER=0.9.6
 ARG LIBTORRENT_VER=0.13.6
-ARG MEDIAINFO_VER=0.7.92.1
-ARG FILEBOT_VER=4.7.7
+ARG MEDIAINFO_VER=0.7.95
+ARG FILEBOT_VER=4.7.9
 ARG FLOOD_VER=1.0.0
 ARG BUILD_CORES
 ARG LIBZEN_VER=0.4.31
@@ -53,6 +53,7 @@ RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && cd /tmp \
  && git clone https://github.com/mirror/xmlrpc-c.git \
  && git clone https://github.com/Rudde/mktorrent.git \
+ && git clone https://github.com/acoustid/chromaprint.git \
  && cd /tmp/mktorrent && make -j ${NB_CORES} && make install \
  && cd /tmp/xmlrpc-c/stable && ./configure && make -j ${NB_CORES} && make install \
  && cd /tmp/libtorrent && ./autogen.sh && ./configure && make -j ${NB_CORES} && make install \
@@ -60,7 +61,7 @@ RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && cd /tmp \
  && wget -q http://mediaarea.net/download/binary/mediainfo/${MEDIAINFO_VER}/MediaInfo_CLI_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
  && wget -q http://mediaarea.net/download/binary/libmediainfo0/${MEDIAINFO_VER}/MediaInfo_DLL_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
- && wget http://downloads.sourceforge.net/zenlib/libzen_${LIBZEN_VER}.tar.gz \
+ && wget http://downloads.sourceforge.net/zenlib/libzen_${LIBZEN_VER}.tar.gz \ 
  && tar xzf libzen_${LIBZEN_VER}.tar.gz \
  && tar xzf MediaInfo_DLL_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
  && tar xzf MediaInfo_CLI_${MEDIAINFO_VER}_GNU_FromSource.tar.gz \
@@ -87,6 +88,8 @@ RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && tar xJf FileBot_${FILEBOT_VER}-portable.tar.xz && rm FileBot_${FILEBOT_VER}-portable.tar.xz \
  && mkdir /usr/flood && cd /usr/flood && wget -qO- https://github.com/jfurrow/flood/archive/v${FLOOD_VER}.tar.gz | tar xz --strip 1 \
  && npm install --production \
+ && ln -sf /usr/local/lib/libmediainfo.so.0.0.0 /filebot/lib/x86_64/libmediainfo.so \
+ && ln -sf /usr/local/lib/libzen.la /filebot/lib/x86_64/libzen.so \
  && apk del ${BUILD_DEPS} \
  && rm -rf /var/cache/apk/* /tmp/*
 
