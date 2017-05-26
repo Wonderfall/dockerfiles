@@ -11,7 +11,8 @@ ENV UID=991 GID=991 \
     DB_TYPE=sqlite3 \
     DOMAIN=localhost
 
-RUN BUILD_DEPS=" \
+RUN apk -U upgrade \
+ && apk add -t build-dependencies \
     gnupg \
     tar \
     build-base \
@@ -19,14 +20,16 @@ RUN BUILD_DEPS=" \
     automake \
     pcre-dev \
     libtool \
-    samba-dev" \
- && apk -U upgrade && apk add \
-    ${BUILD_DEPS} \
+    samba-dev \
+ && apk add \
     libressl \
     ca-certificates \
     libsmbclient \
     tzdata \
- && pecl install smbclient apcu redis \
+ && pecl install \
+    smbclient \
+    apcu \
+    redis \
  && echo "extension=smbclient.so" > /php/conf.d/smbclient.ini \
  && echo "extension=redis.so" > /php/conf.d/redis.ini \
  && mkdir /nextcloud \
@@ -39,7 +42,7 @@ RUN BUILD_DEPS=" \
  && if [ "${CHECKSUM_STATE}" != "OK" ]; then echo "Warning! Checksum does not match!" && exit 1; fi \
  && tar xjf latest.tar.bz2 --strip 1 -C /nextcloud \
  && update-ca-certificates \
- && apk del ${BUILD_DEPS} php7-pear php7-dev \
+ && apk del build-dependencies \
  && rm -rf /var/cache/apk/* /tmp/*
 
 COPY rootfs /

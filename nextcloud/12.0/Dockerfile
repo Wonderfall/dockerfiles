@@ -14,7 +14,8 @@ ENV UID=991 GID=991 \
     DB_TYPE=sqlite3 \
     DOMAIN=localhost
 
-RUN BUILD_DEPS=" \
+RUN apk -U upgrade \
+ && apk add -t build-dependencies \
     gnupg \
     tar \
     build-base \
@@ -22,14 +23,16 @@ RUN BUILD_DEPS=" \
     automake \
     pcre-dev \
     libtool \
-    samba-dev" \
- && apk -U upgrade && apk add \
-    ${BUILD_DEPS} \
+    samba-dev \
+ && apk add \
     libressl \
     ca-certificates \
     libsmbclient \
     tzdata \
- && pecl install smbclient apcu redis \
+ && pecl install \
+    smbclient \
+    apcu \
+    redis \
  && echo "extension=smbclient.so" > /php/conf.d/smbclient.ini \
  && echo "extension=redis.so" > /php/conf.d/redis.ini \
  && mkdir /nextcloud \
@@ -50,7 +53,7 @@ RUN BUILD_DEPS=" \
  && echo "All seems good, now unpacking ${NEXTCLOUD_TARBALL}..." \
  && tar xjf ${NEXTCLOUD_TARBALL} --strip 1 -C /nextcloud \
  && update-ca-certificates \
- && apk del ${BUILD_DEPS} \
+ && apk del build-dependencies \
  && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
 
 COPY rootfs /
