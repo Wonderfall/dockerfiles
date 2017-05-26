@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:3.6
 
 ARG BUILD_CORES
 
@@ -104,6 +104,7 @@ ARG CUSTOM_BUILD_PKGS=" \
     libedit-dev \
     libxml2-dev \
     libressl-dev \
+    libbz2 \
     sqlite-dev"
 
 ARG CUSTOM_PKGS=" \
@@ -111,7 +112,7 @@ ARG CUSTOM_PKGS=" \
     openldap \
     gmp \
     libmcrypt \
-    libbz2 \
+    bzip2-dev \
     icu \
     libpq"
 
