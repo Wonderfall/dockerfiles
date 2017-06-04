@@ -1,3 +1,11 @@
 #!/bin/sh
 
-/filebot/filebot.sh -script fn:cleaner /data/Media
+(sleep 10; find /data/Media -type l | while read in; do
+    file "$in" | grep "broken symbolic link"
+    if [ $? -ne 1 ]; then
+        echo "Delete $in"
+        rm -f "$in"
+    fi
+done
+
+find /data/Media/ -type d -empty -exec rm -r {} \;) >> /tmp/postrm.log &

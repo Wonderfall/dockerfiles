@@ -5,6 +5,23 @@
 
 TORRENT_PATH="$1"
 TORRENT_NAME="$2"
-TORRENT_LABEL="$3"
+TORRENT_LABEL="$(echo $3 | tr '[:upper:]' '[:lower:]')"
 
-/filebot/filebot.sh -script fn:amc --output "/data/Media" --action symlink --conflict skip -non-strict --log-file amc.log --def excludeList=amc.excludes unsorted=y music=y "seriesFormat=/data/Media/TV/{n}/Season {s.pad(2)}/{s00e00} - {t}" "animeFormat=/data/Media/Animes/{n}/{e.pad(3)} - {t}" "movieFormat=/data/Media/Movies/{n}" "musicFormat=/data/Media/Music/{n}/{fn}" "ut_dir=$TORRENT_PATH" "ut_kind=multi" "ut_title=$TORRENT_NAME" "ut_label=$TORRENT_LABEL" &
+
+case $TORRENT_LABEL in
+    films|movies|film|movie)
+        /filebot/filebot.sh --db TheMovieDB -script fn:amc --output "/data/Media" --action <FILEBOT_RENAME_METHOD> --conflict skip -non-strict --log-file amc.log --def excludeList=amc.excludes unsorted=y "movieFormat=/data/Media/Movies/<FILEBOT_RENAME_MOVIES>" "ut_dir=$TORRENT_PATH" "ut_kind=multi" "ut_title=$TORRENT_NAME" "ut_label=Movie" &
+    ;;
+    music|musics|musique|musiques)
+        /filebot/filebot.sh --db ID3 -script fn:amc --output "/data/Media" --action <FILEBOT_RENAME_METHOD> --conflict skip -non-strict --log-file amc.log --def excludeList=amc.excludes unsorted=y music=y "musicFormat=/data/Media/Music/<FILEBOT_RENAME_MUSICS>" "ut_dir=$TORRENT_PATH" "ut_kind=multi" "ut_title=$TORRENT_NAME" "ut_label=Music" &
+    ;;
+    tv|"tv show"|"tv shows"|series|serie)
+        /filebot/filebot.sh --db TheTVDB -script fn:amc --output "/data/Media" --action <FILEBOT_RENAME_METHOD> --conflict skip -non-strict --log-file amc.log --def excludeList=amc.excludes unsorted=y "seriesFormat=/data/Media/TV/<FILEBOT_RENAME_SERIES>" "ut_dir=$TORRENT_PATH" "ut_kind=multi" "ut_title=$TORRENT_NAME" "ut_label=TV Show" &
+    ;;
+    anime|animes)
+        /filebot/filebot.sh --db AniDB -script fn:amc --output "/data/Media" --action <FILEBOT_RENAME_METHOD> --conflict skip -non-strict --log-file amc.log --def excludeList=amc.excludes unsorted=y "animeFormat=/data/Media/Animes/<FILEBOT_RENAME_ANIMES>" "ut_dir=$TORRENT_PATH" "ut_kind=multi" "ut_title=$TORRENT_NAME" "ut_label=Anime" &
+    ;;
+    *)
+        /filebot/filebot.sh -script fn:amc --output "/data/Media" --action <FILEBOT_RENAME_METHOD> --conflict skip -non-strict --log-file amc.log --def excludeList=amc.excludes unsorted=y music=y "seriesFormat=/data/Media/TV/<FILEBOT_RENAME_SERIES>" "animeFormat=/data/Media/Animes/<FILEBOT_RENAME_ANIMES>" "movieFormat=/data/Media/Movies/<FILEBOT_RENAME_MOVIES>" "musicFormat=/data/Media/Music/<FILEBOT_RENAME_MUSICS>" "ut_dir=$TORRENT_PATH" "ut_kind=multi" "ut_title=$TORRENT_NAME" "ut_label=$TORRENT_LABEL" &
+    ;;
+esac

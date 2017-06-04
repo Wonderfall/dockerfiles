@@ -6,7 +6,7 @@ port_random = no
 check_hash = no
 directory = /data/torrents
 session = /data/.session
-encryption = require,require_RC4,allow_incoming,try_outgoing
+encryption = allow_incoming, try_outgoing, enable_retry
 use_udp_trackers = yes
 dht = off
 peer_exchange = no
@@ -17,7 +17,7 @@ min_peers_seed = 1
 max_peers_seed = 50
 max_uploads = 15
 
-network.xmlrpc.size_limit.set = 2000000
+network.xmlrpc.size_limit.set = 10000000
 
 schedule = watch_directory,1,1,"load_start=/data/.watch/*.torrent"
 schedule = untied_directory,5,5,"stop_untied=/data/.watch/*.torrent"
