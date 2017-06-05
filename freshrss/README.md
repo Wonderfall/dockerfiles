@@ -1,23 +1,22 @@
-## wonderfall/privatebin
+## wonderfall/freshrss
 
-Paste securely.
+A free, self-hostable aggregator : https://github.com/FreshRSS/FreshRSS
 
 #### Features
 - Based on Alpine Linux (wonderfall/nginx-php image)
-- Uses [PrivateBin](https://github.com/PrivateBin/PrivateBin), originally a fork of zerobin by elrido.
 - Bundled with nginx and PHP7.1.
 
 #### Build-time variables
-- **PRIVATEBIN_VER** : version of PrivateBin
+- **FRESHRSS_VER** : version of FreshRSS
 
 #### Environment variables
-- **UID** : zerobin user id
-- **GID** : zerobin group id
+- **UID** : user id
+- **GID** : group id
 - **MEMORY_LIMIT** : php memory limit *(default : 128M)*
 - **UPLOAD_MAX_SIZE** : maximum upload size *(default : 10M)*
 
 #### Volumes
-- **/privatebin/data**
+- **/freshrss/data**
 
 #### Ports
 - **8888** [(reverse proxy!)](https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration)
