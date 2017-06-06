@@ -4,7 +4,8 @@ ARG FRESHRSS_VER=1.7.0
 
 ENV UID=991 GID=991 \
     UPLOAD_MAX_SIZE=10M \
-    MEMORY_LIMIT=128M
+    MEMORY_LIMIT=128M \
+    CRON_PERIOD=30m
 
 RUN apk -U add --no-cache \
     tar \
