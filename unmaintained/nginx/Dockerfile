@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:3.5
 MAINTAINER Wonderfall <wonderfall@schrodinger.io>
 
 ENV UID=991 GID=991
@@ -9,8 +9,7 @@ ARG GPG_LIBRESSL="A1EB 079B 8D3E B92B 4EBD  3139 663A F51B D5E4 D8D5"
 ARG GPG_NGINX="B0F4 2533 73F8 F6F5 10D4  2178 520A 9993 A1C0 52F8"
 ARG BUILD_CORES
 
-RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
- && NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
+RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && BUILD_DEPS=" \
     build-base \
     linux-headers \
@@ -71,8 +70,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && ./configure \
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
-    --with-cc-opt='-O3 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -Wno-deprecated-declarations' \
-    --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro' \
+    --with-cc-opt='-O3 -fPIE -Wformat -Werror=format-security -Wno-deprecated-declarations' \
     --with-openssl=/tmp/libressl-${LIBRESSL_VERSION} \
     --with-http_ssl_module \
     --with-http_v2_module \

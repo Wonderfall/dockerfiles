@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.5
 
 ENV UID=991 GID=991
 
@@ -28,8 +28,7 @@ ARG NGINX_3RD_PARTY_MODULES=" \
     --add-module=/tmp/headers-more-nginx-module \
     --add-module=/tmp/ngx_brotli"
 
-RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
- && NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
+RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && BUILD_DEPS=" \
     build-base \
     linux-headers \
@@ -89,8 +88,8 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && ./configure \
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
-    --with-cc-opt="-O3 -fPIE -fstack-protector-strong -Wformat -Werror=format-security -Wno-deprecated-declarations -I ../boringssl/.openssl/include/" \
-    --with-ld-opt="-Wl,-Bsymbolic-functions -Wl,-z,relro -L ../boringssl/.openssl/lib" \
+    --with-cc-opt="-O3 -fPIE -Wformat -Werror=format-security -Wno-deprecated-declarations -I ../boringssl/.openssl/include/" \
+    --with-ld-opt="-L ../boringssl/.openssl/lib" \
     --http-log-path=/var/log/nginx/access.log \
     --error-log-path=/var/log/nginx/error.log \
     ${NGINX_MODULES} \
