@@ -1,5 +1,7 @@
 ## wonderfall/mastodon
 
+![Mastodon](https://github.com/tootsuite/mastodon/blob/master/app/javascript/images/mastodon-getting-started.png?raw=true)
+
 A GNU Social-compatible microblogging server : https://github.com/tootsuite/mastodon
 
 #### Why this image?
