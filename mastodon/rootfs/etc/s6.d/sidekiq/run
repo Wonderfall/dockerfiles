@@ -1,3 +1,3 @@
 #!/bin/sh
 cd /mastodon
-exec bundle exec sidekiq -c $SIDEKIQ_WORKERS -q default -q push -q pull -q mailers
+exec bundle exec sidekiq -c $SIDEKIQ_WORKERS -q default -q push -q pull -q mailers > ./log/sidekiq.log 2>&1

@@ -18,8 +18,16 @@ A GNU Social-compatible microblogging server
    https://github.com/tootsuite/mastodon
     17j2g7vpgHhLuXhN4bueZFCvdxxieyRVWd
 ---------------------------------------------
+UID/GID settings
+---------------------------------------------
 User  ID : ${UID}
 Group ID : ${GID}
+---------------------------------------------
+Logs location
+---------------------------------------------
+Sidekiq   : /mastodon/log/sidekiq.log
+Streaming : /mastodon/log/streaming.log
+Web       : /mastodon/log/web.log
 ---------------------------------------------
 "
 
@@ -40,7 +48,7 @@ if [ "$RUN_DB_MIGRATIONS" == "true" ]; then
   su-exec mastodon:mastodon rake db:migrate
 fi
 
-echo "Executing process..."
+echo "Executing process(es)..."
 if [ '$@' == '' ]; then
     exec su-exec mastodon:mastodon /bin/s6-svscan /etc/s6.d
 else
