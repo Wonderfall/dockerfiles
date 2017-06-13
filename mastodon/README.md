@@ -16,8 +16,8 @@ This image is not the official one. The main difference you can notice is that a
 - No root processes.
 
 #### Docker Hub tags
-- **master** : latest code for adventurers
-- **stable** : latest stable version
+- **master** : latest code for adventurers (builds daily on Docker Hub)
+- **stable** : latest stable version (builds weekly on Dockr Hub)
 
 #### Build-time variables
 - **VERSION** : version of Mastodon, can be `v1.4.1` or `master`. *(default : master)*
@@ -31,10 +31,10 @@ This image is not the official one. The main difference you can notice is that a
 - Other environment variables : https://github.com/tootsuite/mastodon/blob/master/.env.production.sample
 
 #### Volumes
-- /mastodon/public/system : shit like media attachments, avatars, etc.
-- /mastodon/public/assets : Mastodon assets
-- /mastodon/public/packs : Mastodon assets
-- /mastodon/log : Mastodon logfiles (mount if you prefer to)
+- **/mastodon/public/system** : shit like media attachments, avatars, etc.
+- **/mastodon/public/assets** : Mastodon assets
+- **/mastodon/public/packs** : Mastodon assets
+- **/mastodon/log** : Mastodon logfiles (mount if you prefer to)
 
 #### Ports
 - **3000** : Mastodon web
