@@ -17,7 +17,8 @@ This image is not the official one. The main difference you can notice is that a
 
 #### Docker Hub tags
 - **master** : latest code for adventurers (builds daily on Docker Hub)
-- **stable** : latest stable version (builds weekly on Dockr Hub)
+- **stable** : latest stable version (builds weekly on Docker Hub)
+- **targaryen** : Targaryen-themed stable version (builds weekly on Docker Hub)
 
 #### Build-time variables
 - **VERSION** : version of Mastodon, can be `v1.4.1` or `master`. *(default : master)*
