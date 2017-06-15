@@ -55,7 +55,7 @@ RUN apk -U upgrade \
  && npm -g cache clean && yarn cache clean \
  && mv public/assets /tmp/assets && mv public/packs /tmp/packs \
  && apk del build-dependencies \
- && rm -rf /tmp/* /var/cache/apk/*
+ && rm -rf /var/cache/apk/*
 
 COPY rootfs /
 
