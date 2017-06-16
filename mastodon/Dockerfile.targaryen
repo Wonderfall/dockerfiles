@@ -49,7 +49,7 @@ RUN apk -U upgrade \
     tar \
  && update-ca-certificates \
  && wget -qO- https://github.com/${REPOSITORY}/archive/${VERSION}.tar.gz | tar xz --strip 1 \
- && cp -R /tmp/targaryen/* . \
+ && cp -R /tmp/targaryen/* . && chmod +x targaryen.sh && ./targaryen.sh \
  && gem install bundler \
  && bundle install --deployment --clean --no-cache --without test development \
  && npm install -g npm@3 && npm install -g yarn \
