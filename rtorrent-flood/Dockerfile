@@ -19,7 +19,7 @@ ENV FILEBOT_RENAME_METHOD="symlink" \
     FILEBOT_RENAME_MOVIES="{n} ({y})" \
     FILEBOT_RENAME_SERIES="{n}/Season {s.pad(2)}/{s00e00} - {t}" \
     FILEBOT_RENAME_ANIMES="{n}/{e.pad(3)} - {t}" \
-    FILEBOT_RENAME_MUSICS="{n}/{fn}"
+    FILEBOT_RENAME_MUSICS="{artist}/{album}/{fn}"
 
 RUN NB_CORES=${BUILD_CORES-`getconf _NPROCESSORS_CONF`} \
  && apk -U upgrade \
