@@ -1,0 +1,14 @@
+#       #  command: './run.sh'
+
+version: '2'
+services:
+    searx:
+        image: searx
+        #image: wonderfall/searx
+        build: .
+        container_name: searx
+        ports:
+          - "8888:8888"
+        volumes:
+          - ${PWD}/settings.yml:/settings/settings.yml
+            #command: run.sh
