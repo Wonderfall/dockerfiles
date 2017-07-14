@@ -2,6 +2,8 @@ FROM node:8-alpine
 
 ARG VERSION=1.10.1
 
+ENV UID=991 GID=991
+
 WORKDIR /cryptpad
 
 RUN apk add --no-cache git tini su-exec ca-certificates libressl tar \
@@ -12,12 +14,6 @@ RUN apk add --no-cache git tini su-exec ca-certificates libressl tar \
 
 EXPOSE 3000
 
-VOLUME /cryptpad/datastore
-VOLUME /cryptpad/customize
-
-ENV UID=991 GID=991
-ENV USE_SSL=false
-ENV STORAGE='./storage/file'
-ENV LOG_TO_STDOUT=true
+VOLUME /cryptpad/datastore /cryptpad/customize
 
 CMD ["/cryptpad/container-start.sh"]
