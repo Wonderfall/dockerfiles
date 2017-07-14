@@ -12,8 +12,12 @@ RUN apk add --no-cache git tini su-exec ca-certificates libressl tar \
  && npm install -g bower \
  && bower install --allow-root
 
+COPY run.sh /usr/local/bin/run.sh
+
+RUN chmod +x /usr/local/bin/run.sh
+
 EXPOSE 3000
 
 VOLUME /cryptpad/datastore /cryptpad/customize
 
-CMD ["/cryptpad/container-start.sh"]
+CMD ["run.sh"]
