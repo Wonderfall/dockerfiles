@@ -1,4 +1,4 @@
-FROM node:8-alpine
+FROM alpine:3.6
 
 ARG VERSION=1.10.1
 
@@ -6,7 +6,15 @@ ENV UID=991 GID=991
 
 WORKDIR /cryptpad
 
-RUN apk add --no-cache git tini su-exec ca-certificates libressl tar \
+RUN apk -U add --no-cache \
+    git \
+    tini \
+    su-exec \
+    ca-certificates \
+    libressl \
+    tar \
+    nodejs-current \
+    nodejs-current-npm \
  && wget -qO- https://github.com/xwiki-labs/cryptpad/archive/${VERSION}.tar.gz | tar xz --strip 1 \
  && npm install \
  && npm install -g bower \
