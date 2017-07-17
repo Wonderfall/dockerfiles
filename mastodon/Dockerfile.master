@@ -21,6 +21,7 @@ RUN apk -U upgrade \
     git \
     icu-libs \
     imagemagick \
+    libidn \
     libpq \
     libressl \
     libxml2 \
@@ -39,6 +40,7 @@ RUN apk -U upgrade \
     build-base \
     icu-dev \
     libffi-dev \
+    libidn-dev \
     libxml2-dev \
     libxslt-dev \
     postgresql-dev \
