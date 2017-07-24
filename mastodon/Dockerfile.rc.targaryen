@@ -13,7 +13,7 @@ ENV UID=991 GID=991 \
 
 WORKDIR /mastodon
 
-COPY targaryen /tmp/targaryen
+COPY targaryen-rc /tmp/targaryen
 
 RUN apk -U upgrade \
  && apk add \
