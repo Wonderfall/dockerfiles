@@ -36,8 +36,8 @@ addgroup -g ${GID} mastodon &>/dev/null
 adduser -h /mastodon -s /bin/sh -D -G mastodon -u ${UID} mastodon &>/dev/null
 
 echo "Moving assets to volumes..."
-mv /tmp/assets/* public/assets &>/dev/null
-mv /tmp/packs/* public/packs &>/dev/null
+cp -r /tmp/assets/* public/assets &>/dev/null
+cp -r /tmp/packs/* public/packs &>/dev/null
 
 echo "Updating permissions, this can take a while..."
 find /mastodon -path /mastodon/public/system -prune -o -not -user mastodon -not -group mastodon -print0 | xargs -0 chown -f mastodon:mastodon
