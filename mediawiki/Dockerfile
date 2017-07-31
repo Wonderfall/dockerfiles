@@ -12,6 +12,7 @@ RUN apk -U add \
     libressl \
     ca-certificates \
     git \
+    lua \
     coreutils \
     diffutils \
     build-base \
