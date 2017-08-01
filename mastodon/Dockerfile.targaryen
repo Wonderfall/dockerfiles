@@ -1,6 +1,6 @@
 FROM alpine:3.6
 
-ARG VERSION=v1.4.7
+ARG VERSION=v1.5.0
 ARG REPOSITORY=tootsuite/mastodon
 
 ENV UID=991 GID=991 \
@@ -21,7 +21,9 @@ RUN apk -U upgrade \
     ffmpeg \
     file \
     git \
+    icu-libs \
     imagemagick \
+    libidn \
     libpq \
     libressl \
     libxml2 \
@@ -38,7 +40,9 @@ RUN apk -U upgrade \
     su-exec \
  && apk add -t build-dependencies \
     build-base \
+    icu-dev \
     libffi-dev \
+    libidn-dev \
     libxml2-dev \
     libxslt-dev \
     postgresql-dev \
@@ -54,7 +58,7 @@ RUN apk -U upgrade \
  && bundle install --deployment --clean --no-cache --without test development \
  && npm install -g npm@3 && npm install -g yarn \
  && yarn --ignore-optional --pure-lockfile \
- && SECRET_KEY_BASE=$(rake secret) rake assets:precompile \
+ && SECRET_KEY_BASE=$(rake secret) SMTP_FROM_ADDRESS= rake assets:precompile \
  && npm -g cache clean && yarn cache clean \
  && mv public/assets /tmp/assets && mv public/packs /tmp/packs \
  && apk del build-dependencies \
