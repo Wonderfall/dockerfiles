@@ -75,7 +75,7 @@ RUN apk -U upgrade \
 # Clean
  && npm -g cache clean && yarn cache clean \
  && apk del build-dependencies \
- && rm -rf /var/cache/apk/*
+ && rm -rf /var/cache/apk/* /tmp/src
 
 COPY rootfs /
 
