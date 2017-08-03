@@ -2,6 +2,7 @@ FROM alpine:3.6
 
 ARG VERSION=v1.5.0
 ARG REPOSITORY=tootsuite/mastodon
+ARG LIBICONV_VERSION=1.15
 
 ENV UID=991 GID=991 \
     RUN_DB_MIGRATIONS=true \
@@ -13,6 +14,7 @@ ENV UID=991 GID=991 \
 
 WORKDIR /mastodon
 
+# Install dependencies
 RUN apk -U upgrade \
  && apk add \
     ca-certificates \
@@ -24,8 +26,6 @@ RUN apk -U upgrade \
     libidn \
     libpq \
     libressl \
-    libxml2 \
-    libxslt \
     nodejs-current-npm \
     nodejs-current \
     protobuf \
@@ -36,28 +36,44 @@ RUN apk -U upgrade \
     ruby-json \
     s6 \
     su-exec \
+
+# Install build dependencies
  && apk add -t build-dependencies \
     build-base \
     icu-dev \
     libffi-dev \
     libidn-dev \
-    libxml2-dev \
-    libxslt-dev \
     postgresql-dev \
     protobuf-dev \
     python \
     ruby-dev \
     ruby-rdoc \
     tar \
+    yarn \
+
+# Update CA certificates
  && update-ca-certificates \
+
+# Install GNU Libiconv
+ && wget http://ftp.gnu.org/pub/gnu/libiconv/libiconv-${LIBICONV_VERSION}.tar.gz -O /tmp/libiconv-${LIBICONV_VERSION}.tar.gz \
+ && tar xzf /tmp/libiconv-${LIBICONV_VERSION}.tar.gz -C /usr/src \
+ && cd /usr/src/libiconv-${LIBICONV_VERSION} \
+ && ./configure --prefix=/usr/local \
+ && make && make install && libtool --finish /usr/local/lib \
+
+# Install Mastodon
+ && cd /mastodon \
  && wget -qO- https://github.com/${REPOSITORY}/archive/${VERSION}.tar.gz | tar xz --strip 1 \
  && gem install bundler \
  && bundle install --deployment --clean --no-cache --without test development \
- && npm install -g npm@3 && npm install -g yarn \
  && yarn --ignore-optional --pure-lockfile \
+
+# Precompile Mastodon assets
  && SECRET_KEY_BASE=$(rake secret) SMTP_FROM_ADDRESS= rake assets:precompile \
- && npm -g cache clean && yarn cache clean \
  && mv public/assets /tmp/assets && mv public/packs /tmp/packs \
+
+# Clean
+ && npm -g cache clean && yarn cache clean \
  && apk del build-dependencies \
  && rm -rf /var/cache/apk/*
 
