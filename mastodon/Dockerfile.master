@@ -56,8 +56,8 @@ RUN apk -U upgrade \
 
 # Install GNU Libiconv
  && wget http://ftp.gnu.org/pub/gnu/libiconv/libiconv-${LIBICONV_VERSION}.tar.gz -O /tmp/libiconv-${LIBICONV_VERSION}.tar.gz \
- && tar xzf /tmp/libiconv-${LIBICONV_VERSION}.tar.gz -C /usr/src \
- && cd /usr/src/libiconv-${LIBICONV_VERSION} \
+ && mkdir /tmp/src && tar xzf /tmp/libiconv-${LIBICONV_VERSION}.tar.gz -C /tmp/src \
+ && cd /tmp/src/libiconv-${LIBICONV_VERSION} \
  && ./configure --prefix=/usr/local \
  && make && make install && libtool --finish /usr/local/lib \
 

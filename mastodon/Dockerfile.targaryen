@@ -1,6 +1,6 @@
-FROM alpine:3.6
+FROM alpine:edge
 
-ARG VERSION=v1.5.0
+ARG VERSION=v1.5.1
 ARG REPOSITORY=tootsuite/mastodon
 ARG LIBICONV_VERSION=1.15
 
@@ -77,7 +77,7 @@ RUN apk -U upgrade \
  && mv public/assets /tmp/assets && mv public/packs /tmp/packs \
 
 # Clean
- && npm -g cache clean && yarn cache clean \
+ && npm -g cache clean --force && yarn cache clean \
  && apk del build-dependencies \
  && rm -rf /var/cache/apk/* /tmp/src
 
