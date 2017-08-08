@@ -24,9 +24,13 @@ RUN apk -U upgrade \
  && pip install --no-cache -r https://raw.githubusercontent.com/asciimoo/searx/master/requirements.txt \
  && mkdir /usr/local/searx && cd /usr/local/searx \
  && wget -qO- https://github.com/asciimoo/searx/archive/master.tar.gz | tar xz --strip 1 \
- && sed -i "s/127.0.0.1/0.0.0.0/g" searx/settings.yml \
  && apk del build-dependencies \
  && rm -f /var/cache/apk/*
+
+
+RUN mkdir /settings
+
+VOLUME /settings
 
 COPY run.sh /usr/local/bin/run.sh
 

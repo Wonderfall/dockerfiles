@@ -17,3 +17,6 @@ It provides basic privacy by mixing your queries with searches on other platform
 
 #### Ports
 - **8888** [(reverse proxy!)](https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration)
+
+#### Volumes
+- **settings.yml:/settings/settings.yml**
