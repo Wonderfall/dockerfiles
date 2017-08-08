@@ -113,7 +113,7 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && ./configure \
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
-    --with-cc-opt="-O3 -fPIE -fstack-protector-strong -DTCP_FASTOPEN=23 -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -Wno-deprecated-declarations -I ../boringssl/.openssl/include/" \
+    --with-cc-opt="-O3 -fPIE -fstack-protector-strong -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -Wno-deprecated-declarations -I ../boringssl/.openssl/include/" \
     --with-ld-opt="-lrt -ljemalloc -Wl,-Bsymbolic-functions -Wl,-z,relro -L ../boringssl/.openssl/lib" \
     --http-log-path=/var/log/nginx/access.log \
     --error-log-path=/var/log/nginx/error.log \
