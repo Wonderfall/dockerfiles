@@ -1,0 +1,21 @@
+It is highly recommended to NOT expose the web GUI directly on the internet.
+Use a reverse proxy to communicate securely via HTTPS (e.g. nginx). 
+Remove this message to enable using this file.
+
+version: '2'
+services:
+  plex:
+    container_name: rtorrent-flood
+    image: wonderfall/rtorrent-flood
+    restart: unless-stopped
+    ports:
+      - 49184:49184
+      - 6881:6881  # If DHT is enabled
+      - 8085:3000  # GUI
+    environment:
+      - FLOOD_SECRET=<some-secret>
+      - CONTEXT_PATH=/
+    volumes:
+      - /host/download/path/:/data/
+      - /host/db/path/:/flood-db/
+      # - /host/rtorrent.rc:/home/torrent/.rtorrent.rc  # Optional, do not use by default
