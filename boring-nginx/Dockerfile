@@ -1,8 +1,8 @@
-FROM alpine:edge
+FROM alpine:3.6
 
 ENV UID=991 GID=991
 
-ARG NGINX_VERSION=1.11.13
+ARG NGINX_VERSION=1.13.3
 ARG GPG_NGINX="B0F4 2533 73F8 F6F5 10D4  2178 520A 9993 A1C0 52F8"
 ARG BUILD_CORES
 
@@ -84,7 +84,7 @@ RUN echo "@commuedge https://nl.alpinelinux.org/alpine/edge/community" >> /etc/a
  && if [ "${FINGERPRINT}" != "${GPG_NGINX}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
  && echo "All seems good, now unpacking ${NGINX_TARBALL}..." \
  && tar xzf ${NGINX_TARBALL} && cd nginx-${NGINX_VERSION} \
- && wget -q https://raw.githubusercontent.com/cujanovic/nginx-dynamic-tls-records-patch/master/nginx__dynamic_tls_records_1.11.5%2B.patch -O dynamic_records.patch \
+ && wget -q https://raw.githubusercontent.com/cujanovic/nginx-dynamic-tls-records-patch/master/nginx__dynamic_tls_records_1.13.0%2B.patch -O dynamic_records.patch \
  && patch -p1 < dynamic_records.patch \
  && ./configure \
     --prefix=/etc/nginx \
