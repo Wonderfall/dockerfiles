@@ -11,8 +11,8 @@ Paste securely.
 - **PRIVATEBIN_VER** : version of PrivateBin
 
 #### Environment variables
-- **UID** : zerobin user id
-- **GID** : zerobin group id
+- **UID** : privatebin user id
+- **GID** : privatebin group id
 - **MEMORY_LIMIT** : php memory limit *(default : 128M)*
 - **UPLOAD_MAX_SIZE** : maximum upload size *(default : 10M)*
 

@@ -19,7 +19,7 @@ COPY rootfs /
 
 RUN chmod +x /usr/local/bin/run.sh /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
 
-VOLUME /zerobin/data /php/session
+VOLUME /privatebin/data /php/session
 
 EXPOSE 8888
 
