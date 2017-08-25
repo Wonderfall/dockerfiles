@@ -24,6 +24,7 @@
 - GNU Libiconv for php iconv extension (avoiding errors with some apps).
 - No root processes. Never.
 - Environment variables provided (see below).
+- Optional use of S3 bucket for primary storage (see below for config).
 
 ### Tags
 - **latest** : latest stable version. (12.0)
@@ -58,7 +59,12 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **DB_USER** : username for database *(default : none)*
 - **DB_PASSWORD** : password for database user *(default : none)*
 - **DB_HOST** : database host *(default : none)*
-
+- **DATASTORE_BUCKET** : S3 bucket to use for primary storage *(default : none)*
+- **DATASTORE_KEY** : S3 Key for about bucket  *(default : none)*
+- **DATASTORE_SECRET** :  S3 secret for about bucket *(default : none)*
+- **DATASTORE_HOST** : S3 host for above bucket  *(default : none)*
+- **DATASTORE_PORT** :  S3 port for above bucket *(default : 443)*
+- **DATASTORE_USE_PATH_STYLE** :  Whether to use path style for S3 bucket *(default : false)*
 Don't forget to use a **strong password** for the admin account!
 
 ### Port
@@ -86,7 +92,7 @@ docker run -d --name db_nextcloud \
        -e MYSQL_DATABASE=nextcloud -e MYSQL_USER=nextcloud \
        -e MYSQL_PASSWORD=supersecretpassword \
        mariadb:10
-       
+
 docker run -d --name nextcloud \
        --link db_nextcloud:db_nextcloud \
        -v /mnt/nextcloud/data:/data \
@@ -170,7 +176,7 @@ nextcloud-db:
     - MYSQL_DATABASE=nextcloud
     - MYSQL_USER=nextcloud
     - MYSQL_PASSWORD=supersecretpassword
-    
+
 # If using Nextant
 solr:
   image: solr:6-alpine

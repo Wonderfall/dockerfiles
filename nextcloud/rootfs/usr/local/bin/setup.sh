@@ -63,6 +63,31 @@ cat >> /nextcloud/config/autoconfig.php <<EOF;
 ?>
 EOF
 
+# Put S3 config into it's own config file
+if [[ ! -z "$DATASTORE_BUCKET"  ]]; then
+  cat >> /nextcloud/config/s3.config.php <<EOF;
+<?php
+\$CONFIG = array (
+  # Setup S3 as a backend for primary storage
+  'objectstore' => array (
+    'class' => 'OC\\Files\\ObjectStore\\S3',
+    'arguments' => array (
+      'bucket' => '${DATASTORE_BUCKET}',
+      'autocreate' => false,
+      'key' => '${DATASTORE_KEY}',
+      'secret' => '${DATASTORE_SECRET}',
+      'hostname' => '${DATASTORE_HOST}',
+      'port' => '${DATASTORE_PORT:-443}',
+      'use_ssl' => true,
+      // required for some non amazon s3 implementations
+      'use_path_style' => %{DATASTORE_USE_PATH_STYLE},
+    ),
+  ),
+);
+?>
+EOF
+fi
+
 echo "Starting automatic configuration..."
 # Execute ownCloud's setup step, which creates the ownCloud database.
 # It also wipes it if it exists. And it updates config.php with database
