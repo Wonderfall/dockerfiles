@@ -58,6 +58,26 @@ if [[ ! -z "$ADMIN_USER"  ]]; then
   'adminpass'     => '${ADMIN_PASSWORD}',
 EOF
 fi
+if [[ ! -z "$DATASTORE_BUCKET"  ]]; then
+  cat >> /nextcloud/config/autoconfig.php <<EOF;
+  # Setup S3 as a backend for primary storage
+  'objectstore' => array (
+    'class' => 'OC\\Files\\ObjectStore\\S3',
+    'arguments' => array (
+      'bucket' => '${DATASTORE_BUCKET}',
+      'autocreate' => false,
+      'key' => '${DATASTORE_KEY}',
+      'secret' => '${DATASTORE_SECRET}',
+      'hostname' => '${DATASTORE_URL}',
+      'use_ssl' => true,
+      'port' => '${DATASTORE_PORT:443}',
+      'use_ssl' => true,
+      // required for some non amazon s3 implementations
+      'use_path_style' => true,
+    ),
+  ),
+EOF
+fi
 cat >> /nextcloud/config/autoconfig.php <<EOF;
 );
 ?>
