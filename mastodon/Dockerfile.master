@@ -43,6 +43,7 @@ RUN apk -U upgrade \
     icu-dev \
     libffi-dev \
     libidn-dev \
+    libtool \
     postgresql-dev \
     protobuf-dev \
     python \
