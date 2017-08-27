@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine:3.6
 
 ARG VERSION=v1.5.1
 ARG REPOSITORY=tootsuite/mastodon
