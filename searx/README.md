@@ -11,6 +11,9 @@ It provides basic privacy by mixing your queries with searches on other platform
 - Latest code from [asciimoo/searx](https://github.com/asciimoo/searx)
 - A unique secret key is generated when booting the first time.
 
+#### Build-time variables
+- **VERSION** : Searx version
+
 #### Environment variables
 - **IMAGE_PROXY** : enables images proxying *(default : False)*
 - **BASE_URL** : http://domain.tld *(default : False)*

@@ -9,9 +9,7 @@ ENV GHOST_NODE_VERSION_CHECK=false \
     ENABLE_ISSO=False \
     ISSO_HOST=isso.domain.tld \
     ISSO_AVATAR=false \
-    ISSO_VOTE=false \
-    ENABLE_DISQUS=False \
-    DISQUS_SHORTNAME=shortname
+    ISSO_VOTE=false
 
 WORKDIR /ghost
 

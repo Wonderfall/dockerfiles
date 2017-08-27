@@ -36,16 +36,6 @@ if [ "$ENABLE_ISSO" == "True" ] && ! grep -q 'isso' /ghost/content/themes/casper
            -e "s/<VOTE>/$ISSO_VOTE/g" /ghost/content/themes/casper/post.hbs
 fi
 
-if [ "$ENABLE_DISQUS" == "True" ] && grep -q 'Disqus comments' /ghost/content/themes/casper/post.hbs; then
-    ### This is crap, if you have a better idea, tell me!
-vim -e - /ghost/content/themes/casper/post.hbs <<@@@
-g/site-id/.-5,.d
-wq
-@@@
-    sed -i '87d' /ghost/content/themes/casper/post.hbs
-    sed -i -e "s/test-apkdzgmqhj/${DISQUS_SHORTNAME}/g" /ghost/content/themes/casper/post.hbs
-fi
-
 echo "> Updating permissions..."
 chown -R ${UID}:${GID} /ghost /etc/s6.d
 

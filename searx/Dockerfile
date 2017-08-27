@@ -1,5 +1,7 @@
 FROM alpine:3.6
 
+ARG VERSION=0.12.0
+
 ENV BASE_URL=False IMAGE_PROXY=False \
     UID=991 GID=991
 
@@ -21,9 +23,9 @@ RUN apk -U upgrade \
     openssl \
     tini \
     py2-pip \
- && pip install --no-cache -r https://raw.githubusercontent.com/asciimoo/searx/master/requirements.txt \
  && mkdir /usr/local/searx && cd /usr/local/searx \
- && wget -qO- https://github.com/asciimoo/searx/archive/master.tar.gz | tar xz --strip 1 \
+ && wget -qO- https://github.com/asciimoo/searx/archive/v${VERSION}.tar.gz | tar xz --strip 1 \
+ && pip install --no-cache -r requirements.txt \
  && sed -i "s/127.0.0.1/0.0.0.0/g" searx/settings.yml \
  && apk del build-dependencies \
  && rm -f /var/cache/apk/*
