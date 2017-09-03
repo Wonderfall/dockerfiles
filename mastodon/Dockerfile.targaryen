@@ -1,6 +1,6 @@
 FROM alpine:3.6
 
-ARG VERSION=v1.5.1
+ARG VERSION=v1.6.0rc1
 ARG REPOSITORY=tootsuite/mastodon
 ARG LIBICONV_VERSION=1.15
 
