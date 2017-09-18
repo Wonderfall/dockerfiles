@@ -36,6 +36,12 @@ f_gen_sites_enabled() {
         template_sites=/nginx/sites-enabled/template
     fi
     sed -e 's|<frontend_domain>|'${FRONTEND_DOMAIN}'|' ${template_sites} > /nginx/sites-enabled/${FRONTEND_DOMAIN}.conf
+    if [ "${FRONTEND_HSTS}" == "false" ]; then
+        sed -i -e "s|include /nginx/conf.d/hsts.conf|#include /nginx/conf.d/hsts.conf|g" /nginx/sites-enabled/${FRONTEND_DOMAIN}.conf
+    fi
+    if [ "${FRONTEND_HEADERS}" == "false" ]; then
+        sed -i -e "s|include /nginx/conf.d/headers.conf|#include /nginx/conf.d/headers.conf|g" /nginx/sites-enabled/${FRONTEND_DOMAIN}.conf
+    fi
 }
 
 f_gen_location() {
@@ -101,9 +107,11 @@ f_make_conf() {
     FRONTEND_PATH="/"
     FRONTEND_SSL=false
     FRONTEND_AUTH=""
+    FRONTEND_HSTS=true
+    FRONTEND_HEADERS=true
 
     container_name=$1
-    IFS=$'\n' 
+    IFS=$'\n'
     if [ "${CONTAINER_LABELS}" != "" ]; then
         for label in ${CONTAINER_LABELS}; do
             case "$(echo ${label} | awk '{print $1}')" in
@@ -123,15 +131,21 @@ f_make_conf() {
                 "reverse.frontend.domain_max_body_size")
                     FRONTEND_MAX_BODY_SIZE="$(echo ${label} | awk '{print $2}')"
                 ;;
+                "reverse.frontend.headers")
+                    FRONTEND_HEADERS="$(echo ${label} | awk '{print $2}')"
+                ;;
                 "reverse.frontend.ssl")
                     FRONTEND_SSL="$(echo ${label} | awk '{print $2}')"
+                ;;
+                "reverse.frontend.hsts")
+                    FRONTEND_HSTS="$(echo ${label} | awk '{print $2}')"
                 ;;
                 "reverse.backend.port")
                     BACKEND_PORT="$(echo ${label} | awk '{print $2}')"
                 ;;
             esac
         done
-        f_log INF "Generate files for ${FRONTEND_DOMAIN}, with path=${FRONTEND_PATH}, auth=${FRONTEND_AUTH}, ssl_type=${FRONTEND_SSLTYPE}, ssl=${FRONTEND_SSL} and port=${BACKEND_PORT}"
+        f_log INF "Generate files for ${FRONTEND_DOMAIN}, with path=${FRONTEND_PATH}, auth=${FRONTEND_AUTH}, hsts=${FRONTEND_HEADERS}, ssl_type=${FRONTEND_SSLTYPE}, ssl=${FRONTEND_SSL}, hsts=${FRONTEND_HSTS} and port=${BACKEND_PORT}"
         f_gen_location ${container_name}
         f_gen_sites_enabled
         f_gen_certs ${container_name}
