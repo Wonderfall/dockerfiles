@@ -1,0 +1,27 @@
+server {
+  listen 8080;
+  server_name <frontend_domain>;
+
+  rewrite ^ https://<frontend_domain>:443$request_uri? permanent;
+}
+
+
+server {
+
+  listen 8443 ssl http2;
+  server_name <frontend_domain>;
+  index index.html index.php index.htm;
+
+  ssl_certificate /nginx/ssl/certificates/<frontend_domain>.crt;
+  ssl_certificate_key /nginx/ssl/certificates/<frontend_domain>.key;
+  ssl_trusted_certificate /nginx/ssl/certificates/<frontend_domain>.chain.pem;
+  include /nginx/conf.d/ssl.conf;
+  include /nginx/conf.d/headers.conf;
+
+  include /nginx/path.d/<frontend_domain>/*.conf;
+
+  location ~ /\.well-known/acme-challenge {
+    root /nginx/www/<frontend_domain>;
+    allow all;
+  }
+}

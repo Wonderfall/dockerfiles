@@ -1,0 +1,21 @@
+pipeline:
+  build:
+    image: xataz/docker-drone-plugin
+    repo: xataz/reverse-nginx
+    action: build
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  push:
+    image: xataz/docker-drone-plugin
+    repo: xataz/reverse-nginx
+    action: push
+    environment:
+      - UID=1000
+      - GID=991
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/xataz/.docker/config.json:/docker/.docker/config.json
+    when:
+      branch: master
+      event: [push, tag, deployment]

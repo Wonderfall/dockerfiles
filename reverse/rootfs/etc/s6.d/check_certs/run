@@ -1,0 +1,7 @@
+#!/bin/sh
+
+sleep 60
+while true; do
+    /usr/local/bin/check_certs
+    sleep 86400
+done

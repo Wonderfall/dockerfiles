@@ -1,0 +1,48 @@
+version: '2'
+
+networks:
+  default:
+    driver: bridge
+
+services:
+  lutim:
+    image: xataz/lutim
+    container_name: lutim
+    labels:
+      - reverse.frontend.domain=sub.docker.local
+      - reverse.frontend.path=lutim
+      - reverse.frontend.auth=USER:zkgudxk6qOT5g
+      - reverse.backend.port=8181
+    environment: 
+      - UID=1001
+      - GID=1001
+      - WEBROOT=/lutim
+      - SECRET=908de85a9809724481c8a360c90879da
+      - CONTACT=contact@domain.com
+      - MAX_FILE_SIZE=250000000
+
+  lufi:
+    image: xataz/lufi
+    container_name: lufi
+    labels:
+      - reverse.frontend.domain=sub.docker.local
+      - reverse.frontend.path=lufi
+      - reverse.frontend.auth=USER:zkgudxk6qOT5g
+      - reverse.backend.port=8080
+    environment:
+      - UID=1001
+      - GID=1001
+      - WEBROOT=/lufi
+
+  reverse:
+    image: xataz/reverse-nginx
+    container_name: reverse
+    ports:
+      - "80:8080"
+      - "443:8443"
+    volumes:
+      - /docker/nginx/ssl:/nginx/ssl
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on: 
+      - lufi
+      - lutim

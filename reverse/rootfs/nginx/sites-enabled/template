@@ -1,0 +1,6 @@
+server {
+  listen 8080;
+  server_name <frontend_domain>;
+  include /nginx/conf.d/headers.conf;
+  include /nginx/path.d/<frontend_domain>/*.conf;
+}

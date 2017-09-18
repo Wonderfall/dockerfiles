@@ -1,0 +1,182 @@
+#!/bin/sh
+
+## Variables
+CSI="\033["
+CEND="${CSI}0m"
+CRED="${CSI}1;31m"
+CGREEN="${CSI}1;32m"
+CYELLOW="${CSI}1;33m"
+CBLUE="${CSI}1;34m"
+
+## Functions
+f_log() {
+    LOG_TYPE=$1
+    LOG_MESSAGE=$2
+
+    case "${LOG_TYPE}" in
+    "INF")
+        echo -e "${CBLUE}=INF= $(date +%Y/%m/%d-%H:%M:%S) ${LOG_MESSAGE}${CEND}"
+    ;;
+    "SUC")
+        echo -e "${CGREEN}=SUC= $(date +%Y/%m/%d-%H:%M:%S) ${LOG_MESSAGE}${CEND}"
+    ;;
+    "WRN")
+        echo -e "${CYELLOW}=WRN= $(date +%Y/%m/%d-%H:%M:%S) ${LOG_MESSAGE}${CEND}"
+    ;;
+    "ERR")
+        echo -e "${CRED}=ERR= $(date +%Y/%m/%d-%H:%M:%S) ${LOG_MESSAGE}${CEND}"
+    ;;
+    esac
+}
+
+f_gen_sites_enabled() {
+    if [ "${FRONTEND_SSL}" == "true" ]; then
+        template_sites=/nginx/sites-enabled/template_ssl
+    else
+        template_sites=/nginx/sites-enabled/template
+    fi
+    sed -e 's|<frontend_domain>|'${FRONTEND_DOMAIN}'|' ${template_sites} > /nginx/sites-enabled/${FRONTEND_DOMAIN}.conf
+}
+
+f_gen_location() {
+    container_name=$1
+    if [ ! -d /nginx/path.d/${FRONTEND_DOMAIN} ]; then
+        mkdir -p /nginx/path.d/${FRONTEND_DOMAIN}
+    fi
+
+    if [ "${FRONTEND_PATH}" == "/" ]; then
+        path_file=/nginx/path.d/${FRONTEND_DOMAIN}/base.conf
+        auth_file=/nginx/auth/${FRONTEND_DOMAIN}/base.auth
+    else
+        path_file=/nginx/path.d/${FRONTEND_DOMAIN}/${FRONTEND_PATH}.conf
+        auth_file=/nginx/auth/${FRONTEND_DOMAIN}/${FRONTEND_PATH}.auth
+    fi
+    if [ ! -e ${path_file} ]; then
+        if [ "${FRONTEND_AUTH}" != "" ]; then
+            mkdir -p /nginx/auth/${FRONTEND_DOMAIN}
+            sed -e 's|<frontend_domain_max_body_size>|'${FRONTEND_MAX_BODY_SIZE}'|' \
+                -e 's|<backend_addr>|'${container_name}'|' \
+                -e 's|<backend_port>|'${BACKEND_PORT}'|' \
+                -e 's|<frontend_domain>|'${FRONTEND_DOMAIN}'|' \
+                -e 's|<frontend_path>|'${FRONTEND_PATH}'|' \
+                -e 's|<auth_file>|'${auth_file}'|' /nginx/path.d/template_auth > ${path_file}
+            echo "${FRONTEND_AUTH}" > ${auth_file}
+        else
+            sed -e 's|<frontend_domain_max_body_size>|'${FRONTEND_MAX_BODY_SIZE}'|' \
+                -e 's|<backend_addr>|'${container_name}'|' \
+                -e 's|<backend_port>|'${BACKEND_PORT}'|' \
+                -e 's|<frontend_path>|'${FRONTEND_PATH}'|' /nginx/path.d/template > ${path_file}
+        fi
+    fi
+}
+
+f_gen_certs() {
+    container_name=$1
+    if [ "${FRONTEND_SSL}" == "true" ]; then
+        CERTFILE=/nginx/ssl/certificates/${FRONTEND_DOMAIN}.cert.pem
+        KEYFILE=/nginx/ssl/certificates/${FRONTEND_DOMAIN}.key
+        CHAINFILE=/nginx/ssl/certificates/${FRONTEND_DOMAIN}.chain.pem
+        FULLCHAINFILE=/nginx/ssl/certificates/${FRONTEND_DOMAIN}.crt
+        if [ ! -e ${CERTFILE} ] || [ ! -e ${KEYFILE} ] || [ ! -e ${CHAINFILE} ] || [ ! -e ${FULLCHAINFILE} ]; then
+            mkdir -p /nginx/www/${FRONTEND_DOMAIN}
+            /usr/local/bin/lego -a -m ${EMAIL} -d ${FRONTEND_DOMAIN} --path /nginx/ssl --http :8080 --tls :8443 -k ${FRONTEND_SSLTYPE} run
+            if [ $? == 0 ]; then
+                head -$(grep -n "END CERTIFICATE" ${FULLCHAINFILE} | head -1 | cut -d: -f1) ${FULLCHAINFILE} > ${CERTFILE}
+                tail -$(($(wc -l ${FULLCHAINFILE} | awk '{print $1}')-$(grep -n "END CERTIFICATE" ${FULLCHAINFILE} | head -1 | cut -d: -f1))) ${FULLCHAINFILE} > ${CHAINFILE}
+                chown -R ${UID}:${GID} /nginx/ssl/
+            fi
+            [[ $? == 0 ]] && f_log INF "New Certificate for ${FRONTEND_DOMAIN} generated" || f_log ERR "New Certificate for ${FRONTEND_DOMAIN} not generated"
+        fi
+    fi
+}
+
+
+
+f_make_conf() {
+
+    FRONTEND_DOMAIN=mydomain.local
+    FRONTEND_MAX_BODY_SIZE=200M
+    FRONTEND_SSLTYPE=ec384
+    BACKEND_PORT=8080
+    FRONTEND_PATH="/"
+    FRONTEND_SSL=false
+    FRONTEND_AUTH=""
+
+    container_name=$1
+    IFS=$'\n' 
+    if [ "${CONTAINER_LABELS}" != "" ]; then
+        for label in ${CONTAINER_LABELS}; do
+            case "$(echo ${label} | awk '{print $1}')" in
+                "reverse.frontend.domain")
+                    FRONTEND_DOMAIN=""
+                    FRONTEND_DOMAIN="$(echo ${label} | awk '{print $2}')"
+                ;;
+                "reverse.frontend.path")
+                    FRONTEND_PATH="$(echo ${label} | awk '{print $2}')"
+                ;;
+                "reverse.frontend.auth")
+                    FRONTEND_AUTH="$(echo ${label} | awk '{print $2}')"
+                ;;
+                "reverse.frontend.ssltype")
+                    FRONTEND_SSLTYPE="$(echo ${label} | awk '{print $2}')"
+                ;;
+                "reverse.frontend.domain_max_body_size")
+                    FRONTEND_MAX_BODY_SIZE="$(echo ${label} | awk '{print $2}')"
+                ;;
+                "reverse.frontend.ssl")
+                    FRONTEND_SSL="$(echo ${label} | awk '{print $2}')"
+                ;;
+                "reverse.backend.port")
+                    BACKEND_PORT="$(echo ${label} | awk '{print $2}')"
+                ;;
+            esac
+        done
+        f_log INF "Generate files for ${FRONTEND_DOMAIN}, with path=${FRONTEND_PATH}, auth=${FRONTEND_AUTH}, ssl_type=${FRONTEND_SSLTYPE}, ssl=${FRONTEND_SSL} and port=${BACKEND_PORT}"
+        f_gen_location ${container_name}
+        f_gen_sites_enabled
+        f_gen_certs ${container_name}
+    fi
+}
+
+
+# Check /var/run/docker.sock
+f_log INF "Check if /var/run/docker.sock exist ..."
+ls /var/run/docker.sock > /dev/null 2>&1
+if [ $? == 0 ]; then
+    f_log INF "/var/run/docker.sock exist ..."
+else
+    f_log ERR "/var/run/docker.sock don't exist ..."
+    exit 1
+fi
+
+
+f_log INF "Start reverse configuration ..."
+
+# Prepare container
+f_log INF "Create user 'reverse'"
+addgroup -g ${GID} reverse && adduser -H -s /bin/sh -D -G reverse -u ${UID} reverse
+f_log INF "Create folder"
+mkdir -p /nginx/sites-enabled /nginx /nginx/log /nginx/run /nginx/sites-enabled /nginx/ssl /nginx/ssl/selfsigned/dhparam
+
+
+# Generate file
+for container in $(curl --unix-socket /var/run/docker.sock http://localhost/containers/json 2> /dev/null | jq '.[].Names' | sed 's|.*"/\(.*\)"$|\1|;/\[/d;/\]/d'); do 
+    CONTAINER_LABELS=$(curl --unix-socket /var/run/docker.sock http://localhost/containers/${container}/json 2> /dev/null | jq '.Config.Labels' | grep -E "reverse\." | sed 's|.*"\(.*\)": "\(.*\)".*$|\1 \2|')
+    f_make_conf ${container}
+done
+
+f_log INF "Apply permissions"
+chown -R reverse:reverse /nginx /etc/s6.d
+chmod +x /usr/local/bin/check_certs
+find /etc/s6.d -name run -exec chmod +x {} \;
+find /etc/s6.d -name finish -exec chmod +x {} \;
+
+f_log SUC "End reverse configuration"
+
+
+## run s6
+if [ $# -gt 0 ]; then
+    exec su-exec reverse:reverse "$@"
+else
+    exec su-exec reverse:reverse /bin/s6-svscan /etc/s6.d    
+fi

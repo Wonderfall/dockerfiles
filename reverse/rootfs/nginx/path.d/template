@@ -1,0 +1,5 @@
+  location <frontend_path> {
+    include /nginx/conf.d/proxy.conf;
+    client_max_body_size <frontend_domain_max_body_size>;
+    proxy_pass http://<backend_addr>:<backend_port>;
+  }

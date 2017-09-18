@@ -1,0 +1,7 @@
+  location <frontend_path> {
+    include /nginx/conf.d/proxy.conf;
+    auth_basic "Who's this?";
+    auth_basic_user_file "<auth_file>";
+    client_max_body_size <frontend_domain_max_body_size>;
+    proxy_pass http://<backend_addr>:<backend_port>;
+  }

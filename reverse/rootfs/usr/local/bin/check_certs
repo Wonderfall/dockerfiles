@@ -1,0 +1,64 @@
+#!/bin/sh
+
+## Variables
+CSI="\033["
+CEND="${CSI}0m"
+CRED="${CSI}1;31m"
+CGREEN="${CSI}1;32m"
+CYELLOW="${CSI}1;33m"
+CBLUE="${CSI}1;34m"
+
+## Functions
+f_log() {
+    LOG_TYPE=$1
+    LOG_MESSAGE=$2
+
+    case "${LOG_TYPE}" in
+    "INF")
+        echo -e "${CBLUE}=INF= $(date +%Y/%m/%d-%H:%M:%S) ${LOG_MESSAGE}${CEND}"
+    ;;
+    "WRN")
+        echo -e "${CYELLOW}=WRN= $(date +%Y/%m/%d-%H:%M:%S) ${LOG_MESSAGE}${CEND}"
+    ;;
+    "ERR")
+        echo -e "${CRED}=ERR= $(date +%Y/%m/%d-%H:%M:%S) ${LOG_MESSAGE}${CEND}"
+    ;;
+    esac
+}
+
+f_check_certs() {
+    LIST_DOMAINS=$(ls /nginx/ssl/certificates | grep .crt | grep -v issuer | sed 's|.crt||g')
+    RELOAD_NGINX=0
+
+    for domain in ${LIST_DOMAINS}; do 
+        CERTFILE=/nginx/ssl/certificates/${domain}.cert.pem
+        KEYFILE=/nginx/ssl/certificates/${domain}.key
+        CHAINFILE=/nginx/ssl/certificates/${domain}.chain.pem
+        FULLCHAINFILE=/nginx/ssl/certificates/${domain}.crt
+        
+        mkdir -p /nginx/www/${domain}
+        openssl x509 -checkend 864000 -noout -in "${FULLCHAINFILE}"
+        if [ $? == 0 ]; then
+            f_log INF "Certificate for ${domain} is good for another 10 days!"
+        else
+            f_log INF "Generate New Certificate for ${domain}"
+            /usr/local/bin/lego -a -m ${EMAIL} -d ${domain} --path /nginx/ssl --webroot /nginx/www/${domain} renew
+            if [ $? == 0 ]; then
+                if [ -e ${FULLCHAINFILE} ]; then
+                    head -$(grep -n "END CERTIFICATE" ${FULLCHAINFILE} | head -1 | cut -d: -f1) ${FULLCHAINFILE} > ${CERTFILE}
+                    tail -$(($(wc -l ${FULLCHAINFILE} | awk '{print $1}')-$(grep -n "END CERTIFICATE" ${FULLCHAINFILE} | head -1 | cut -d: -f1))) ${FULLCHAINFILE} > ${CHAINFILE}
+                    RELOAD_NGINX=1
+                    f_log INF "New Certificate for ${domain} generated" 
+                fi
+            else 
+                f_log ERR "New Certificate for ${domain} not generated"
+            fi
+        fi             
+    done
+}
+
+f_check_certs
+
+if [ ${RELOAD_NGINX} -eq 1 ]; then
+    nginx reload
+fi
