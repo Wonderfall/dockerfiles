@@ -27,7 +27,8 @@ ARG NGINX_MODULES=" \
 
 ARG NGINX_3RD_PARTY_MODULES=" \
     --add-module=/tmp/headers-more-nginx-module \
-    --add-module=/tmp/ngx_brotli"
+    --add-module=/tmp/ngx_brotli \
+    --add-module=/tmp/nginx-ct"
 
 RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
 
@@ -72,10 +73,13 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && cd /tmp && git clone https://github.com/bagder/libbrotli --depth=1 \
  && cd libbrotli && ./autogen.sh && ./configure && make -j ${NB_CORES} && make install \
  && cd /tmp && git clone https://github.com/google/ngx_brotli --depth=1 \
- && cd ngx_brotli && git submodule update --init \
+ && cd ngx_brotli && git submodule update --init && cd /tmp \
 
 # Headers More
- && cd /tmp && git clone https://github.com/openresty/headers-more-nginx-module --depth=1 \
+ && git clone https://github.com/openresty/headers-more-nginx-module --depth=1 \
+
+# nginx-ct
+&& git clone https://github.com/grahamedgecombe/nginx-ct --depth=1 \
 
 # OpenSSL
  && OPENSSL_TARBALL="openssl-${OPENSSL_VERSION}.tar.gz" \
@@ -125,6 +129,10 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && git config --global http.https://gopkg.in.followRedirects true \
  && go get github.com/xenolf/lego \
  && mv /tmp/go/bin/lego /usr/local/bin/lego \
+
+# ct-submit
+ && go get github.com/grahamedgecombe/ct-submit \
+ && mv /tmp/go/bin/ct-submit /usr/local/bin/ct-submit \
 
 # Clean
  && apk del build-dependencies \

@@ -45,6 +45,10 @@ f_gen_sites_enabled() {
     if [ "${FRONTEND_OCSP}" == "false" ]; then
         sed -i -e "s|include /nginx/conf.d/ocsp.conf|#include /nginx/conf.d/ocsp.conf|g" /nginx/sites-enabled/${FRONTEND_DOMAIN}.conf
     fi
+    if [ "${FRONTEND_CT}" == "false" ]; then
+        sed -i -e "s|ssl_ct_static_scts|#ssl_ct_static_scts|g" /nginx/sites-enabled/${FRONTEND_DOMAIN}.conf
+        sed -i -e "s|include /nginx/conf.d/ct.conf|#include /nginx/conf.d/ct.conf|g" /nginx/sites-enabled/${FRONTEND_DOMAIN}.conf
+    fi
 }
 
 f_gen_location() {
@@ -99,7 +103,17 @@ f_gen_certs() {
     fi
 }
 
-
+f_gen_scts() {
+    container_name=$1
+    if [ "${FRONTEND_SSL}" == "true" ] && [ "${FRONTEND_CT}" == "true" ]; then
+        mkdir -p /nginx/ssl/timestamps/${FRONTEND_DOMAIN}
+        FULLCHAINFILE=/nginx/ssl/certificates/${FRONTEND_DOMAIN}.crt
+        SCTFILE=nginx/ssl/timestamps/${FRONTEND_DOMAIN}/fullchain.sct
+        if [ ! -f ${SCTFILE} ]; then
+            ct-submit ct.googleapis.com/pilot <${FULLCHAINFILE}>${SCTFILE}
+        fi
+    fi
+}
 
 f_make_conf() {
 
@@ -113,6 +127,7 @@ f_make_conf() {
     FRONTEND_HSTS=true
     FRONTEND_HEADERS=true
     FRONTEND_OCSP=true
+    FRONTEND_CT=true
 
     container_name=$1
     IFS=$'\n'
@@ -147,15 +162,19 @@ f_make_conf() {
                 "reverse.frontend.ocsp")
                     FRONTEND_OCSP="$(echo ${label} | awk '{print $2}')"
                 ;;
+                "reverse.frontend.ct")
+                    FRONTEND_CT="$(echo ${label} | awk '{print $2}')"
+                ;;
                 "reverse.backend.port")
                     BACKEND_PORT="$(echo ${label} | awk '{print $2}')"
                 ;;
             esac
         done
-        f_log INF "Generate files for ${FRONTEND_DOMAIN}, with path=${FRONTEND_PATH}, auth=${FRONTEND_AUTH}, headers=${FRONTEND_HEADERS}, ssl_type=${FRONTEND_SSLTYPE}, ssl=${FRONTEND_SSL}, hsts=${FRONTEND_HSTS}, ocsp=${FRONTEND_OCSP} and port=${BACKEND_PORT}"
+        f_log INF "Generate files for ${FRONTEND_DOMAIN}, with path=${FRONTEND_PATH}, auth=${FRONTEND_AUTH}, headers=${FRONTEND_HEADERS}, ssl_type=${FRONTEND_SSLTYPE}, ssl=${FRONTEND_SSL}, hsts=${FRONTEND_HSTS}, ocsp=${FRONTEND_OCSP}, ct=${FRONTEND_CT} and port=${BACKEND_PORT}"
         f_gen_location ${container_name}
         f_gen_sites_enabled
         f_gen_certs ${container_name}
+        f_gen_scts ${container_name}
     fi
 }
 

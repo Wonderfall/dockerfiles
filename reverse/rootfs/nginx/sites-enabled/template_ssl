@@ -15,10 +15,12 @@ server {
   ssl_certificate /nginx/ssl/certificates/<frontend_domain>.crt;
   ssl_certificate_key /nginx/ssl/certificates/<frontend_domain>.key;
   ssl_trusted_certificate /nginx/ssl/certificates/<frontend_domain>.chain.pem;
+  ssl_ct_static_scts /nginx/ssl/timestamps/<frontend_domain>;
   include /nginx/conf.d/ssl.conf;
   include /nginx/conf.d/headers.conf;
   include /nginx/conf.d/hsts.conf;
   include /nginx/conf.d/ocsp.conf;
+  include /nginx/conf.d/ct.conf;
 
   include /nginx/path.d/<frontend_domain>/*.conf;
 
