@@ -44,6 +44,7 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     jemalloc \
     su-exec \
     s6 \
+    jq \
     libressl \
     bind-tools \
 
@@ -107,7 +108,7 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     --with-openssl-opt='no-async enable-ec_nistp_64_gcc_128 no-shared no-ssl2 no-ssl3 no-comp no-idea no-weak-ssl-ciphers -DOPENSSL_NO_HEARTBEATS -m64 -march=native -mtune=native -O3 -fPIE -fstack-protector-strong -D_FORTIFY_SOURCE=2' \
     --with-openssl=/tmp/openssl-${OPENSSL_VERSION} \
     --http-log-path=/nginx/log/nginx_access.log \
-    --error-log-path=/nginx/log/nginx/nginx_error.log \
+    --error-log-path=/nginx/log/nginx_error.log \
     --pid-path=/nginx/run/nginx.pid \
     --lock-path=/nginx/run/nginx.lock \
     --user=reverse --group=reverse \
