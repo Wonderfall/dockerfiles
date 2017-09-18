@@ -18,6 +18,7 @@ server {
   include /nginx/conf.d/ssl.conf;
   include /nginx/conf.d/headers.conf;
   include /nginx/conf.d/hsts.conf;
+  include /nginx/conf.d/ocsp.conf;
 
   include /nginx/path.d/<frontend_domain>/*.conf;
 

@@ -42,6 +42,9 @@ f_gen_sites_enabled() {
     if [ "${FRONTEND_HEADERS}" == "false" ]; then
         sed -i -e "s|include /nginx/conf.d/headers.conf|#include /nginx/conf.d/headers.conf|g" /nginx/sites-enabled/${FRONTEND_DOMAIN}.conf
     fi
+    if [ "${FRONTEND_OCSP}" == "false" ]; then
+        sed -i -e "s|include /nginx/conf.d/ocsp.conf|#include /nginx/conf.d/ocsp.conf|g" /nginx/sites-enabled/${FRONTEND_DOMAIN}.conf
+    fi
 }
 
 f_gen_location() {
@@ -109,6 +112,7 @@ f_make_conf() {
     FRONTEND_AUTH=""
     FRONTEND_HSTS=true
     FRONTEND_HEADERS=true
+    FRONTEND_OCSP=true
 
     container_name=$1
     IFS=$'\n'
@@ -140,12 +144,15 @@ f_make_conf() {
                 "reverse.frontend.hsts")
                     FRONTEND_HSTS="$(echo ${label} | awk '{print $2}')"
                 ;;
+                "reverse.frontend.ocsp")
+                    FRONTEND_OCSP="$(echo ${label} | awk '{print $2}')"
+                ;;
                 "reverse.backend.port")
                     BACKEND_PORT="$(echo ${label} | awk '{print $2}')"
                 ;;
             esac
         done
-        f_log INF "Generate files for ${FRONTEND_DOMAIN}, with path=${FRONTEND_PATH}, auth=${FRONTEND_AUTH}, hsts=${FRONTEND_HEADERS}, ssl_type=${FRONTEND_SSLTYPE}, ssl=${FRONTEND_SSL}, hsts=${FRONTEND_HSTS} and port=${BACKEND_PORT}"
+        f_log INF "Generate files for ${FRONTEND_DOMAIN}, with path=${FRONTEND_PATH}, auth=${FRONTEND_AUTH}, headers=${FRONTEND_HEADERS}, ssl_type=${FRONTEND_SSLTYPE}, ssl=${FRONTEND_SSL}, hsts=${FRONTEND_HSTS}, ocsp=${FRONTEND_OCSP} and port=${BACKEND_PORT}"
         f_gen_location ${container_name}
         f_gen_sites_enabled
         f_gen_certs ${container_name}
