@@ -100,10 +100,6 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && echo "All seems good, now unpacking ${NGINX_TARBALL}..." \
  && tar xzf ${NGINX_TARBALL} && cd nginx-${NGINX_VERSION} \
 
-# Nginx patch : full HPACK encoding
- && wget -q https://gist.githubusercontent.com/Wonderfall/da386e52e8c65c81d358c64066c85ace/raw/e9ee0228eaf37c9da3fd70129700651f6a9d5839/nginx-http2-hpack.patch \
- && patch -p1 < nginx-http2-hpack.patch \
-
 # Nginx patch : dynamic TLS records
  && wget -q https://raw.githubusercontent.com/cujanovic/nginx-dynamic-tls-records-patch/master/nginx__dynamic_tls_records_1.13.0%2B.patch -O dynamic_records.patch \
  && patch -p1 < dynamic_records.patch \
@@ -116,7 +112,6 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     --with-ld-opt="-lrt -ljemalloc -Wl,-Bsymbolic-functions -Wl,-z,relro" \
     --with-openssl-opt='no-async enable-ec_nistp_64_gcc_128 no-shared no-ssl2 no-ssl3 no-comp no-idea no-weak-ssl-ciphers -DOPENSSL_NO_HEARTBEATS -O3 -fPIE -fstack-protector-strong -D_FORTIFY_SOURCE=2' \
     --with-openssl=/tmp/openssl-${OPENSSL_VERSION} \
-    --with-http_v2_hpack_enc \
     --http-log-path=/nginx/log/nginx_access.log \
     --error-log-path=/nginx/log/nginx_error.log \
     --pid-path=/nginx/run/nginx.pid \
