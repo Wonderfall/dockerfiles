@@ -133,63 +133,64 @@ version: '2'
 networks:
   default:
     driver: bridge
-    
-nextcloud:
-  image: wonderfall/nextcloud
-  depends_on:
-    - nextcloud-db           # If using MySQL
-    - solr                   # If using Nextant
-    - redis                  # If using Redis
-  environment:
-    - UID=1000
-    - GID=1000
-    - UPLOAD_MAX_SIZE=10G
-    - APC_SHM_SIZE=128M
-    - OPCACHE_MEM_SIZE=128
-    - CRON_PERIOD=15m
-    - TZ=Europe/Berlin
-    - ADMIN_USER=admin            # Don't set to configure through browser
-    - ADMIN_PASSWORD=admin        # Don't set to configure through browser
-    - DOMAIN=localhost
-    - DB_TYPE=mysql
-    - DB_NAME=nextcloud
-    - DB_USER=nextcloud
-    - DB_PASSWORD=supersecretpassword
-    - DB_HOST=nextcloud-db
-  volumes:
-    - /docker/nextcloud/data:/data
-    - /docker/nextcloud/config:/config
-    - /docker/nextcloud/apps:/apps2
-    - /docker/nextcloud/themes:/nextcloud/themes
 
-# If using MySQL
-nextcloud-db:
-  image: mariadb:10
-  volumes:
-    - /docker/nextcloud/db:/var/lib/mysql
-  environment:
-    - MYSQL_ROOT_PASSWORD=supersecretpassword
-    - MYSQL_DATABASE=nextcloud
-    - MYSQL_USER=nextcloud
-    - MYSQL_PASSWORD=supersecretpassword
-    
-# If using Nextant
-solr:
-  image: solr:6-alpine
-  container_name: solr
-  volumes:
-    - /docker/nextcloud/solr:/opt/solr/server/solr/mycores
-  entrypoint:
-    - docker-entrypoint.sh
-    - solr-precreate
-    - nextant
+services:
+  nextcloud:
+    image: wonderfall/nextcloud
+    depends_on:
+      - nextcloud-db           # If using MySQL
+      - solr                   # If using Nextant
+      - redis                  # If using Redis
+    environment:
+      - UID=1000
+      - GID=1000
+      - UPLOAD_MAX_SIZE=10G
+      - APC_SHM_SIZE=128M
+      - OPCACHE_MEM_SIZE=128
+      - CRON_PERIOD=15m
+      - TZ=Europe/Berlin
+      - ADMIN_USER=admin            # Don't set to configure through browser
+      - ADMIN_PASSWORD=admin        # Don't set to configure through browser
+      - DOMAIN=localhost
+      - DB_TYPE=mysql
+      - DB_NAME=nextcloud
+      - DB_USER=nextcloud
+      - DB_PASSWORD=supersecretpassword
+      - DB_HOST=nextcloud-db
+    volumes:
+      - /docker/nextcloud/data:/data
+      - /docker/nextcloud/config:/config
+      - /docker/nextcloud/apps:/apps2
+      - /docker/nextcloud/themes:/nextcloud/themes
 
-# If using Redis
-redis:
-  image: redis:alpine
-  container_name: redis
-  volumes:
-    - /docker/nextcloud/redis:/data
+  # If using MySQL
+  nextcloud-db:
+    image: mariadb:10
+    volumes:
+      - /docker/nextcloud/db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=supersecretpassword
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=supersecretpassword
+    
+  # If using Nextant
+  solr:
+    image: solr:6-alpine
+    container_name: solr
+    volumes:
+      - /docker/nextcloud/solr:/opt/solr/server/solr/mycores
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - nextant
+
+  # If using Redis
+  redis:
+    image: redis:alpine
+    container_name: redis
+    volumes:
+      - /docker/nextcloud/redis:/data
 ```
 
 You can update everything with `docker-compose pull` followed by `docker-compose up -d`.
