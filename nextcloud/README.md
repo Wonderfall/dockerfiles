@@ -3,10 +3,6 @@
 
 [![](https://images.microbadger.com/badges/version/wonderfall/nextcloud.svg)](http://microbadger.com/images/wonderfall/nextcloud "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/wonderfall/nextcloud.svg)](http://microbadger.com/images/wonderfall/nextcloud "Get your own image badge on microbadger.com")
 
-[![](https://images.microbadger.com/badges/version/wonderfall/nextcloud:daily.svg)](https://microbadger.com/images/wonderfall/nextcloud:daily "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/wonderfall/nextcloud:daily.svg)](https://microbadger.com/images/wonderfall/nextcloud:daily "Get your own image badge on microbadger.com")
-
-[![](https://images.microbadger.com/badges/version/wonderfall/nextcloud:11.0.svg)](https://microbadger.com/images/wonderfall/nextcloud:11.0 "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/wonderfall/nextcloud:11.0.svg)](https://microbadger.com/images/wonderfall/nextcloud:11.0 "Get your own image badge on microbadger.com")
-
 ![](https://s32.postimg.org/69nev7aol/Nextcloud_logo.png)
 
 **This image was made for my own use and I have no intention to make this official. Support won't be regular so if there's an update, or a fix, you can open a pull request. Any contribution is welcome, but please be aware I'm very busy currently. Before opening an issue, please check if there's already one related. Also please use Github instead of Docker Hub, otherwise I won't see your comments. Thanks.**
@@ -123,7 +119,7 @@ You will have to build yourself using an Alpine-ARM image, like `orax/alpine-arm
 In the admin panel, you should switch from `AJAX cron` to `cron` (system cron).
 
 ### Update
-Pull a newer image, then recreate the container as you did before (*Setup* step). None of your data will be lost since you're using external volumes. If Nextcloud performed a full upgrade, your apps could be disabled, enable them again.
+Pull a newer image, then recreate the container as you did before (*Setup* step). None of your data will be lost since you're using external volumes. If Nextcloud performed a full upgrade, your apps could be disabled, enable them again **(starting with 12.0.x, your apps are automatically enabled after an upgrade)**.
 
 ### Docker-compose
 I advise you to use [docker-compose](https://docs.docker.com/compose/), which is a great tool for managing containers. You can create a `docker-compose.yml` with the following content (which must be adapted to your needs) and then run `docker-compose up -d nextcloud-db`, wait some 15 seconds for the database to come up, then run everything with `docker-compose up -d`, that's it! On subsequent runs,  a single `docker-compose up -d` is sufficient!
@@ -206,44 +202,48 @@ Redis can be used for distributed and file locking cache, alongside with APCu (l
 ```
 
 ### How to configure Nextant
-You will have to deploy a Solr server, I've shown an example above with docker-compose. Once Nextant app is installed, go to "additional settings" in your admin pannel and use http://solr:8983/solr as "Adress of your Solr Servlet". There you go. You may however experience the same issue as mine : https://github.com/nextcloud/server/pull/3160 (let's hope there'll be at least a backport...).
+You will have to deploy a Solr server, I've shown an example above with docker-compose. Once Nextant app is installed, go to "additional settings" in your admin pannel and use http://solr:8983/solr as "Adress of your Solr Servlet". There you go!
 
 ### Tip : how to use occ command
-There is a script for that, so you shouldn't bother to log into the container, set the right permissions, and so on. Use `docker exec -ti nexcloud occ command`.
+There is a script for that, so you shouldn't bother to log into the container, set the right permissions, and so on. Just use `docker exec -ti nexcloud occ command`.
 
 ### Reverse proxy
-Of course you can use your own solution to do so! nginx, Haproxy, Caddy, h2o, there's plenty of choices and documentation about it on the Web.
+Of course you can use your own solution! nginx, Haproxy, Caddy, h2o, Traefik...
 
-Personally I'm using nginx, so if you're using nginx, there are two possibilites :
+Whatever your choice is, you have to know that headers are already sent by the container, including HSTS, so there's no need to add them again. **It is strongly recommended (I'd like to say : MANDATORY) to use Nextcloud through an encrypted connection (HTTPS).** [Let's Encrypt](https://letsencrypt.org/) provides free SSL/TLS certificates, so you have no excuses.
 
-- nginx is on the host : get the Nextcloud container IP address with `docker inspect nextcloud | grep IPAddress\" | head -n1 | grep -Eo "[0-9.]+" `. But whenever the container is restarted or recreated, its IP address can change. Or you can bind Nextcloud HTTP port (8888) to the host (so the reverse proxy can access with `http://localhost:8888` or whatever port you set), but in this case you should consider using a firewall since it's also listening to `http://0.0.0.0:8888`.
+You can take a look at my brand new image [wonderfall/reverse](https://hub.docker.com/r/wonderfall/reverse/). It was made with security and ease-of-use in mind, using the latest versions of nginx and OpenSSL. It also provides SSL/TLS automation with [lego](https://github.com/xenolf/lego), a Let's Encrypt client. Also, no need to bother about configuration files! This image does litterally everything for you.
 
-- nginx is in a container, things are easier : you can link nextcloud container to an nginx container so you can use `proxy_pass http://nextcloud:8888`. If you're interested, I provide a nginx image available on Docker Hub : `wonderfall/boring-nginx`, and it comes with a script called `ngxproxy`, which does all the magic after asking you a few questions. Otherwise, an example of configuration would be :
+Look at how simple it is. First, you have to add labels to your Nextcloud container, like this:
 
 ```
-server {
-  listen 8000;
-  server_name example.com;
-  return 301 https://$host$request_uri;
-}
-
-server {
-  listen 4430 ssl http2;
-  server_name example.com;
-
-  ssl_certificate /certs/example.com.crt;
-  ssl_certificate_key /certs/example.com.key;
-
-  include /etc/nginx/conf/ssl_params.conf;
-
-  client_max_body_size 10G; # change this value it according to $UPLOAD_MAX_SIZE
-
-  location / {
-    proxy_pass http://nextcloud:8888;
-    include /etc/nginx/conf/proxy_params;
-  }
-}
+  nextcloud:
+  ...
+    labels:
+      - reverse.frontend.domain=cloud.domain.tld
+      - reverse.backend.port=8888
+      - reverse.frontend.ssl=true
+      - reverse.frontend.ssltype=ec384
+      - reverse.frontend.hsts=false
+      - reverse.frontend.headers=false
 ```
 
+These labels can tell the reverse container what settings should be set when generating files/certificates for Nextcloud. Now you can add the reverse container in your docker-compose file, and you need to provide it your `EMAIL` (for Let's Encrypt), and bind it to the nextcloud container :
 
-Headers are already sent by the container, including HSTS, so there's no need to add them again. **It is strongly recommended to use Nextcloud through an encrypted connection (HTTPS).** [Let's Encrypt](https://letsencrypt.org/) provides free SSL/TLS certificates (trustworthy!).
+```
+  reverse:
+    image: wonderfall/reverse
+    container_name: reverse
+    ports:
+      - "80:8080"
+      - "443:8443"
+    environment:
+      - EMAIL=admin@domain.tld
+    volumes:
+      - /mnt/docker/nginx/ssl:/nginx/ssl
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - nextcloud
+```
+
+That's it! Did I lie to you?
