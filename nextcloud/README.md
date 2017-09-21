@@ -71,13 +71,13 @@ Don't forget to use a **strong password** for the admin account!
 Basically, you can use a database instance running on the host or any other machine. An easier solution is to use an external database container. I suggest you to use MariaDB, which is a reliable database server. You can use the official `mariadb` image available on Docker Hub to create a database container, which must be linked to the Nextcloud container. PostgreSQL can also be used as well.
 
 ### Setup
-Pull the image and create a container. `/mnt` can be anywhere on your host, this is just an example. Change `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD` values (mariadb). You may also want to change UID and GID for Nextcloud, as well as other variables (see *Environment Variables*).
+Pull the image and create a container. `/docker` can be anywhere on your host, this is just an example. Change `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD` values (mariadb). You may also want to change UID and GID for Nextcloud, as well as other variables (see *Environment Variables*).
 
 ```
 docker pull wonderfall/nextcloud:10.0 && docker pull mariadb:10
 
 docker run -d --name db_nextcloud \
-       -v /mnt/nextcloud/db:/var/lib/mysql \
+       -v /docker/nextcloud/db:/var/lib/mysql \
        -e MYSQL_ROOT_PASSWORD=supersecretpassword \
        -e MYSQL_DATABASE=nextcloud -e MYSQL_USER=nextcloud \
        -e MYSQL_PASSWORD=supersecretpassword \
@@ -85,10 +85,10 @@ docker run -d --name db_nextcloud \
        
 docker run -d --name nextcloud \
        --link db_nextcloud:db_nextcloud \
-       -v /mnt/nextcloud/data:/data \
-       -v /mnt/nextcloud/config:/config \
-       -v /mnt/nextcloud/apps:/apps2 \
-       -v /mnt/nextcloud/themes:/nextcloud/themes \
+       -v /docker/nextcloud/data:/data \
+       -v /docker/nextcloud/config:/config \
+       -v /docker/nextcloud/apps:/apps2 \
+       -v /docker/nextcloud/themes:/nextcloud/themes \
        -e UID=1000 -e GID=1000 \
        -e UPLOAD_MAX_SIZE=10G \
        -e APC_SHM_SIZE=128M \
@@ -128,12 +128,18 @@ I advise you to use [docker-compose](https://docs.docker.com/compose/), which is
 Don't copy/paste without thinking! It is a model so you can see how to do it correctly.
 
 ```
+version: '2'
+
+networks:
+  default:
+    driver: bridge
+    
 nextcloud:
   image: wonderfall/nextcloud
-  links:
-    - nextcloud-db:nextcloud-db   # If using MySQL
-    - solr:solr                   # If using Nextant
-    - redis:redis                 # If using Redis
+  depends_on:
+    - nextcloud-db           # If using MySQL
+    - solr                   # If using Nextant
+    - redis                  # If using Redis
   environment:
     - UID=1000
     - GID=1000
@@ -151,16 +157,16 @@ nextcloud:
     - DB_PASSWORD=supersecretpassword
     - DB_HOST=nextcloud-db
   volumes:
-    - /mnt/nextcloud/data:/data
-    - /mnt/nextcloud/config:/config
-    - /mnt/nextcloud/apps:/apps2
-    - /mnt/nextcloud/themes:/nextcloud/themes
+    - /docker/nextcloud/data:/data
+    - /docker/nextcloud/config:/config
+    - /docker/nextcloud/apps:/apps2
+    - /docker/nextcloud/themes:/nextcloud/themes
 
 # If using MySQL
 nextcloud-db:
   image: mariadb:10
   volumes:
-    - /mnt/nextcloud/db:/var/lib/mysql
+    - /docker/nextcloud/db:/var/lib/mysql
   environment:
     - MYSQL_ROOT_PASSWORD=supersecretpassword
     - MYSQL_DATABASE=nextcloud
@@ -172,7 +178,7 @@ solr:
   image: solr:6-alpine
   container_name: solr
   volumes:
-    - /mnt/docker/solr:/opt/solr/server/solr/mycores
+    - /docker/nextcloud/solr:/opt/solr/server/solr/mycores
   entrypoint:
     - docker-entrypoint.sh
     - solr-precreate
@@ -183,7 +189,7 @@ redis:
   image: redis:alpine
   container_name: redis
   volumes:
-    - /mnt/docker/redis:/data
+    - /docker/nextcloud/redis:/data
 ```
 
 You can update everything with `docker-compose pull` followed by `docker-compose up -d`.
@@ -240,7 +246,7 @@ These labels can tell the reverse container what settings should be set when gen
     environment:
       - EMAIL=admin@domain.tld
     volumes:
-      - /mnt/docker/nginx/ssl:/nginx/ssl
+      - /docker/reverse/ssl:/nginx/ssl
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - nextcloud
