@@ -87,7 +87,8 @@ ARG PHP_EXT_LIST=" \
     pgsql \
     ftp \
     exif \
-    gmp"
+    gmp \
+    imap"
 
 ARG CUSTOM_BUILD_PKGS=" \
     freetype-dev \
@@ -105,7 +106,8 @@ ARG CUSTOM_BUILD_PKGS=" \
     libxml2-dev \
     libressl-dev \
     libbz2 \
-    sqlite-dev"
+    sqlite-dev \
+    imap-dev"
 
 ARG CUSTOM_PKGS=" \
     freetype \
@@ -114,7 +116,8 @@ ARG CUSTOM_PKGS=" \
     libmcrypt \
     bzip2-dev \
     icu \
-    libpq"
+    libpq \
+    c-client"
 
 COPY rootfs /
 
