@@ -1,6 +1,6 @@
 FROM wonderfall/nginx-php
 
-ARG PRIVATEBIN_VER=1.1
+ARG PRIVATEBIN_VER=1.1.1
 
 ENV GID=991 UID=991 \
     UPLOAD_MAX_SIZE=10M \
@@ -25,6 +25,6 @@ EXPOSE 8888
 
 LABEL maintainer="Wonderfall <wonderfall@targaryen.house>" \
       description="A minimalist, open source online pastebin where the server has zero knowledge of pasted data" \
-      version="PrivateBin 1.1"
+      version="PrivateBin 1.1.1"
 
 CMD ["run.sh"]
