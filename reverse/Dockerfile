@@ -71,7 +71,9 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
 
 # Brotli
  && cd /tmp && git clone https://github.com/bagder/libbrotli --depth=1 \
- && cd libbrotli && ./autogen.sh && ./configure && make -j ${NB_CORES} && make install \
+ && cd libbrotli && ./autogen.sh && ./configure \
+ && mkdir brotli/c/tools/.deps && touch brotli/c/tools/.deps/brotli-brotli.Po \
+ && make -j ${NB_CORES} && make install \
  && cd /tmp && git clone https://github.com/google/ngx_brotli --depth=1 \
  && cd ngx_brotli && git submodule update --init && cd /tmp \
 
