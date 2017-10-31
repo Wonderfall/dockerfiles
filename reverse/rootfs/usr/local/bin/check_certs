@@ -37,13 +37,22 @@ f_check_certs() {
         FULLCHAINFILE=/nginx/ssl/certificates/${domain}.crt
         SCTFILE=/nginx/ssl/timestamps/${domain}/fullchain.sct
         
+        SSL_ALGO="$(openssl x509 -text -in ${FULLCHAINFILE} | grep "Public Key Algorithm" | awk '{print $4}')"
+        SSL_SIZE="$(openssl x509 -text -in ${FULLCHAINFILE} | grep "Public-Key" | sed 's/^.*(\(.*\) bit)$/\1/')"
+
+        if [ "${SSL_ALGO}" == "rsaEncryption" ]; then
+            SSL_TYPE="rsa${SSL_SIZE}"
+        elif [ "${SSL_ALGO}" == "id-ecPublicKey" ]; then
+            SSL_TYPE="ec${SSL_SIZE}"
+        fi
+        
         mkdir -p /nginx/www/${domain}
         openssl x509 -checkend 864000 -noout -in "${FULLCHAINFILE}"
         if [ $? == 0 ]; then
             f_log INF "Certificate for ${domain} is good for another 10 days!"
         else
             f_log INF "Generate New Certificate for ${domain}"
-            /usr/local/bin/lego -a -m ${EMAIL} -d ${domain} --path /nginx/ssl --webroot /nginx/www/${domain} renew
+            /usr/local/bin/lego -a -m ${EMAIL} -d ${domain} --path /nginx/ssl --webroot /nginx/www/${domain} -k ${SSL_TYPE} renew
             if [ $? == 0 ]; then
                 if [ -e ${FULLCHAINFILE} ]; then
                     head -$(grep -n "END CERTIFICATE" ${FULLCHAINFILE} | head -1 | cut -d: -f1) ${FULLCHAINFILE} > ${CERTFILE}
