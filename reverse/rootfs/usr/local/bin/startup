@@ -194,15 +194,7 @@ f_log INF "Start reverse configuration ..."
 
 # Prepare container
 f_log INF "Create user 'reverse'"
-if [ "$(grep ${GID} /etc/group)" == "" ]; then
-     addgroup -g ${GID} reverse
-else
-    GROUP_NAME=$(grep ${GID} /etc/group | cut -d: -f1)
-fi
-
-if [ "$(grep ${UID} /etc/passwd)" == "" ]; then
-    adduser -H -s /bin/sh -D -G ${GROUP_NAME} -u ${UID} reverse
-fi
+addgroup -g ${GID} reverse && adduser -H -s /bin/sh -D -G reverse -u ${UID} reverse
 f_log INF "Create folder"
 mkdir -p /nginx/sites-enabled /nginx /nginx/log /nginx/run /nginx/sites-enabled /nginx/ssl /nginx/ssl/selfsigned/dhparam
 
