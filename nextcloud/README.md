@@ -9,7 +9,7 @@
 
 ### Features
 - Based on Alpine Linux.
-- Bundled with nginx and PHP 7.1 (wonderfall/nginx-php image).
+- Bundled with nginx and PHP 7.1 (hoellen/nginx-php image).
 - Automatic installation using environment variables.
 - Package integrity (SHA512) and authenticity (PGP) checked during building process.
 - Data and apps persistence.
@@ -74,7 +74,7 @@ Basically, you can use a database instance running on the host or any other mach
 Pull the image and create a container. `/docker` can be anywhere on your host, this is just an example. Change `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD` values (mariadb). You may also want to change UID and GID for Nextcloud, as well as other variables (see *Environment Variables*).
 
 ```
-docker pull wonderfall/nextcloud:10.0 && docker pull mariadb:10
+docker pull hoellen/nextcloud:12.0 && docker pull mariadb:10
 
 docker run -d --name db_nextcloud \
        -v /docker/nextcloud/db:/var/lib/mysql \
@@ -82,7 +82,7 @@ docker run -d --name db_nextcloud \
        -e MYSQL_DATABASE=nextcloud -e MYSQL_USER=nextcloud \
        -e MYSQL_PASSWORD=supersecretpassword \
        mariadb:10
-       
+
 docker run -d --name nextcloud \
        --link db_nextcloud:db_nextcloud \
        -v /docker/nextcloud/data:/data \
@@ -103,7 +103,7 @@ docker run -d --name nextcloud \
        -e DB_USER=nextcloud \
        -e DB_PASSWORD=supersecretpassword \
        -e DB_HOST=db_nextcloud \
-       wonderfall/nextcloud:10.0
+       hoellen/nextcloud:12.0
 ```
 
 You are **not obliged** to use `ADMIN_USER` and `ADMIN_PASSWORD`. If these variables are not provided, you'll be able to configure your admin acccount from your browser.
@@ -136,7 +136,7 @@ networks:
 
 services:
   nextcloud:
-    image: wonderfall/nextcloud
+    image: hoellen/nextcloud
     depends_on:
       - nextcloud-db           # If using MySQL
       - solr                   # If using Nextant
@@ -173,7 +173,7 @@ services:
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
       - MYSQL_PASSWORD=supersecretpassword
-    
+
   # If using Nextant
   solr:
     image: solr:6-alpine
