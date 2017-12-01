@@ -1,2 +1,2 @@
 # dockerfiles
-Discontinued. Fork at your will.
+Based on [Wonderfall Dockerfiles](https://github.com/Wonderfall/dockerfiles)
