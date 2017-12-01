@@ -55,6 +55,6 @@ EXPOSE 8888
 
 LABEL description="A server software for creating file hosting services" \
       nextcloud="Nextcloud daily" \
-      maintainer="Wonderfall <wonderfall@targaryen.house>"
+      maintainer="hoellen <info@hoellen.eu>"
 
 CMD ["run.sh"]
