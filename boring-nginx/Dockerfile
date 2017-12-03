@@ -29,11 +29,7 @@ ARG NGINX_3RD_PARTY_MODULES=" \
     --add-module=/tmp/ngx_brotli"
 
 RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
-
-# Update system
  && apk -U upgrade \
-
-# Installing runtime dependencies
  && apk add \
     ${BUILD_DEPS} \
     pcre \
@@ -45,8 +41,6 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     libressl \
     bind-tools \
     tini \
-
-# Installing build dependencies
  && apk add -t build-dependencies \
     build-base \
     linux-headers \
@@ -63,17 +57,11 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     gnupg \
     cmake \
     go \
-
-# Brotli
  && cd /tmp && git clone https://github.com/bagder/libbrotli --depth=1 \
  && cd libbrotli && ./autogen.sh && ./configure && make -j ${NB_CORES} && make install \
  && cd /tmp && git clone https://github.com/google/ngx_brotli --depth=1 \
  && cd ngx_brotli && git submodule update --init \
-
-# Headers More
  && cd /tmp && git clone https://github.com/openresty/headers-more-nginx-module --depth=1 \
-
-# BoringSSL
  && git clone https://boringssl.googlesource.com/boringssl --depth=1 \
  && cd boringssl \
  && sed -i 's@out \([>=]\) TLS1_2_VERSION@out \1 TLS1_3_VERSION@' ssl/ssl_lib.cc \
@@ -86,8 +74,6 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && make -j ${NB_CORES} && cd .. \
  && mkdir -p .openssl/lib/ && cd .openssl && ln -s ../include && cd .. \
  && cp build/crypto/libcrypto.a build/ssl/libssl.a .openssl/lib && cd /tmp \
-
-# Nginx tarball checking
  && NGINX_TARBALL="nginx-${NGINX_VERSION}.tar.gz" \
  && wget -q https://nginx.org/download/${NGINX_TARBALL} \
  && echo "Verifying ${NGINX_TARBALL} using GPG..." \
@@ -100,16 +86,8 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && if [ "${FINGERPRINT}" != "${GPG_NGINX}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
  && echo "All seems good, now unpacking ${NGINX_TARBALL}..." \
  && tar xzf ${NGINX_TARBALL} && cd nginx-${NGINX_VERSION} \
-
-# Nginx patch : dynamic TLS records
  && wget -q https://raw.githubusercontent.com/cujanovic/nginx-dynamic-tls-records-patch/master/nginx__dynamic_tls_records_1.13.0%2B.patch -O dynamic_records.patch \
  && patch -p1 < dynamic_records.patch \
-
-# Nginx full HPACK encoding support
-# && wget -q https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx_1.13.1_http2_hpack.patch \
-# && patch -p1 < nginx_1.13.1_http2_hpack.patch \
-
-# Nginx compilation
  && ./configure \
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
@@ -121,8 +99,6 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     ${NGINX_3RD_PARTY_MODULES} \
  && make -j ${NB_CORES} && make install && make clean \
  && strip -s /usr/sbin/nginx \
-
-# Clean
  && apk del build-dependencies \
  && rm -rf /tmp/* /var/cache/apk/* /root/.gnupg
 
