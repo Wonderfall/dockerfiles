@@ -1,5 +1,0 @@
-#!/bin/sh
-cd /ghost
-NODE_ENV=development node_modules/.bin/knex-migrator init
-NODE_ENV=development node_modules/.bin/knex-migrator migrate
-exec npm start

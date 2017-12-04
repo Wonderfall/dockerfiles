@@ -1,6 +1,0 @@
-#!/bin/sh
-
-while true; do
-  php -f /freshrss/app/actualize_script.php
-  sleep <CRON_PERIOD>
-done
