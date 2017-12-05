@@ -1,6 +1,6 @@
 FROM alpine:3.6
 
-ARG VERSION=0.12.0
+ARG VERSION=0.13.1
 
 ENV BASE_URL=False IMAGE_PROXY=False \
     UID=991 GID=991
@@ -36,6 +36,6 @@ RUN chmod +x /usr/local/bin/run.sh
 
 EXPOSE 8888
 
-LABEL maintainer="Wonderfall <wonderfall@targaryen.house>"
+LABEL maintainer="hoellen <info@hoellen.eu>"
 
 CMD ["run.sh"]
