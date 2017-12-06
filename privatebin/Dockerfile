@@ -1,4 +1,4 @@
-FROM wonderfall/nginx-php
+FROM hoellen/nginx-php
 
 ARG PRIVATEBIN_VER=1.1.1
 
@@ -23,7 +23,7 @@ VOLUME /privatebin/data /php/session
 
 EXPOSE 8888
 
-LABEL maintainer="Wonderfall <wonderfall@targaryen.house>" \
+LABEL maintainer="hoellen <info@hoellen.eu>" \
       description="A minimalist, open source online pastebin where the server has zero knowledge of pasted data" \
       version="PrivateBin 1.1.1"
 
