@@ -8,6 +8,7 @@
 **This image was made for my own use and I have no intention to make this official. Support won't be regular so if there's an update, or a fix, you can open a pull request. Any contribution is welcome, but please be aware I'm very busy currently. Before opening an issue, please check if there's already one related. Also please use Github instead of Docker Hub, otherwise I won't see your comments. Thanks.**
 
 ### Features
+- Based on wonderfall/dockerfiles (Thanks!)
 - Based on Alpine Linux.
 - Bundled with nginx and PHP 7.1 (hoellen/nginx-php image).
 - Automatic installation using environment variables.
@@ -25,8 +26,6 @@
 - **latest** : latest stable version. (12.0)
 - **12.0** : latest 12.0.x version (stable)
 - **11.0** : latest 11.0.x version (old stable)
-- **10.0** : latest 10.0.x version (old stable) (unmaintained)
-- **9.0** : latest 9.0.x version. (old stable) (unmaintained)
 - **daily** : latest code (daily build).
 
 Other tags than `daily` are built weekly. For security reasons, you should occasionally update the container, even if you have the latest version of Nextcloud.
@@ -219,38 +218,5 @@ Of course you can use your own solution! nginx, Haproxy, Caddy, h2o, Traefik...
 
 Whatever your choice is, you have to know that headers are already sent by the container, including HSTS, so there's no need to add them again. **It is strongly recommended (I'd like to say : MANDATORY) to use Nextcloud through an encrypted connection (HTTPS).** [Let's Encrypt](https://letsencrypt.org/) provides free SSL/TLS certificates, so you have no excuses.
 
-You can take a look at my brand new image [wonderfall/reverse](https://hub.docker.com/r/wonderfall/reverse/). It was made with security and ease-of-use in mind, using the latest versions of nginx and OpenSSL. It also provides SSL/TLS automation with [lego](https://github.com/xenolf/lego), a Let's Encrypt client. Also, no need to bother about configuration files! This image does litterally everything for you.
-
-Look at how simple it is. First, you have to add labels to your Nextcloud container, like this:
-
-```
-  nextcloud:
-  ...
-    labels:
-      - reverse.frontend.domain=cloud.domain.tld
-      - reverse.backend.port=8888
-      - reverse.frontend.ssl=true
-      - reverse.frontend.ssltype=ec384
-      - reverse.frontend.hsts=false
-      - reverse.frontend.headers=false
-```
-
-These labels can tell the reverse container what settings should be set when generating files/certificates for Nextcloud. Now you can add the reverse container in your docker-compose file, and you need to provide it your `EMAIL` (for Let's Encrypt), and bind it to the nextcloud container :
-
-```
-  reverse:
-    image: wonderfall/reverse
-    container_name: reverse
-    ports:
-      - "80:8080"
-      - "443:8443"
-    environment:
-      - EMAIL=admin@domain.tld
-    volumes:
-      - /docker/reverse/ssl:/nginx/ssl
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - nextcloud
-```
 
 That's it! Did I lie to you?
