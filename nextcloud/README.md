@@ -211,7 +211,7 @@ Redis can be used for distributed and file locking cache, alongside with APCu (l
 You will have to deploy a Solr server, I've shown an example above with docker-compose. Once Nextant app is installed, go to "additional settings" in your admin pannel and use http://solr:8983/solr as "Adress of your Solr Servlet". There you go!
 
 ### Tip : how to use occ command
-There is a script for that, so you shouldn't bother to log into the container, set the right permissions, and so on. Just use `docker exec -ti nexcloud occ command`.
+There is a script for that, so you shouldn't bother to log into the container, set the right permissions, and so on. Just use `docker exec -ti nextcloud occ command`.
 
 ### Reverse proxy
 Of course you can use your own solution! nginx, Haproxy, Caddy, h2o, Traefik...
