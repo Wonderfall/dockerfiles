@@ -113,6 +113,6 @@ VOLUME /sites-enabled /www /conf.d /passwds /certs /var/log/nginx
 LABEL description="nginx built from source" \
       openssl="BoringSSL" \
       nginx="nginx ${NGINX_VERSION}" \
-      maintainer="Wonderfall <wonderfall@targaryen.house>"
+      maintainer="hoellen <info@hoellen.eu>"
 
 CMD ["run.sh"]

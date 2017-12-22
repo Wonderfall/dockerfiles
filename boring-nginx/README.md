@@ -1,4 +1,4 @@
-## wonderfall/boring-nginx
+## hoellen/boring-nginx
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nginx_logo.svg/115px-Nginx_logo.svg.png)
 
@@ -6,6 +6,7 @@
 This is nginx statically linked against BoringSSL, with embedded Brotli support.
 
 #### Features
+- Thanks to [Wonderfall](https://github.com/wonderfall/dockerfiles)
 - Based on Alpine Linux.
 - nginx built against **BoringSSL** with SSE/SHA, and AVX2 SIMD-instructions.
 - **TLS 1.3** patch : use of TLS 1.3 DRAFT is enforced (haven't found another way yet).
