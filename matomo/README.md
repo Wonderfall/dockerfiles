@@ -1,7 +1,5 @@
 ## hoellen/matomo
 
-![](https://i.goopics.net/m3.png)
-
 #### What is this?
 It is a web analytics platform. Matomo respects your privacy and gives you full control over your data.
 
