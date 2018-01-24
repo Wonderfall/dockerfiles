@@ -52,6 +52,6 @@ EXPOSE 8888
 
 LABEL description "Open web analytics platform" \
       matomo "Matomo v${VERSION}" \
-      maintainer="hoellen <indo@hoellen.eu>"
+      maintainer="hoellen <info@hoellen.eu>"
 
 CMD ["run.sh"]
