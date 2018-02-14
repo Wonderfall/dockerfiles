@@ -1,8 +1,3 @@
-![nginx-php](http://apmblog.dynatrace.com/wp-content/uploads/2014/10/PHP-on-Nginx.jpg)
-
-> This image is build and push with [drone.io](https://github.com/drone/drone), a circle-ci like self-hosted.
-> If you don't trust, you can build yourself.
-
 ## Description
 What is [Nginx](http://nginx.org)?
 
