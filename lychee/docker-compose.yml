@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+
+  koken:
+    image: wonderfall/lychee
+    container_name: lychee
+    restart: always
+    ports:
+      - "8888:8888"
+    volumes:
+      - ~/docker/lychee/uploads:/lychee/uploads
+      - ~/docker/lychee/data:/lychee/data
+    networks:
+      - default
+      - proxy-network
+
+  mysql:
+    image: mariadb
+    container_name: lychee_db
+    volumes:
+      - /var/docker/lychee/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: lycheerootpassword
+
+networks:
+  proxy-network:
+    external: true
