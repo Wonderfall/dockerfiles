@@ -11,6 +11,7 @@ sed -i -e "s/<APC_SHM_SIZE>/$APC_SHM_SIZE/g" /php/conf.d/apcu.ini \
 # Put the configuration and apps into volumes
 ln -sf /config/config.php /nextcloud/config/config.php &>/dev/null
 ln -sf /apps2 /nextcloud &>/dev/null
+chown -h $UID:$GID /nextcloud/config/config.php /nextcloud/apps2
 
 # Create folder for php sessions if not exists
 if [ ! -d /data/session ]; then
