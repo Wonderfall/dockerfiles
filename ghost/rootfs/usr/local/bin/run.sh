@@ -37,7 +37,7 @@ if [ "$ENABLE_ISSO" == "True" ] && ! grep -q 'isso' /ghost/content/themes/casper
 fi
 
 echo "> Updating permissions..."
-chown -R ${UID}:${GID} /ghost /etc/s6.d
+chown -R ${UID}:${GID} /ghost/content /etc/s6.d
 
 echo "> Executing process..."
 if [ '$@' == '' ]; then
