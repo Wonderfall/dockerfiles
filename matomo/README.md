@@ -40,8 +40,7 @@ proxy_host_headers[] = HTTP_X_FORWARDED_HOST
 
 #### Reverse proxy
 Use port **8888**.
-https://github.com/Wonderfall/dockerfiles/tree/master/reverse
-https://github.com/hardware/mailserver/wiki/Reverse-proxy-configuration
+https://github.com/hoellen/dockerfiles/tree/master/boring-nginx
 
 #### Docker Compose (example)
 ```
