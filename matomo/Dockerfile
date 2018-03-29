@@ -1,4 +1,4 @@
-FROM hoellen/nginx-php:7.1
+FROM hoellen/nginx-php:7.2
 
 ARG VERSION=3.4.0
 ARG GPG_matthieu="814E 346F A01A 20DB B04B  6807 B5DB D592 5590 A237"
