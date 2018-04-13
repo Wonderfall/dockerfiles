@@ -64,7 +64,8 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && cd /tmp && git clone https://github.com/openresty/headers-more-nginx-module --depth=1 \
  && git clone https://boringssl.googlesource.com/boringssl --depth=1 \
  && cd boringssl \
- && sed -i 's@ssl->version[ ]*=[ ]*TLS1_2_VERSION@ssl->version = TLS1_3_VERSION@' ssl/s3_lib.cc \
+ && wget https://gitlab.com/buik/boringssl/raw/boringssl-patch/Enable-TLS13-BoringSSL.patch -O tls13.patch \
+ && git apply tls13.patch \
  && sed -i 's@\$shaext[ ]*=[ ]*0;@\$shaext = 1;@' crypto/*/*/asm/*.pl \
  && sed -i 's@\$avx[ ]*=[ ]*[0|1];@\$avx = 2;@' crypto/*/*/asm/*.pl \
  && sed -i 's@\$addx[ ]*=[ ]*0;@\$addx = 1;@' crypto/*/*/asm/*.pl \
