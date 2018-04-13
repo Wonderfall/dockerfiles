@@ -9,7 +9,7 @@ This is nginx statically linked against BoringSSL, with embedded Brotli support.
 - Thanks to [Wonderfall](https://github.com/wonderfall/dockerfiles)
 - Based on Alpine Linux.
 - nginx built against **BoringSSL** with SSE/SHA, and AVX2 SIMD-instructions.
-- **TLS 1.3** patch : use of TLS 1.3 DRAFT is enforced (haven't found another way yet).
+- **TLS 1.3** enabled
 - Built using hardening gcc flags.
 - Dynamic TLS records patch (cloudflare).
 - TTP/2 (+NPN) support.
