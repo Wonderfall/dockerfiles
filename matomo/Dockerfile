@@ -1,6 +1,6 @@
 FROM hoellen/nginx-php:7.2
 
-ARG VERSION=3.4.0
+ARG VERSION=3.5.0
 ARG GPG_matthieu="814E 346F A01A 20DB B04B  6807 B5DB D592 5590 A237"
 
 ENV UID=991 GID=991 \
@@ -24,7 +24,7 @@ RUN BUILD_DEPS=" \
  && pecl install geoip-1.1.1 \
  && echo 'extension=geoip.so' >> /php/conf.d/geoip.ini \
  && mkdir /matomo && cd /tmp \
- && MATOMO_TARBALL="piwik-${VERSION}.tar.gz" \
+ && MATOMO_TARBALL="matomo-${VERSION}.tar.gz" \
  && wget -q https://builds.matomo.org/${MATOMO_TARBALL} \
  && wget -q https://builds.matomo.org/${MATOMO_TARBALL}.asc \
  && wget -q https://builds.matomo.org/signature.asc \
