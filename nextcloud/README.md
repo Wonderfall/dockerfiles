@@ -3,14 +3,12 @@
 
 [![](https://images.microbadger.com/badges/version/hoellen/nextcloud.svg)](http://microbadger.com/images/hoellen/nextcloud "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/hoellen/nextcloud.svg)](http://microbadger.com/images/hoellen/nextcloud "Get your own image badge on microbadger.com")
 
-![](https://s32.postimg.org/69nev7aol/Nextcloud_logo.png)
-
 **This image was made for my own use and I have no intention to make this official. Support won't be regular so if there's an update, or a fix, you can open a pull request. Any contribution is welcome, but please be aware I'm very busy currently. Before opening an issue, please check if there's already one related. Also please use Github instead of Docker Hub, otherwise I won't see your comments. Thanks.**
 
 ### Features
 - Based on wonderfall/dockerfiles (Thanks!)
 - Based on Alpine Linux.
-- Bundled with nginx and PHP 7.1 (hoellen/nginx-php image).
+- Bundled with nginx and PHP 7.2 (hoellen/nginx-php image).
 - Automatic installation using environment variables.
 - Package integrity (SHA512) and authenticity (PGP) checked during building process.
 - Data and apps persistence.

@@ -1,4 +1,4 @@
-FROM hoellen/nginx-php:7.1
+FROM hoellen/nginx-php:7.2
 
 ENV UID=991 GID=991 \
     UPLOAD_MAX_SIZE=10G \
