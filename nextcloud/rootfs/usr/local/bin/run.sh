@@ -6,7 +6,11 @@ sed -i -e "s/<APC_SHM_SIZE>/$APC_SHM_SIZE/g" /php/conf.d/apcu.ini \
        -e "s/<CRON_PERIOD>/$CRON_PERIOD/g" /etc/s6.d/cron/run \
        -e "s/<MEMORY_LIMIT>/$MEMORY_LIMIT/g" /usr/local/bin/occ \
        -e "s/<UPLOAD_MAX_SIZE>/$UPLOAD_MAX_SIZE/g" /nginx/conf/nginx.conf /php/etc/php-fpm.conf \
-       -e "s/<MEMORY_LIMIT>/$MEMORY_LIMIT/g" /php/etc/php-fpm.conf
+       -e "s/<MEMORY_LIMIT>/$MEMORY_LIMIT/g" /php/etc/php-fpm.conf \
+       -e "s/<PHP_MAX_CHILDREN>/$PHP_MAX_CHILDREN/g" /php/etc/php-fpm.conf \
+       -e "s/<PHP_START_SERVERS>/$PHP_START_SERVERS/g" /php/etc/php-fpm.conf \
+       -e "s/<PHP_MIN_SPARE_SERVERS>/$PHP_MIN_SPARE_SERVERS/g" /php/etc/php-fpm.conf \
+       -e "s/<PHP_MAX_SPARE_SERVERS>/$PHP_MAX_SPARE_SERVERS/g" /php/etc/php-fpm.conf
 
 # Put the configuration and apps into volumes
 ln -sf /config/config.php /nextcloud/config/config.php &>/dev/null

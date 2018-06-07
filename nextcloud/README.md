@@ -43,6 +43,10 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **APC_SHM_SIZE** : apc memory size *(default : 128M)*
 - **OPCACHE_MEM_SIZE** : opcache memory size in megabytes *(default : 128)*
 - **MEMORY_LIMIT** : php memory limit *(default : 512M)*
+- **PHP_MAX_CHILDREN** : php max child processes *(default : 15)*
+- **PHP_START_SERVERS** : php number of processes on startup *(default : 2)*
+- **PHP_MIN_SPARE_SERVERS** : php min of idle processes *(default : 1)*
+- **PHP_MAX_SPARE_SERVERS** : php max of idle processes *(default : 6)*
 - **CRON_PERIOD** : time interval between two cron tasks *(default : 15m)*
 - **CRON_MEMORY_LIMIT** : memory limit for PHP when executing cronjobs *(default : 1024m)*
 - **TZ** : the system/log timezone *(default : Etc/UTC)*
