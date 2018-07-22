@@ -5,7 +5,7 @@ Paste securely.
 #### Features
 - Based on Alpine Linux (hoellen/nginx-php image)
 - Uses [PrivateBin](https://github.com/PrivateBin/PrivateBin), originally a fork of zerobin by elrido.
-- Bundled with nginx and PHP7.1.
+- Bundled with nginx and PHP7.2
 
 #### Build-time variables
 - **PRIVATEBIN_VER** : version of PrivateBin
