@@ -16,7 +16,8 @@ ENV UID=991 GID=991 \
     CRON_MEMORY_LIMIT=1g \
     TZ=Etc/UTC \
     DB_TYPE=sqlite3 \
-    DOMAIN=localhost
+    DOMAIN=localhost \
+    CHECK_PERMISSIONS=1
 
 RUN apk -U upgrade \
  && apk add -t build-dependencies \

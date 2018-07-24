@@ -56,6 +56,7 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 - **DB_USER** : username for database *(default : none)*
 - **DB_PASSWORD** : password for database user *(default : none)*
 - **DB_HOST** : database host *(default : none)*
+- **CHECK_PERMISSIONS** : disable permission check *(default: 1)*
 
 Don't forget to use a **strong password** for the admin account!
 
