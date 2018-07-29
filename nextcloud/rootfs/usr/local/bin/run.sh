@@ -22,20 +22,20 @@ if [ ! -d /data/session ]; then
   mkdir -p /data/session;
 fi
 
-if [ "$CHECK_PERMISSIONS" = "1" ]; then
-  echo "Updating permissions..."
-  for dir in /nextcloud /data /config /apps2 /var/log /php /nginx /tmp /etc/s6.d; do
-    if $(find $dir ! -user $UID -o ! -group $GID|egrep '.' -q); then
-      echo "Updating permissions in $dir..."
-      chown -R $UID:$GID $dir
-    else
-      echo "Permissions in $dir are correct."
-    fi
-  done
-  echo "Done updating permissions."
-else
-  echo "Skip checking permissions"
-fi
+echo "Updating permissions..."
+for dir in /nextcloud /data /config /apps2 /var/log /php /nginx /tmp /etc/s6.d; do
+  if [ "$dir" = "/data" ] && [ "$CHECK_PERMISSIONS" = "0" ]; then
+    echo "WARNING: Skip checking permissions for /data"
+    continue
+  fi
+  if $(find $dir ! -user $UID -o ! -group $GID|egrep '.' -q); then
+    echo "Updating permissions in $dir..."
+    chown -R $UID:$GID $dir
+  else
+    echo "Permissions in $dir are correct."
+  fi
+done
+echo "Done updating permissions."
 
 if [ ! -f /config/config.php ]; then
     # New installation, run the setup
