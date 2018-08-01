@@ -12,23 +12,29 @@ ENV GID=991 UID=991 \
 
 RUN BUILD_DEPS="tar gnupg" \
  && apk -U upgrade && apk add $BUILD_DEPS \
- && mkdir privatebin && cd privatebin \
+ && mkdir -p privatebin/data privatebin/cfg \
  && export GNUPGHOME="$(mktemp -d)" \
  && gpg2 --list-public-keys || /bin/true \
  && wget -qO- https://privatebin.info/key/security.asc | gpg2 --import - \
  && wget -qO /privatebin.tar.gz.asc https://github.com/PrivateBin/PrivateBin/releases/download/${PRIVATEBIN_VER}/PrivateBin-${PRIVATEBIN_VER}.tar.gz.asc \
  && wget -qO /privatebin.tar.gz https://github.com/PrivateBin/PrivateBin/archive/${PRIVATEBIN_VER}.tar.gz \
  && gpg2 --verify /privatebin.tar.gz.asc \
+ && cd srv \
  && tar -xzf /privatebin.tar.gz --strip 1 \
- && mv cfg/conf.sample.php cfg/conf.php \
+ && mv cfg /privatebin \
+ && mv lib /privatebin \
+ && mv tpl /privatebin \
+ && mv vendor /privatebin \
+ && sed -i "s#define('PATH', '');#define('PATH', '/privatebin/');#" index.php \
  && apk del $BUILD_DEPS \
- && rm -rf /var/cache/apk/* /privatebin.tar.gz* "${GNUPGHOME}"
+ && rm -rf /var/cache/apk/* *.md /privatebin.tar.gz* "${GNUPGHOME}"
 
 COPY rootfs /
 
 RUN chmod +x /usr/local/bin/run.sh /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
 
-VOLUME /privatebin/data /php/session
+# mark dirs as volumes that need to be writable, allows running the container --read-only
+VOLUME /privatebin/data /php /nginx /tmp /etc/s6.d
 
 EXPOSE 8888
 
