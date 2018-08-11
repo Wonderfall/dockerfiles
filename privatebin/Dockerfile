@@ -1,6 +1,6 @@
 FROM hoellen/nginx-php
 
-ARG PRIVATEBIN_VER=1.2
+ARG PRIVATEBIN_VER=1.2.1
 
 ENV GID=991 UID=991 \
     UPLOAD_MAX_SIZE=10M \
@@ -15,7 +15,7 @@ RUN BUILD_DEPS="tar gnupg" \
  && mkdir -p privatebin/data privatebin/cfg \
  && export GNUPGHOME="$(mktemp -d)" \
  && gpg2 --list-public-keys || /bin/true \
- && wget -qO- https://privatebin.info/key/security.asc | gpg2 --import - \
+ && wget -qO- https://privatebin.info/key/release.asc | gpg2 --import - \
  && wget -qO /privatebin.tar.gz.asc https://github.com/PrivateBin/PrivateBin/releases/download/${PRIVATEBIN_VER}/PrivateBin-${PRIVATEBIN_VER}.tar.gz.asc \
  && wget -qO /privatebin.tar.gz https://github.com/PrivateBin/PrivateBin/archive/${PRIVATEBIN_VER}.tar.gz \
  && gpg2 --verify /privatebin.tar.gz.asc \
