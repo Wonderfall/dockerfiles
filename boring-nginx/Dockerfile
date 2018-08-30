@@ -64,8 +64,6 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && cd /tmp && git clone https://github.com/openresty/headers-more-nginx-module --depth=1 \
  && git clone https://boringssl.googlesource.com/boringssl --depth=1 \
  && cd boringssl \
- && wget https://gitlab.com/buik/boringssl/raw/boringssl-patch/Enable-TLS13-BoringSSL.patch -O tls13.patch \
- && git apply tls13.patch \
  && sed -i 's@\$shaext[ ]*=[ ]*0;@\$shaext = 1;@' crypto/*/*/asm/*.pl \
  && sed -i 's@\$avx[ ]*=[ ]*[0|1];@\$avx = 2;@' crypto/*/*/asm/*.pl \
  && sed -i 's@\$addx[ ]*=[ ]*0;@\$addx = 1;@' crypto/*/*/asm/*.pl \
@@ -85,6 +83,8 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && if [ "${FINGERPRINT}" != "${GPG_NGINX}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
  && echo "All seems good, now unpacking ${NGINX_TARBALL}..." \
  && tar xzf ${NGINX_TARBALL} && cd nginx-${NGINX_VERSION} \
+ && wget -q https://raw.githubusercontent.com/cujanovic/nginx-dynamic-tls-records-patch/master/nginx__dynamic_tls_records_1.13.0%2B.patch -O dynamic_records.patch \
+ && patch -p1 < dynamic_records.patch \
  && ./configure \
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
