@@ -83,7 +83,7 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && if [ "${FINGERPRINT}" != "${GPG_NGINX}" ]; then echo "Warning! Wrong GPG fingerprint!" && exit 1; fi \
  && echo "All seems good, now unpacking ${NGINX_TARBALL}..." \
  && tar xzf ${NGINX_TARBALL} && cd nginx-${NGINX_VERSION} \
- && wget -q https://raw.githubusercontent.com/hoellen/dockerfiles/fix-dynamic-tls/boring-nginx/dynamic_records.patch -O dynamic_records.patch \
+ && wget -q https://raw.githubusercontent.com/hoellen/dockerfiles/master/boring-nginx/dynamic_records.patch -O dynamic_records.patch \
  && patch -p1 < dynamic_records.patch \
  && ./configure \
     --prefix=/etc/nginx \
