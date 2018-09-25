@@ -21,11 +21,12 @@
 - Environment variables provided (see below).
 
 ### Tags
-- **latest** : latest stable version. (13.0)
-- **13.0** : latest 13.0.x version (stable)
-- **12.0** : latest 12.0.x version (old stable)
+- **latest** : latest stable version (14.0)
+- **14.0** : latest 14.0.x version (stable)
+- **13.0** : latest 13.0.x version (old stable)
+- **12.0** : latest 12.0.x version (deprecated)
 - ~~**11.0** : latest 11.0.x version (end-of-life)~~
-- **daily** : latest code (daily build).
+- **daily** : latest code (daily build)
 
 Other tags than `daily` are built weekly. For security reasons, you should occasionally update the container, even if you have the latest version of Nextcloud.
 
