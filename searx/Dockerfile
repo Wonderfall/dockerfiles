@@ -25,6 +25,7 @@ RUN apk -U upgrade \
     py2-pip \
  && mkdir /usr/local/searx && cd /usr/local/searx \
  && wget -qO- https://github.com/asciimoo/searx/archive/v${VERSION}.tar.gz | tar xz --strip 1 \
+ && pip install --upgrade pip \
  && pip install --no-cache -r requirements.txt \
  && sed -i "s/127.0.0.1/0.0.0.0/g" searx/settings.yml \
  && apk del build-dependencies \
