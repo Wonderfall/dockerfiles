@@ -21,10 +21,11 @@
 - Environment variables provided (see below).
 
 ### Tags
-- **latest** : latest stable version (14.0)
-- **14.0** : latest 14.0.x version (stable)
-- **13.0** : latest 13.0.x version (old stable)
-- **12.0** : latest 12.0.x version (deprecated)
+- **latest** : latest stable version (15.0)
+- **15.0** : latest 15.0.x version (stable)
+- **14.0** : latest 14.0.x version (old stable)
+- **13.0** : latest 13.0.x version (deprecated)
+- ~~**12.0** : latest 12.0.x version (end-of-life)~~
 - ~~**11.0** : latest 11.0.x version (end-of-life)~~
 - **daily** : latest code (daily build)
 
@@ -78,7 +79,7 @@ Basically, you can use a database instance running on the host or any other mach
 Pull the image and create a container. `/docker` can be anywhere on your host, this is just an example. Change `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD` values (mariadb). You may also want to change UID and GID for Nextcloud, as well as other variables (see *Environment Variables*).
 
 ```
-docker pull hoellen/nextcloud:12.0 && docker pull mariadb:10
+docker pull hoellen/nextcloud:15.0 && docker pull mariadb:10
 
 docker run -d --name db_nextcloud \
        -v /docker/nextcloud/db:/var/lib/mysql \
