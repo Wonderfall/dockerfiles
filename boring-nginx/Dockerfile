@@ -64,9 +64,6 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && cd /tmp && git clone https://github.com/openresty/headers-more-nginx-module --depth=1 \
  && git clone https://boringssl.googlesource.com/boringssl --depth=1 \
  && cd boringssl \
- && sed -i 's@\$shaext[ ]*=[ ]*0;@\$shaext = 1;@' crypto/*/*/asm/*.pl \
- && sed -i 's@\$avx[ ]*=[ ]*[0|1];@\$avx = 2;@' crypto/*/*/asm/*.pl \
- && sed -i 's@\$addx[ ]*=[ ]*0;@\$addx = 1;@' crypto/*/*/asm/*.pl \
  && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. \
  && make -j ${NB_CORES} && cd .. \
  && mkdir -p .openssl/lib/ && cd .openssl && ln -s ../include && cd .. \
