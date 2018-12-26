@@ -14,6 +14,7 @@ ENV UID=991 GID=991 \
     TZ=Etc/UTC \
     DB_TYPE=sqlite3 \
     DOMAIN=localhost
+    CHECK_PERMISSIONS=1
 
 RUN apk -U upgrade \
  && apk add -t build-dependencies \
@@ -25,17 +26,22 @@ RUN apk -U upgrade \
     pcre-dev \
     libtool \
     samba-dev \
+    imagemagick-dev \
  && apk add \
     libressl \
     ca-certificates \
     libsmbclient \
+    imagemagick-libs \
     tzdata \
+ && pecl channel-update pecl.php.net \
  && pecl install \
     smbclient \
     apcu \
     redis \
+    imagick \
  && echo "extension=smbclient.so" > /php/conf.d/smbclient.ini \
  && echo "extension=redis.so" > /php/conf.d/redis.ini \
+ && echo "extension=imagick.so" > /php/conf.d/imagick.ini \
  && mkdir /nextcloud \
  && cd /tmp \
  && wget -q https://download.nextcloud.com/server/daily/latest.tar.bz2 \
