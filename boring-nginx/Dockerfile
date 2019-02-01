@@ -36,7 +36,6 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     zlib \
     libgcc \
     libstdc++ \
-    jemalloc \
     su-exec \
     libressl \
     bind-tools \
@@ -48,7 +47,6 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     automake \
     autoconf \
     git \
-    jemalloc-dev \
     tar \
     libtool \
     pcre-dev \
@@ -86,7 +84,7 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
     --with-cc-opt="-O3 -fPIE -fstack-protector-strong -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -Wno-deprecated-declarations -I ../boringssl/.openssl/include/" \
-    --with-ld-opt="-lrt -ljemalloc -Wl,-Bsymbolic-functions -Wl,-z,relro -L ../boringssl/.openssl/lib" \
+    --with-ld-opt="-lrt -Wl,-Bsymbolic-functions -Wl,-z,relro -L ../boringssl/.openssl/lib" \
     --http-log-path=/var/log/nginx/access.log \
     --error-log-path=/var/log/nginx/error.log \
     ${NGINX_MODULES} \
