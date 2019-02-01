@@ -101,7 +101,7 @@ ARG CUSTOM_BUILD_PKGS=" \
     libxpm-dev \
     libedit-dev \
     libxml2-dev \
-    libressl-dev \
+    openssl-dev \
     libbz2 \
     sqlite-dev \
     imap-dev"
@@ -143,7 +143,7 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
     curl \
     libedit \
     libxml2 \
-    libressl \
+    openssl \
     libwebp \
     libzip \
     gd \
