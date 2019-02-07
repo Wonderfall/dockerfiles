@@ -27,7 +27,7 @@ https://github.com/cloudflare/sslconfig/blob/master/patches/nginx__dynamic_tls_r
 
 --- a/src/event/ngx_event_openssl.c
 +++ b/src/event/ngx_event_openssl.c
-@@ -1267,6 +1267,7 @@
+@@ -1272,6 +1272,7 @@
  
      sc->buffer = ((flags & NGX_SSL_BUFFER) != 0);
      sc->buffer_size = ssl->buffer_size;
@@ -35,7 +35,7 @@ https://github.com/cloudflare/sslconfig/blob/master/patches/nginx__dynamic_tls_r
  
      sc->session_ctx = ssl->ctx;
  
-@@ -2115,6 +2116,41 @@
+@@ -2124,6 +2125,41 @@
  
      for ( ;; ) {
  
@@ -77,7 +77,7 @@ https://github.com/cloudflare/sslconfig/blob/master/patches/nginx__dynamic_tls_r
          while (in && buf->last < buf->end && send < limit) {
              if (in->buf->last_buf || in->buf->flush) {
                  flush = 1;
-@@ -2222,6 +2258,9 @@
+@@ -2231,6 +2272,9 @@
  
      if (n > 0) {
  
@@ -109,10 +109,10 @@ https://github.com/cloudflare/sslconfig/blob/master/patches/nginx__dynamic_tls_r
  };
  
  
-@@ -98,6 +107,10 @@
-     unsigned                    try_early_data:1;
+@@ -99,6 +108,10 @@
      unsigned                    in_early:1;
      unsigned                    early_preread:1;
+     unsigned                    write_blocked:1;
 +
 +    ngx_ssl_dyn_rec_t           dyn_rec;
 +    ngx_msec_t                  dyn_rec_last_write;
@@ -120,7 +120,7 @@ https://github.com/cloudflare/sslconfig/blob/master/patches/nginx__dynamic_tls_r
  };
  
  
-@@ -107,7 +120,7 @@
+@@ -108,7 +121,7 @@
  #define NGX_SSL_DFLT_BUILTIN_SCACHE  -5
  
  
