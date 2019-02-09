@@ -24,8 +24,7 @@ RUN apk -U upgrade \
     tini \
  && mkdir /usr/local/searx && cd /usr/local/searx \
  && wget -qO- https://github.com/asciimoo/searx/archive/v${VERSION}.tar.gz | tar xz --strip 1 \
- && pip3 install --upgrade pip \
- && pip3 install --upgrade setuptools pip==18.1 \
+ && pip3 install --upgrade setuptools pip \
  && pip3 install --no-cache -r requirements.txt \
  && sed -i "s/127.0.0.1/0.0.0.0/g" searx/settings.yml \
  && apk del build-dependencies \
