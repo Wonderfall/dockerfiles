@@ -108,7 +108,7 @@ docker run -d --name nextcloud \
        -e DB_USER=nextcloud \
        -e DB_PASSWORD=supersecretpassword \
        -e DB_HOST=db_nextcloud \
-       hoellen/nextcloud:12.0
+       hoellen/nextcloud:15.0
 ```
 
 You are **not obliged** to use `ADMIN_USER` and `ADMIN_PASSWORD`. If these variables are not provided, you'll be able to configure your admin acccount from your browser.
@@ -124,7 +124,7 @@ You will have to build yourself using an Alpine-ARM image, like `orax/alpine-arm
 In the admin panel, you should switch from `AJAX cron` to `cron` (system cron).
 
 ### Update
-Pull a newer image, then recreate the container as you did before (*Setup* step). None of your data will be lost since you're using external volumes. If Nextcloud performed a full upgrade, your apps could be disabled, enable them again **(starting with 12.0.x, your apps are automatically enabled after an upgrade)**.
+Pull a newer image, then recreate the container as you did before (*Setup* step). None of your data will be lost since you're using external volumes. Nextcloud takes care of the database migration steps.
 
 ### Docker-compose
 I advise you to use [docker-compose](https://docs.docker.com/compose/), which is a great tool for managing containers. You can create a `docker-compose.yml` with the following content (which must be adapted to your needs) and then run `docker-compose up -d nextcloud-db`, wait some 15 seconds for the database to come up, then run everything with `docker-compose up -d`, that's it! On subsequent runs,  a single `docker-compose up -d` is sufficient!
