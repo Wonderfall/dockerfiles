@@ -76,6 +76,8 @@ Don't forget to use a **strong password** for the admin account!
 ### Database
 Basically, you can use a database instance running on the host or any other machine. An easier solution is to use an external database container. I suggest you to use MariaDB, which is a reliable database server. You can use the official `mariadb` image available on Docker Hub to create a database container, which must be linked to the Nextcloud container. PostgreSQL can also be used as well.
 
+Please note, that you may need to adjust some database settings to your hardware to achieve better performance for your Nextcloud instance. Some examples can be found in the [Nextcloud documentation](https://docs.nextcloud.com/server/16/admin_manual/configuration_database/linux_database_configuration.html).
+
 ### Setup
 Pull the image and create a container. `/docker` can be anywhere on your host, this is just an example. Change `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD` values (mariadb). You may also want to change UID and GID for Nextcloud, as well as other variables (see *Environment Variables*).
 
