@@ -12,6 +12,12 @@ It provides basic privacy by mixing your queries with searches on other platform
 - Latest code from [asciimoo/searx](https://github.com/asciimoo/searx)
 - A unique secret key is generated when booting the first time.
 
+#### Tags
+- **latest** : latest stable version (0.15)
+- **master** : latest code from master branch
+
+`latest` and `master` are built weekly. For security reasons, you should occasionally update the container, even if you have the latest version of Searx.
+
 #### Build-time variables
 - **VERSION** : Searx version
 
