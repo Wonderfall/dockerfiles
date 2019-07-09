@@ -1,6 +1,6 @@
 FROM hoellen/nginx-php
 
-ARG PRIVATEBIN_VER=1.2.1
+ARG PRIVATEBIN_VER=1.3
 
 ENV GID=991 UID=991 \
     UPLOAD_MAX_SIZE=10M \
@@ -40,6 +40,6 @@ EXPOSE 8888
 
 LABEL maintainer="hoellen <info@hoellen.eu>" \
       description="A minimalist, open source online pastebin where the server has zero knowledge of pasted data" \
-      version="PrivateBin 1.2"
+      version="PrivateBin 1.3"
 
 CMD ["run.sh"]
