@@ -49,6 +49,7 @@ ARG PHP_CONF=" \
     --with-curl \
     --with-libedit \
     --with-openssl \
+    --with-password-argon2 \
     --with-iconv=/usr/local \
     --with-gd \
     --with-jpeg-dir \
@@ -104,7 +105,8 @@ ARG CUSTOM_BUILD_PKGS=" \
     openssl-dev \
     libbz2 \
     sqlite-dev \
-    imap-dev"
+    imap-dev \
+    argon2-dev"
 
 ARG CUSTOM_PKGS=" \
     freetype \
@@ -113,6 +115,7 @@ ARG CUSTOM_PKGS=" \
     bzip2-dev \
     icu \
     libpq \
+    argon2-libs \
     c-client"
 
 COPY rootfs /
