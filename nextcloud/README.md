@@ -22,6 +22,7 @@
 
 ### Tags
 - **latest** : latest stable version (16.0)
+- **17.0** : latest 17.0.x version (beta)
 - **16.0** : latest 16.0.x version (stable)
 - **15.0** : latest 15.0.x version (old stable)
 - **14.0** : latest 14.0.x version (deprecated)
