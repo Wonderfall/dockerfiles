@@ -7,7 +7,7 @@ Paste securely.
 - Uses [PrivateBin](https://github.com/PrivateBin/PrivateBin), originally a fork of zerobin by elrido.
 - GPG signature check
 - separate /data directory
-- Bundled with nginx and PHP7.2
+- Bundled with nginx and PHP
 
 #### Build-time variables
 - **PRIVATEBIN_VER** : version of PrivateBin
