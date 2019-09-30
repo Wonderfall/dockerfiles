@@ -68,7 +68,8 @@ RUN apk -U upgrade \
 
 COPY rootfs /
 
-RUN chmod +x /usr/local/bin/* /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
+RUN chmod +x /usr/local/bin/* /etc/s6.d/*/* /etc/s6.d/.s6-svscan/* \
+ && sed -i '/SAMEORIGIN/d' /nginx/sites-enabled/nginx.conf
 
 VOLUME /data /config /apps2 /nextcloud/themes
 
