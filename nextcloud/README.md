@@ -113,7 +113,7 @@ docker run -d --name nextcloud \
        -e DB_USER=nextcloud \
        -e DB_PASSWORD=supersecretpassword \
        -e DB_HOST=db_nextcloud \
-       hoellen/nextcloud:15.0
+       hoellen/nextcloud:18.0
 ```
 
 You are **not obliged** to use `ADMIN_USER` and `ADMIN_PASSWORD`. If these variables are not provided, you'll be able to configure your admin acccount from your browser.
