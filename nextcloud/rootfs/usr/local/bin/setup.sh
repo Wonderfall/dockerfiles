@@ -8,7 +8,8 @@ CONFIGFILE=/config/config.php
 
 
 # Create an initial configuration file.
-instanceid=oc$(echo $PRIMARY_HOSTNAME | sha1sum | fold -w 10 | head -n 1)
+instanceid=oc$(openssl rand -hex 6 | head -c 10)
+
 cat > $CONFIGFILE <<EOF;
 <?php
 \$CONFIG = array (
