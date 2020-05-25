@@ -37,7 +37,6 @@ Other tags than `daily` are built weekly. For security reasons, you should occas
 
 ### Build-time variables
 - **NEXTCLOUD_VERSION** : version of nextcloud
-- **GNU_LIBICONV_VERSION** : version of GNU Libiconv
 - **GPG_nextcloud** : signing key fingerprint
 
 ### Environment variables
@@ -85,14 +84,14 @@ Please note, that you may need to adjust some database settings to your hardware
 Pull the image and create a container. `/docker` can be anywhere on your host, this is just an example. Change `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD` values (mariadb). You may also want to change UID and GID for Nextcloud, as well as other variables (see *Environment Variables*).
 
 ```
-docker pull hoellen/nextcloud:15.0 && docker pull mariadb:10
+docker pull hoellen/nextcloud && docker pull mariadb
 
 docker run -d --name db_nextcloud \
        -v /docker/nextcloud/db:/var/lib/mysql \
        -e MYSQL_ROOT_PASSWORD=supersecretpassword \
        -e MYSQL_DATABASE=nextcloud -e MYSQL_USER=nextcloud \
        -e MYSQL_PASSWORD=supersecretpassword \
-       mariadb:10
+       mariadb
 
 docker run -d --name nextcloud \
        --link db_nextcloud:db_nextcloud \
@@ -114,17 +113,12 @@ docker run -d --name nextcloud \
        -e DB_USER=nextcloud \
        -e DB_PASSWORD=supersecretpassword \
        -e DB_HOST=db_nextcloud \
-       hoellen/nextcloud:18.0
+       hoellen/nextcloud
 ```
 
 You are **not obliged** to use `ADMIN_USER` and `ADMIN_PASSWORD`. If these variables are not provided, you'll be able to configure your admin acccount from your browser.
 
 **Below you can find a docker-compose file, which is very useful!**
-
-Now you have to use a **reverse proxy** in order to access to your container through Internet, steps and details are available at the end of the README.md. And that's it! Since you already configured Nextcloud through setting environment variables, there's no setup page.
-
-### ARM-based devices
-You will have to build yourself using an Alpine-ARM image, like `orax/alpine-armhf:edge`.
 
 ### Configure
 In the admin panel, you should switch from `AJAX cron` to `cron` (system cron).
@@ -150,7 +144,6 @@ services:
     image: hoellen/nextcloud
     depends_on:
       - nextcloud-db           # If using MySQL
-      - solr                   # If using Nextant
       - redis                  # If using Redis
     environment:
       - UID=1000
@@ -160,8 +153,6 @@ services:
       - OPCACHE_MEM_SIZE=128
       - CRON_PERIOD=15m
       - TZ=Europe/Berlin
-      - ADMIN_USER=admin            # Don't set to configure through browser
-      - ADMIN_PASSWORD=admin        # Don't set to configure through browser
       - DOMAIN=localhost
       - DB_TYPE=mysql
       - DB_NAME=nextcloud
@@ -185,17 +176,6 @@ services:
       - MYSQL_USER=nextcloud
       - MYSQL_PASSWORD=supersecretpassword
 
-  # If using Nextant
-  solr:
-    image: solr:6-alpine
-    container_name: solr
-    volumes:
-      - /docker/nextcloud/solr:/opt/solr/server/solr/mycores
-    entrypoint:
-      - docker-entrypoint.sh
-      - solr-precreate
-      - nextant
-
   # If using Redis
   redis:
     image: redis:alpine
@@ -218,9 +198,6 @@ Redis can be used for distributed and file locking cache, alongside with APCu (l
    'port' => 6379,
    ),
 ```
-
-### How to configure Nextant
-You will have to deploy a Solr server, I've shown an example above with docker-compose. Once Nextant app is installed, go to "additional settings" in your admin pannel and use http://solr:8983/solr as "Adress of your Solr Servlet". There you go!
 
 ### Tip : how to use occ command
 There is a script for that, so you shouldn't bother to log into the container, set the right permissions, and so on. Just use `docker exec -ti nextcloud occ command`.
