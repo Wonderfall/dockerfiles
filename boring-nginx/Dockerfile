@@ -92,7 +92,7 @@ RUN NB_CORES=${BUILD_CORES-$(getconf _NPROCESSORS_CONF)} \
  && make -j ${NB_CORES} && make install && make clean \
  && strip -s /usr/sbin/nginx \
  && apk del build-dependencies \
- && rm -rf /tmp/* /var/cache/apk/* /root/.gnupg
+ && rm -rf /tmp/* /var/cache/apk/*
 
 COPY rootfs /
 
