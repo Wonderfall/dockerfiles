@@ -13,6 +13,7 @@ RUN apk -U upgrade \
     libxslt-dev \
     libxml2-dev \
     openssl-dev \
+    py-pip \
     git \
     ca-certificates \
  && apk add \
@@ -24,8 +25,8 @@ RUN apk -U upgrade \
     tini \
  && mkdir /usr/local/searx && cd /usr/local/searx \
  && git clone https://github.com/asciimoo/searx/ . \
- && pip3 install --upgrade setuptools pip \
- && pip3 install --no-cache -r requirements.txt \
+ && pip install --upgrade setuptools pip \
+ && pip install --no-cache -r requirements.txt \
  && sed -i "s/127.0.0.1/0.0.0.0/g" searx/settings.yml \
  && apk del build-dependencies \
  && rm -f /var/cache/apk/*
