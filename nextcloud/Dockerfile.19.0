@@ -35,6 +35,7 @@ RUN apk -U upgrade \
     ca-certificates \
     libsmbclient \
     imagemagick-libs \
+    ffmpeg-libs \
     tzdata \
  && pecl channel-update pecl.php.net \
  && pecl install \
