@@ -1,4 +1,4 @@
-FROM hoellen/nginx-php:7.3
+FROM hoellen/nginx-php:7.4
 
 ENV UID=991 GID=991 \
     UPLOAD_MAX_SIZE=10G \
@@ -32,6 +32,7 @@ RUN apk -U upgrade \
     ca-certificates \
     libsmbclient \
     imagemagick-libs \
+    ffmpeg \
     tzdata \
  && pecl channel-update pecl.php.net \
  && pecl install \
@@ -53,13 +54,13 @@ RUN apk -U upgrade \
  && tar xjf latest.tar.bz2 --strip 1 -C /nextcloud \
  && update-ca-certificates \
  && apk del build-dependencies \
- && rm -rf /var/cache/apk/* /tmp/*
+ && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
 
 COPY rootfs /
 
 RUN chmod +x /usr/local/bin/* /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
 
-VOLUME /data /config /apps2 /nextcloud/themes /php/session
+VOLUME /data /config /apps2 /nextcloud/themes
 
 EXPOSE 8888
 
