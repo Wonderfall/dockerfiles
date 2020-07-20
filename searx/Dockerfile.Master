@@ -13,12 +13,12 @@ RUN apk -U upgrade \
     libxslt-dev \
     libxml2-dev \
     openssl-dev \
-    py-pip \
     git \
     ca-certificates \
  && apk add \
     su-exec \
     python3 \
+    py-pip \
     libxml2 \
     libxslt \
     openssl \
