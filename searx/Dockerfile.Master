@@ -12,6 +12,8 @@ RUN apk -U upgrade \
     libffi-dev \
     libxslt-dev \
     libxml2-dev \
+		protoc \
+		protobuf-dev \
     openssl-dev \
     git \
     ca-certificates \
@@ -19,6 +21,7 @@ RUN apk -U upgrade \
     su-exec \
     python3 \
     py-pip \
+		protobuf \
     libxml2 \
     libxslt \
     openssl \
