@@ -21,10 +21,11 @@
 - Environment variables provided (see below).
 
 ### Tags
-- **latest** : latest stable version (20.0)
-- **20.0** : latest 20.0.x version (stable)
-- **19.0** : latest 19.0.x version (old stable)
-- **18.0** : latest 18.0.x version (deprecated)
+- **latest** : latest stable version (21.0)
+- **21.0** : latest 20.0.x version (stable)
+- **20.0** : latest 20.0.x version (old stable)
+- **19.0** : latest 19.0.x version (deprecated)
+- ~~**18.0** : latest 18.0.x version (end-of-life)~~
 - ~~**17.0** : latest 17.0.x version (end-of-life)~~
 - ~~**16.0** : latest 16.0.x version (end-of-life)~~
 - ~~**15.0** : latest 15.0.x version (end-of-life)~~
