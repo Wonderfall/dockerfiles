@@ -1,6 +1,6 @@
 FROM alpine:3.13
 
-ARG VERSION=0.18.0
+ARG VERSION=1.0.0
 
 ENV BASE_URL=False IMAGE_PROXY=False \
     UID=991 GID=991
@@ -12,6 +12,8 @@ RUN apk -U upgrade \
     libffi-dev \
     libxslt-dev \
     libxml2-dev \
+		protoc \
+		protobuf-dev \
     openssl-dev \
     tar \
     ca-certificates \
@@ -19,6 +21,7 @@ RUN apk -U upgrade \
     su-exec \
     python3 \
     py-pip \
+		protobuf \
     libxml2 \
     libxslt \
     openssl \
