@@ -21,7 +21,7 @@
 - Environment variables provided (see below).
 
 ### Tags
-- **latest** : latest stable version (21.0)
+- **latest** : latest stable version (22.0)
 - **22.0** : latest 22.0.x version (stable)
 - **21.0** : latest 21.0.x version (old stable)
 - **20.0** : latest 20.0.x version (deprecated)
